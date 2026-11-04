@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { CASE_MODES, convertCase, type CaseMode } from '@/lib/textCase';
 import { cn } from '@/lib/utils';
 import CodeEditor from './CodeEditor';
@@ -12,6 +13,7 @@ export default function CaseTool() {
   const [text, setText] = useSaved('text', '');
   const [mode, setMode] = useSaved<CaseMode>('mode', 'title', (v) => CASE_MODES.some((m) => m.mode === v));
   const output = useMemo(() => convertCase(text, mode), [text, mode]);
+  useToolRun(text.trim() ? output : null);
 
   return (
     <>

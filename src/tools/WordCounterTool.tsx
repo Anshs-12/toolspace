@@ -1,4 +1,5 @@
 import { useDeferredValue, useMemo } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { Copy } from 'lucide-react';
 import { LIMIT_PRESETS, checkLimit, statsSummary } from '@/lib/counter';
 import { formatMinutes, textStats } from '@/lib/textCase';
@@ -31,6 +32,7 @@ export default function WordCounterTool() {
   const deferred = useDeferredValue(text);
   const s = useMemo(() => textStats(deferred), [deferred]);
   const check = checkLimit(s.characters, limit);
+  useToolRun(deferred.trim() ? `${limit}\u0000${deferred}` : null);
 
   return (
     <>

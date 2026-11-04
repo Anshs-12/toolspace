@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { IconButton, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const COUNTS = [5, 10, 20];
 const HINTS: Record<FieldName, string> = {
@@ -50,6 +51,8 @@ export default function CronTool() {
 
   const parsed = useMemo(() => parseCron(expr), [expr]);
   const explanation = parsed.ok ? explainCron(parsed.schedule) : '';
+  // Not the run times: they move with the clock
+  useToolRun(parsed.ok && expr.trim() ? `${expr.trim()}\u0000${count}` : null);
   const runs = useMemo(() => (parsed.ok && now ? nextRuns(parsed.schedule, now, count) : []), [parsed, now, count]);
   const tz = useMemo(() => (now ? Intl.DateTimeFormat().resolvedOptions().timeZone : ''), [now]);
 

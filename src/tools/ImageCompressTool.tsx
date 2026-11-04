@@ -9,6 +9,7 @@ import { IconButton, StatusLine, downloadFile, formatBytes } from './shared';
 import ToolBar from './ToolBar';
 import { Choice, ImageDrop, blobToDataUrl, canvasOf, ctx2d, decodeImage, encodeCanvas, sampleFile } from './imageShared';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 type FormatChoice = 'auto' | ImageFormat;
 const FORMATS: { value: FormatChoice; label: string }[] = [
@@ -122,6 +123,8 @@ export default function ImageCompressTool() {
   };
 
   const done = items.filter((i) => i.result);
+  // Sizes and options stand in for the outputs (only compared here, never sent)
+  useToolRun(done.length ? `${format}\u0000${quality}\u0000${done.map((i) => `${i.id}:${i.result!.format}:${i.result!.blob.size}`).join(',')}` : null);
   const before = done.reduce((n, i) => n + i.file.size, 0);
   const after = done.reduce((n, i) => n + (keeps(i) ? i.file.size : i.result!.blob.size), 0);
   const anyPng = items.some((i) => (format === 'auto' ? formatOf(i.file.type) ?? 'png' : format) === 'png');

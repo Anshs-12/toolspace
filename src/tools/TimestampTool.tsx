@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { toast } from 'sonner';
 import { Copy, RotateCcw } from 'lucide-react';
 import {
@@ -107,6 +108,8 @@ export default function TimestampTool() {
 
   const result = parsed?.ok ? parsed : null;
   const units = result ? toUnits(result.ms) : null;
+  // Not the relative time: it changes every second without the visitor doing anything
+  useToolRun(result ? `${result.ms}\u0000${zone}` : null);
   const offset = result ? zoneOffset(result.ms, zone) : 0;
   const cal = result ? calendarInfo(result.ms + offset * 60_000) : null;
 

@@ -12,6 +12,7 @@ import CodeEditor from './CodeEditor';
 import { IconButton, StatusLine, byteLength, copyText, formatBytes } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const EXAMPLE = 'The quick brown fox jumps over the lazy dog';
 const FORMATS: HashFormat[] = ['hex', 'HEX', 'base64'];
@@ -82,6 +83,9 @@ export default function HashTool() {
   const showing = hmac != null ? HASH_ALGOS.filter((a) => a !== 'MD5') : HASH_ALGOS;
   const match = expected.trim() ? findMatch(expected, hashes) : null;
   const expectedOk = !expected.trim() || normalizeExpected(expected) != null;
+  useToolRun(
+    !busy && (source.kind === 'file' || text) ? showing.map((a) => (hashes[a] ? formatHash(hashes[a]!, format) : '')).join('\n') : null,
+  );
 
   return (
     <>

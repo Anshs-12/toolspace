@@ -8,6 +8,7 @@ import CodeEditor from './CodeEditor';
 import { InputActions, OutputActions, Panel, StatusLine } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const EXAMPLE = `10 Tips for Better Sleep (2026 Edition)
 Crème Brûlée: A Beginner’s Guide
@@ -35,6 +36,7 @@ export default function SlugTool() {
       empties: lines.filter((l, i) => l.trim() && !slugs[i]).length,
     };
   }, [text, output]);
+  useToolRun(text.trim() && count ? output : null);
 
   return (
     <>

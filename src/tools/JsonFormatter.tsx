@@ -1,4 +1,5 @@
 import { useMemo, useRef } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { stringifyJson, type Indent } from '@/lib/jsonTools';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -26,6 +27,7 @@ export default function JsonFormatter() {
     () => (parsed.status === 'valid' ? stringifyJson(parsed.value, indent, sort) : ''),
     [parsed, indent, sort],
   );
+  useToolRun(output || null);
 
   return (
     <>

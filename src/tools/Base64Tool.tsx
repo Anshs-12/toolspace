@@ -1,4 +1,5 @@
 import React, { useMemo, useRef, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { toast } from 'sonner';
 import { Download, FileIcon, FolderOpen, Trash2 } from 'lucide-react';
 import { bytesToBase64, bytesToText, decodeBase64, encodeText, hexPreview, sniffType } from '@/lib/base64';
@@ -96,6 +97,9 @@ export default function Base64Tool() {
     const type = asText == null ? sniffType(r.bytes) : null;
     return { ok: true as const, bytes: r.bytes, text: asText, type };
   }, [mode, text]);
+
+  // A binary decode has no text form; the Base64 that decoded is the result
+  useToolRun(mode === 'encode' ? encoded : decoded?.ok ? `${decoded.text ?? text}` : null);
 
   const switchMode = (next: Mode) => {
     // Swap: the output becomes the new input, like flipping direction

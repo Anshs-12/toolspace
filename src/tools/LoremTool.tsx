@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { RefreshCw } from 'lucide-react';
 import { lorem, type LoremUnit } from '@/lib/generate';
 import { Button } from '@/components/ui/button';
@@ -30,6 +31,7 @@ export default function LoremTool() {
     return html ? `<p>${one}</p>` : one;
   }, [unit, count, classic, html, seed]);
 
+  useToolRun(text);
   const words = text.replace(/<\/?p>/g, '').split(/\s+/).filter(Boolean).length;
 
   return (

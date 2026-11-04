@@ -8,6 +8,7 @@ import CodeEditor from './CodeEditor';
 import { OutputActions, Panel, StatusLine } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const EXAMPLE: MetaInput = {
   ...EMPTY_META,
@@ -103,6 +104,7 @@ export default function MetaTagTool() {
   const set = <K extends keyof MetaInput>(k: K, v: MetaInput[K]) => setM((prev) => ({ ...prev, [k]: v }));
   const tags = useMemo(() => buildMetaTags(m), [m]);
   const warns = useMemo(() => warnings(m), [m]);
+  useToolRun(m.title.trim() || m.description.trim() ? tags : null);
   const text = (k: 'title' | 'description' | 'url' | 'siteName' | 'image' | 'imageAlt' | 'twitterSite' | 'themeColor') => ({
     id: `meta-${k}`,
     value: m[k],

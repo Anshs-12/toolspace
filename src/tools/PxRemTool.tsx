@@ -7,6 +7,7 @@ import OptionSwitch from './OptionSwitch';
 import { IconButton, InputActions, OutputActions, Panel, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 type Mode = 'single' | 'batch';
 type Precision = '2' | '3' | '4' | 'full';
@@ -47,6 +48,7 @@ export default function PxRemTool() {
   );
   const single = convertValue(value, opts);
   const batch = useMemo(() => convertText(text, opts), [text, opts]);
+  useToolRun(mode === 'single' ? (single.ok ? `${single.from}\u0000${single.value}` : null) : !batch.error && batch.count ? batch.output : null);
   const from = direction === 'px-rem' ? 'px' : 'rem';
   const to = direction === 'px-rem' ? 'rem' : 'px';
 

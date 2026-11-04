@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { FLAGS, MAX_MATCHES } from '@/lib/regex';
 import { REGEX_TIMEOUT_MS, useRegex } from '@/lib/useRegex';
 import { Label } from '@/components/ui/label';
@@ -55,6 +56,11 @@ export default function RegexTool() {
     [state, text],
   );
 
+  useToolRun(
+    pattern && text.trim() && state.status === 'done' && state.result.ok && state.text === text
+      ? [pattern, flagString, state.result.matches.map((m) => `${m.start}-${m.end}`).join(','), state.result.replaced ?? ''].join('\u0000')
+      : null,
+  );
   const matchList = useMemo(() => (result?.ok ? result.matches.map((m) => m.value).join('\n') : ''), [result]);
 
   const status = (() => {

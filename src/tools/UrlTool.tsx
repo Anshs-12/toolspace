@@ -1,4 +1,5 @@
 import { useMemo, useRef } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { parseUrl, urlDecode, urlEncode, type UrlMode } from '@/lib/urlCodec';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import CodeEditor, { type CodeEditorHandle } from './CodeEditor';
@@ -38,6 +39,7 @@ export default function UrlTool() {
   }, [text, direction, mode]);
 
   const output = result?.ok ? result.text : '';
+  useToolRun(text.trim() && result?.ok ? `${direction}\u0000${output}` : null);
   // Show the parts of whichever side is a full URL
   const parsed = useMemo(() => parseUrl(direction === 'decode' ? text : output) ?? parseUrl(direction === 'decode' ? output : text), [direction, text, output]);
   const errorPos = result && !result.ok ? position(text, result.index) : null;

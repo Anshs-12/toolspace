@@ -21,6 +21,7 @@ import { cn } from '@/lib/utils';
 import { IconButton, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const inputClass =
   'h-9 min-w-0 rounded-lg border bg-background px-3 font-mono text-[14px] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-[invalid=true]:border-del';
@@ -80,6 +81,7 @@ export default function ChmodTool() {
   const update = (patch: (m: Mode) => Mode) => setN(modeToNumber(patch(structuredClone(mode))));
   const name = shellQuote(file.trim());
   const commands = { octal: `chmod ${toOctal(mode)} ${name}`, symbolic: `chmod ${toChmodSymbolic(mode)} ${name}` };
+  useToolRun(octal.ok && sym.ok ? `${commands.octal}\u0000${commands.symbolic}` : null);
   const lines = explain(mode);
   const warning = lines.find((l) => l.startsWith('Warning'));
 

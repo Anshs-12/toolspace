@@ -8,6 +8,7 @@ import { InputActions, OutputActions, Panel, StatusLine, byteLength, formatBytes
 import ToolBar from './ToolBar';
 import { Choice } from './imageShared';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const EXAMPLE = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
@@ -99,6 +100,7 @@ export default function SvgTool() {
   }, [settled, decimals, removeTitle]);
 
   const output = result.ok ? result.output : '';
+  useToolRun(result.ok && settled.trim() ? output : null);
   const before = byteLength(settled);
   const after = byteLength(output);
   const s = savings(before, after);

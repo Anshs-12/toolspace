@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { toast } from 'sonner';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { ChevronDown, ChevronRight, ChevronsDownUp, ChevronsUpDown, Copy, Download, Search } from 'lucide-react';
@@ -340,6 +341,7 @@ export default function JsonViewer() {
   const [outputView, setOutputView] = useSaved<View>('outputView', 'tree', (v) => OUTPUT_VIEWS.includes(v as View));
   const inputRef = useRef<CodeEditorHandle>(null);
   const valid = parsed.status === 'valid';
+  useToolRun(parsed.status === 'valid' ? text : null);
   const prettyText = useMemo(() => (parsed.status === 'valid' && outputView === 'text' ? pretty(parsed.value) : ''), [parsed, outputView]);
 
   const notValid = (

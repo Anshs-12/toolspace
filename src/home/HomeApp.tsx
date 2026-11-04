@@ -63,7 +63,7 @@ function PopularCard({ id }: { id: ToolPageId }) {
 }
 
 export const PROMISES = [
-  { Icon: Lock, title: 'Nothing is uploaded', body: 'Every tool runs in your browser. Your data never leaves this tab.' },
+  { Icon: Lock, title: 'Nothing is uploaded', body: 'Every tool runs in your browser. What you paste or open never leaves this tab.' },
   { Icon: UserX, title: 'No sign-up, no limits', body: 'No accounts, no daily caps, no "pro" plan. Use anything as often as you like.' },
   { Icon: Scale, title: 'Open source', body: 'MIT licensed. Read the code, run it yourself, or help improve it.' },
 ];

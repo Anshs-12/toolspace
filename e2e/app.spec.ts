@@ -144,6 +144,8 @@ test.describe('privacy', () => {
     await expect(tag).toHaveAttribute('data-exclude-hash', 'true');
     await expect(tag).toHaveAttribute('data-exclude-search', 'true');
     await expect(tag).toHaveAttribute('data-do-not-track', 'true');
+    await expect(tag).toHaveAttribute('data-before-send', 'toolspaceUmamiBeforeSend');
+    await expect.poll(() => page.evaluate(() => typeof (window as { toolspaceUmamiBeforeSend?: unknown }).toolspaceUmamiBeforeSend)).toBe('function');
     // Loaded and running, but it counts nothing here: this isn't toolspace.tech
     await expect.poll(() => page.evaluate(() => typeof (window as { umami?: unknown }).umami)).toBe('object');
   });

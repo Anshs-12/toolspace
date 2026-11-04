@@ -1,4 +1,5 @@
 import { useMemo, useRef } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { Braces, Minimize2 } from 'lucide-react';
 import { jsonStats, stringifyJson } from '@/lib/jsonTools';
 import { Button } from '@/components/ui/button';
@@ -15,6 +16,7 @@ export default function JsonValidator() {
   const inputRef = useRef<CodeEditorHandle>(null);
 
   const stats = useMemo(() => (parsed.status === 'valid' ? jsonStats(parsed.value) : null), [parsed]);
+  useToolRun(parsed.status === 'valid' ? text : null);
   const plural = (n: number, w: string) => `${n.toLocaleString()} ${w}${n === 1 ? '' : 's'}`;
 
   return (

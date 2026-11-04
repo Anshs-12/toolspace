@@ -8,6 +8,7 @@ import { OutputActions, Panel, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { Choice } from './imageShared';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const field =
   'h-9 rounded-lg border bg-background px-3 font-mono text-[14px] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50';
@@ -51,6 +52,7 @@ export default function PaletteTool() {
   const baseHex = color ? toHex({ ...color, a: 1 }) : '';
   const chosen = all.find((p) => p.id === which) ?? all[0];
   const output = chosen ? exportPalette(chosen, format, name) : '';
+  useToolRun(color ? output : null);
   const gray = color ? toOklch(color).c < 0.02 : false;
 
   return (

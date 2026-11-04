@@ -7,6 +7,7 @@ import CodeEditor from './CodeEditor';
 import { IconButton, InputActions, OutputActions, Panel, StatusLine } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const DEFAULT: RobotsConfig = { groups: [{ agents: ['*'], rules: [], crawlDelay: '' }], sitemaps: [] };
 
@@ -173,6 +174,8 @@ export default function RobotsTool() {
   const output = useMemo(() => buildRobots(config), [config]);
   const parsed = useMemo(() => parseRobots(source === 'built' ? output : pasted), [source, output, pasted]);
   const result = useMemo(() => testPath(parsed, agent, path), [parsed, agent, path]);
+  const robotsText = source === 'built' ? output : pasted;
+  useToolRun(robotsText.trim() ? `${robotsText}\u0000${agent}\u0000${path}\u0000${JSON.stringify(result)}` : null);
 
   const setGroup = (i: number, g: Group) => setConfig((c) => ({ ...c, groups: c.groups.map((x, j) => (j === i ? g : x)) }));
   const pasteFile = (text: string) => {

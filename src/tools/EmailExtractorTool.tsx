@@ -6,6 +6,7 @@ import OptionSwitch from './OptionSwitch';
 import { InputActions, OutputActions, Panel, StatusLine } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const SEPARATORS: { value: EmailSeparator; label: string; aria: string }[] = [
   { value: 'newline', label: '↵', aria: 'One per line' },
@@ -33,6 +34,7 @@ export default function EmailExtractorTool() {
   const deferred = useDeferredValue(text);
   const result = useMemo(() => extractEmails(deferred, { dedupe, lowercase, sort, domains, separator }), [deferred, dedupe, lowercase, sort, domains, separator]);
   const n = result.emails.length;
+  useToolRun(deferred.trim() ? `${separator}\u0000${result.emails.join('\n')}` : null);
 
   const details = [
     result.duplicates ? `${result.duplicates.toLocaleString()} duplicate${result.duplicates === 1 ? '' : 's'} removed` : '',

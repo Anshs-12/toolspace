@@ -22,6 +22,7 @@ import CodeEditor, { type CodeEditorHandle } from './CodeEditor';
 import { InputActions, OutputActions, Panel, StatusLine, byteLength, formatBytes } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const IS_EXAMPLE = new Set(Object.values(EXAMPLES));
 
@@ -110,6 +111,7 @@ export default function BeautifyTool({ fixedLang }: { fixedLang?: CodeLang } = {
   }, [code, actual, indent, printWidth, singleQuote, minifying, dialect, keywordCase]);
 
   const output = result.ok ? result.text : '';
+  useToolRun(!busy && code.trim() && result.ok ? output : null);
   const verb = minifying ? 'Minified' : 'Formatted';
   const status = !code.trim() ? (
     <StatusLine tone="muted">

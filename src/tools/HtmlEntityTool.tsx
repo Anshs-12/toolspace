@@ -7,6 +7,7 @@ import CodeEditor from './CodeEditor';
 import { InputActions, OutputActions, Panel, StatusLine } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 type Mode = 'encode' | 'decode';
 const STYLES: EntityStyle[] = ['named', 'numeric', 'hex'];
@@ -30,6 +31,7 @@ export default function HtmlEntityTool() {
   const encoded = useMemo(() => (mode === 'encode' ? encodeEntities(text, { style, nonAscii }) : ''), [mode, text, style, nonAscii]);
   const decoded = useMemo(() => (mode === 'decode' ? decodeEntities(text) : null), [mode, text]);
   const output = mode === 'encode' ? encoded : (decoded?.text ?? '');
+  useToolRun(text.trim() ? `${mode}\u0000${output}` : null);
 
   const switchMode = (next: Mode) => {
     // Flip direction: the output becomes the input

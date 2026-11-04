@@ -9,6 +9,7 @@ import { StatusLine, downloadFile, formatBytes } from './shared';
 import ToolBar from './ToolBar';
 import { Choice, ImageDrop, blobToDataUrl, decodeImage, drawScaled, encodeCanvas, sampleFile } from './imageShared';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 type FormatChoice = 'auto' | ImageFormat;
 const FORMATS: { value: FormatChoice; label: string }[] = [
@@ -94,6 +95,7 @@ export default function ImageResizeTool() {
   };
 
   const result = out && 'blob' in out ? out : null;
+  useToolRun(result ? `${result.w}x${result.h}\u0000${result.format}\u0000${result.blob.size}\u0000${quality}` : null);
 
   return (
     <>

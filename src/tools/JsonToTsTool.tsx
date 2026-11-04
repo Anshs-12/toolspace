@@ -7,6 +7,7 @@ import { EXAMPLE_JSON } from './content';
 import OptionSwitch from './OptionSwitch';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const FORMATS: { value: JsonToTsFormat; label: string }[] = [
   { value: 'interface', label: 'Interfaces' },
@@ -27,6 +28,7 @@ export default function JsonToTsTool() {
     [parsed, format, rootName, exported, readonly],
   );
   const code = result?.ok ? result.code : '';
+  useToolRun(code);
   const note = result?.ok ? `${result.types} ${format === 'zod' ? 'schema' : 'type'}${result.types === 1 ? '' : 's'}` : undefined;
 
   return (

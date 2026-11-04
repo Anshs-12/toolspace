@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { Copy, Download, Plus, X } from 'lucide-react';
 import { gradientCss, type GradientKind, type GradientStop } from '@/lib/color';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,7 @@ export default function GradientTool() {
   const [stops, setStops] = useSaved<GradientStop[]>('stops', PRESETS[0]!.stops, validStops);
 
   const css = useMemo(() => gradientCss(kind, angle, stops), [kind, angle, stops]);
+  useToolRun(css);
   const declaration = `background: ${css};`;
   const stylesheet = `.gradient {\n  ${declaration}\n}\n`;
   const update = (i: number, patch: Partial<GradientStop>) => setStops(stops.map((s, j) => (j === i ? { ...s, ...patch } : s)));

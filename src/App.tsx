@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react'
 import { toast } from 'sonner';
 import { ArrowRight, CircleCheck } from 'lucide-react';
 import { useDiffWorker } from '@/lib/useDiffWorker';
+import { useToolRun } from '@/lib/analytics';
 import type { DiffLine, DiffOptions, Hunk } from '@/lib/diffProcessor';
 import { buildSplitRows, buildUnifiedRows } from '@/lib/rows';
 import { buildLineMarks } from '@/lib/marks';
@@ -133,6 +134,13 @@ const App: React.FC<{ variant: Variant }> = ({ variant }) => {
   const lines = useMemo(() => (isEmpty ? [] : result?.lines ?? []), [isEmpty, result]);
   const hunks = useMemo(() => (isEmpty ? [] : result?.hunks ?? []), [isEmpty, result]);
   const stats = isEmpty ? null : result?.stats ?? null;
+
+  // A finished comparison of two non-empty texts counts as a run (see lib/analytics.ts); the key never leaves the tab
+  useToolRun(
+    result && input && !error && !pending && input.originalText.trim() && input.changedText.trim()
+      ? [input.originalText, input.changedText, JSON.stringify(diffOptions)].join('\u0000')
+      : null,
+  );
 
   const inEditor = placement === 'editor';
   const rowModel = useMemo(

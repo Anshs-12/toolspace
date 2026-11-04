@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { IconButton, OutputActions, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const inputClass =
   'h-9 min-w-0 rounded-lg border bg-background px-3 font-mono text-[14px] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50';
@@ -88,6 +89,7 @@ export default function SubnetTool() {
 
   const parsed = useMemo(() => parseInput(input, mask), [input, mask]);
   const s = parsed.ok ? calculate(parsed.value.ip, parsed.value.prefix) : null;
+  useToolRun(parsed.ok ? `${parsed.value.ip}/${parsed.value.prefix}\u0000${splitMode}\u0000${splitValue}` : null);
   const rangeTone = s?.range.kind === 'private' ? 'text-add' : s?.range.kind === 'special' ? 'text-amber-700 dark:text-amber-400' : '';
 
   return (

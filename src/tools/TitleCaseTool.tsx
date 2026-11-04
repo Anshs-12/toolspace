@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { TITLE_STYLES, titleCase, type TitleStyle } from '@/lib/textCase';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import CodeEditor from './CodeEditor';
@@ -17,6 +18,7 @@ export default function TitleCaseTool() {
   const [text, setText] = useSaved('text', '');
   const [style, setStyle] = useSaved<TitleStyle>('style', 'chicago', (v) => TITLE_STYLES.some((s) => s.style === v));
   const output = useMemo(() => titleCase(text, style), [text, style]);
+  useToolRun(text.trim() ? output : null);
 
   return (
     <>

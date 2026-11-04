@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { Copy, RefreshCw } from 'lucide-react';
 import { crackTime, entropyBits, generatePassword, passwordAlphabets, strengthLabel, type PasswordOptions } from '@/lib/generate';
 import { cn } from '@/lib/utils';
@@ -34,6 +35,8 @@ export default function PasswordTool() {
   const strength = strengthLabel(bits);
   const [main, ...more] = passwords;
   const none = alphabet === 0;
+  // Compared in this tab only (the hook never sends it); passwords made on load are the starting point, not a run
+  useToolRun(none ? null : passwords.join('\n'));
 
   return (
     <>
@@ -121,7 +124,7 @@ export default function PasswordTool() {
           </div>
         )}
         <div className="-mx-4 mt-6 -mb-4 sm:-mx-6 sm:-mb-6">
-          <StatusLine tone="ok">Made with crypto.getRandomValues in this tab. Nothing is stored or sent.</StatusLine>
+          <StatusLine tone="ok">Made with crypto.getRandomValues in this tab. Passwords aren’t stored or sent.</StatusLine>
         </div>
       </div>
     </>

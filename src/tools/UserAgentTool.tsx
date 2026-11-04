@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { OutputActions, StatusLine } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const SAMPLES: { label: string; ua: string }[] = [
   { label: 'iPhone Safari', ua: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1' },
@@ -43,6 +44,7 @@ export default function UserAgentTool() {
   const isOwn = !ua;
   const current = isOwn ? (own?.ua ?? '') : ua;
   const result = useMemo(() => parseUserAgent(current, isOwn ? { maxTouchPoints: own?.touch } : {}), [current, isOwn, own?.touch]);
+  useToolRun(ua.trim() ? ua : null);
   const json = useMemo(
     () =>
       current

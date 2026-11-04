@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { IconButton, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const field =
   'h-9 min-w-0 flex-1 rounded-lg border bg-background px-3 font-mono text-[14px] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50';
@@ -30,6 +31,7 @@ export default function ContrastTool() {
   const [bg, setBg] = useSaved('background', '#ffffff');
   const pair = useMemo(() => checkPair(fg, bg), [fg, bg]);
   const checks = pair.ok ? results(pair.ratio) : [];
+  useToolRun(pair.ok ? `${toHex(pair.fg)}\u0000${toHex(pair.bg)}` : null);
   const suggestions = useMemo(() => {
     if (!pair.ok) return [];
     return [

@@ -148,7 +148,7 @@ export const PAGES: Page[] = [
     path: '/json-validator/',
     title: 'JSON validator - check JSON syntax online, free | toolspace',
     description:
-      'Validate JSON online and find errors fast: the exact line and column, a plain explanation, duplicate-key warnings. Free, and nothing leaves your browser.',
+      'Validate JSON online and find errors fast: the exact line and column, a plain explanation, duplicate-key warnings. Free; your JSON stays in your browser.',
     name: 'JSON validator',
     blurb: 'Check JSON syntax and see exactly where it breaks.',
     priority: 0.8,
@@ -306,7 +306,7 @@ export const PAGES: Page[] = [
   {
     id: 'qr-code',
     path: '/qr-code-generator/',
-    title: 'QR code generator - free, no sign-up or tracking | toolspace',
+    title: 'QR code generator - free, no scan tracking | toolspace',
     description:
       'Make QR codes for links, text, Wi-Fi, email or phone numbers. Pick colors and error correction, download PNG or SVG. Free, no expiry, made in your browser.',
     name: 'QR code generator',
@@ -498,7 +498,7 @@ export const PAGES: Page[] = [
     path: '/yaml-validator/',
     title: 'YAML validator - check YAML syntax online, free | toolspace',
     description:
-      'Validate YAML and find errors by line and column, with duplicate-key warnings. See the parsed result as JSON. Free, and nothing leaves your browser.',
+      'Validate YAML and find errors by line and column, with duplicate-key warnings. See the parsed result as JSON. Free; your YAML never leaves your browser.',
     name: 'YAML validator',
     blurb: 'Check YAML syntax and see where it breaks.',
     priority: 0.7,
@@ -648,7 +648,7 @@ export const PAGES: Page[] = [
     path: '/xml-formatter/',
     title: 'XML formatter - beautify and validate XML, free | toolspace',
     description:
-      'Format XML with clean indentation and check that it is well-formed, with the error line if not. Free, no sign-up, and nothing leaves your browser.',
+      'Format XML with clean indentation and check that it is well-formed, with the error line if not. Free, no sign-up; your XML never leaves your browser.',
     name: 'XML formatter',
     blurb: 'Format XML and check it is well-formed.',
     priority: 0.6,
@@ -700,7 +700,7 @@ export const PAGES: Page[] = [
     description:
       'Learn what toolspace is: free, open source developer tools that run in your browser, so the text, files and data you work with never leave your device.',
     name: 'About',
-    blurb: 'What toolspace is and how your data stays on your device.',
+    blurb: 'What toolspace is, how your input stays on your device, and what usage data is counted.',
     priority: 0.4,
   },
   {

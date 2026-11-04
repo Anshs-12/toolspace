@@ -7,6 +7,7 @@ import { InputActions, OutputActions, Panel } from './shared';
 import OptionSwitch from './OptionSwitch';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const EXAMPLE = `banana
 Apple
@@ -47,6 +48,7 @@ export default function LineCleanerTool() {
     [text, dedupe, ignoreCase, trim, dropEmpty, sort, reverse, seed],
   );
   const s = result.stats;
+  useToolRun(text.trim() ? result.text : null);
   const n = (x: number) => x.toLocaleString();
 
   return (

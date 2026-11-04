@@ -9,6 +9,7 @@ import { OutputActions, Panel, StatusLine, downloadFile, formatBytes } from './s
 import ToolBar from './ToolBar';
 import { Choice, ImageDrop, blobToDataUrl, canvasOf, ctx2d, decodeImage, drawScaled, encodeCanvas } from './imageShared';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const MASTER = 512;
 const HEX = /^#[0-9a-f]{6}$/i;
@@ -158,6 +159,7 @@ export default function FaviconTool() {
   const html = faviconHtml();
   const manifest = useMemo(() => webManifest({ name: appName, color: bgMode === 'color' ? bgColor : '#ffffff' }), [appName, bgMode, bgColor]);
   const tab = outputs.find((o) => o.name === 'favicon-32x32.png');
+  useToolRun(outputs.length && !error ? `${appName}\u0000${outputs.map((o) => `${o.name}:${o.blob.size}`).join(',')}` : null);
 
   const downloadAll = async () => {
     for (const o of outputs) {

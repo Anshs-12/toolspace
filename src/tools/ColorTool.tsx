@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { Copy } from 'lucide-react';
 import { contrast, formats, harmonies, parseColor, tintsAndShades, toHex, wcagLevel, type Rgba } from '@/lib/color';
 import { cn } from '@/lib/utils';
@@ -42,6 +43,7 @@ function ContrastCard({ color, against, name }: { color: Rgba; against: Rgba; na
 export default function ColorTool() {
   const [input, setInput] = useSaved('color', '#3b82f6', (v) => (v as string).length <= 200);
   const color = useMemo(() => parseColor(input), [input]);
+  useToolRun(color ? `${color.r},${color.g},${color.b},${color.a}` : null);
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { toast } from 'sonner';
 import { Copy, Download } from 'lucide-react';
 import { makeQr, qrSvg, QR_TEMPLATES, type Ecc } from '@/lib/qr';
@@ -91,6 +92,7 @@ export default function QrTool() {
   const qr = useMemo(() => (payload ? makeQr(payload, ecc) : null), [payload, ecc]);
   const colors = { fg: HEX.test(fg) ? fg : '#000000', bg: HEX.test(bg) ? bg : '#ffffff' };
   const svg = qr?.ok ? qrSvg(qr.qr, { margin: 4, ...colors }) : '';
+  useToolRun(svg ? `${svg}\u0000${size}` : null);
 
   return (
     <>

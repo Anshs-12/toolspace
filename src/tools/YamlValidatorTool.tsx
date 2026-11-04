@@ -7,6 +7,7 @@ import CodeEditor, { type CodeEditorHandle } from './CodeEditor';
 import { InputActions, OutputActions, Panel } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 export const YAML_EXAMPLE = `# Two documents in one file
 service: web
@@ -49,6 +50,7 @@ export default function YamlValidatorTool() {
 
   const result = useMemo(() => checkYaml(settled, version), [settled, version]);
   const json = result.status === 'valid' ? result.json : '';
+  useToolRun(result.status === 'valid' ? `${version}\u0000${json}` : null);
   const multi = result.status !== 'empty' && result.documents > 1;
   const firstError = result.status === 'invalid' ? result.errors[0] : undefined;
   const warnings = result.status === 'empty' ? [] : result.warnings;

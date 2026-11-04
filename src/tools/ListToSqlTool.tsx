@@ -8,6 +8,7 @@ import { InputActions, OutputActions, Panel } from './shared';
 import OptionSwitch from './OptionSwitch';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 type Mode = 'sql' | 'join' | 'split';
 const MODES: { value: Mode; label: string; title: string }[] = [
@@ -60,6 +61,7 @@ export default function ListToSqlTool() {
 
   const numeric = allNumeric(items);
   const nonNumeric = mode === 'sql' && quote === 'none' ? items.filter((v) => !isNumeric(v)).length : 0;
+  useToolRun(items.length ? output : null);
 
   return (
     <>

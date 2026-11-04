@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { IconButton, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const field =
   'h-9 w-full min-w-0 rounded-lg border bg-background px-3 font-mono text-[14px] tabular-nums outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-del';
@@ -52,6 +53,7 @@ export default function AspectRatioTool() {
   const errorText = (v: number | string) => (typeof v === 'string' && v !== 'empty' ? v : undefined);
   const solvedOther = solved ? String(solved.rounded) : '';
   const resultLine = simple?.ok ? `${simple.w}:${simple.h}` : '';
+  useToolRun(resultLine || solvedOther ? `${resultLine}\u0000${solvedOther}\u0000${known}` : null);
 
   return (
     <>

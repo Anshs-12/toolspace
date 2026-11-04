@@ -23,23 +23,73 @@ no account, nothing uploaded. It lives at
 
 ## Privacy
 
-There is no backend, and tool input never leaves the browser.
+There is no backend. Tool input (text, files, tokens, images) is processed in
+the browser tab and is not uploaded. The site does send cookieless usage
+analytics to [Umami Cloud](https://umami.is), described below.
 
-The only network request a page makes is an anonymous page-view count to
-[Umami Cloud](https://umami.is): no cookies and no personal data. It is set
-up to stay that way:
+## Analytics
 
-- The tracker script is served from this site (`public/umami.js`), so no
-  third-party code runs on the page.
-- The production Content Security Policy (`src/csp.ts`) has
-  `connect-src https://gateway.umami.is`: every other fetch, XHR or WebSocket is
-  blocked, so pasted text has nowhere to go.
-- URLs are counted without their `#hash` (where share links keep the input) or
-  `?query`. Visitors with Do Not Track on are not counted, and nothing is
-  counted outside toolspace.tech (dev servers, previews and tests).
+Umami counts page views and a `tool-run` event. It sets no cookies.
 
-The settings are the `data-*` attributes on the script tag in `vite.config.ts`
-(`headTags`).
+**What a send contains.** `public/umami-config.js` is the tracker's
+[`data-before-send`](https://umami.is/docs/tracker-configuration) handler and
+rebuilds every payload from this allowlist, cancelling anything else:
+
+| Field | Value |
+| --- | --- |
+| `url` | the page's canonical path from the build, e.g. `/json-formatter/` (never the address bar, so no `#` or `?`) |
+| `title` | the page's static title from the build |
+| `referrer` | another site's origin only, e.g. `https://news.ycombinator.com/`; empty for links within toolspace |
+| `hostname`, `screen`, `language`, `website` | `toolspace.tech`, e.g. `1440x900`, e.g. `en-US`, the site ID |
+| `name`, `data` | only `tool-run` with `{ "tool": "<page id>" }`, e.g. `{ "tool": "json-formatter" }` |
+
+Request headers are the tracker's `Content-Type`, `x-umami-website-id`,
+`x-umami-hostname` and `x-umami-cache` (a token Umami's server issues), plus
+what the browser adds to any request: user agent, `Accept-Language`, `Origin`,
+client hints. No cookies (`credentials: omit`) and no `Referer` (the pages set
+`referrer` to `no-referrer`). Umami's servers also see the visitor's IP
+address, as with any request; per
+[Umami's docs](https://umami.is/docs/metric-definitions) it is used with the
+user agent and a rotating salt to estimate unique visitors, and for approximate
+location, and isn't stored in the analytics records. Visitor counts are
+estimates, not exact people.
+
+**When `tool-run` fires.** `useToolRun` (`src/lib/analytics.ts`) sends it when
+a tool shows a new successful result after the visitor interacted with the
+tool, once the result has stayed unchanged for 2 seconds, and only if it
+differs from the last result counted. Empty input, errors, the sample shown on
+load, input restored from a share link or storage, and unchanged results don't
+count. Validators count only a valid verdict.
+
+**Where it sends.** Only on `toolspace.tech` (`data-domains`), not with Do Not
+Track on (`data-do-not-track`), and only to `https://gateway.umami.is/api/send`,
+the endpoint the Cloud script uses by default (set explicitly with
+`data-host-url`). The production Content Security Policy (`src/csp.ts`) allows
+that one destination for requests and loads scripts only from this site. The
+CSP limits where data can go; the allowlist above is what limits what is sent.
+
+**Tests.** `e2e/analytics.spec.ts` serves the production build as
+`https://toolspace.tech` inside the test browser and answers the collection
+endpoint with a mock, so tracking really runs without reaching Umami. It
+types canary inputs, runs tools, opens a share link and navigates, then checks
+the decoded payloads and headers contain no input, query or fragment.
+
+### Updating the pinned tracker
+
+`public/umami.js` is a copy of `https://cloud.umami.is/script.js`, served from
+this site (a method [Umami documents](https://umami.is/docs/bypass-ad-blockers))
+so no third-party script runs on the page. It doesn't update itself. To update:
+
+```sh
+curl -sS https://cloud.umami.is/script.js -o /tmp/umami.js
+tail -n +6 public/umami.js | shasum -a 256   # the pinned copy (hash is in its header)
+shasum -a 256 /tmp/umami.js                   # the live one
+diff <(npx prettier --parser babel /tmp/umami.js) <(tail -n +6 public/umami.js | npx prettier --parser babel)
+```
+
+If they differ, read the diff (new payload fields, headers or endpoints), copy
+the new file under the header, update the date and hash in it, and run
+`npx playwright test e2e/analytics.spec.ts`.
 
 ## Development
 

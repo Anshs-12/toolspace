@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { IconButton, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const FIXED = [
   { base: 2, label: 'Binary', prefix: '0b', group: 4 },
@@ -30,6 +31,7 @@ export default function NumberBaseTool() {
   const originBase = origin === 'custom' ? custom : origin;
   const parsed = useMemo(() => parseInBase(text, originBase), [text, originBase]);
   const value = parsed.ok === true ? parsed.value : null;
+  useToolRun(value != null ? `${value}\u0000${custom}` : null);
 
   const show = (base: number, groupSize: number) => {
     if (value == null) return '';

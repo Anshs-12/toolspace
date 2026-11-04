@@ -96,10 +96,10 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({ current, app = false, resolvedT
               className="ml-1 hidden h-7 gap-2 rounded-full border bg-transparent px-3 font-mono text-[11.5px] font-normal text-foreground sm:inline-flex"
             >
               <span className="live-dot" aria-hidden="true" />
-              100% local · free
+              runs locally · free
             </Badge>
           </TooltipTrigger>
-          <TooltipContent className="max-w-60 text-center">Your data never leaves this tab: no uploads, no accounts.</TooltipContent>
+          <TooltipContent className="max-w-60 text-center">Your input never leaves this tab: no uploads, no accounts.</TooltipContent>
         </Tooltip>
         <a
           href={REPO_URL}

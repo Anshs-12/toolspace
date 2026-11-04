@@ -117,7 +117,7 @@ print("\\n".join(difflib.unified_diff(normalize("old.json"), normalize("new.json
         <h3>Private data</h3>
         <p>
           API responses often hold tokens or customer data. Online tools that upload your JSON to a server put that data at risk.
-          Every toolspace tool runs in your browser, and the page is blocked from sending your data anywhere.
+          Every toolspace tool runs in your browser, and what you paste is never sent anywhere.
         </p>
       </>
     ),
@@ -252,7 +252,7 @@ df.to_csv("data.csv", index=False, encoding="utf-8-sig")`}</Code>
         </p>
 
         <details open>
-          <summary>Your data stays on your device</summary>
+          <summary>Your input stays on your device</summary>
           <p>
             Every tool does its work in your browser. The text you paste, the files you open, and the tokens, passwords and
             colors you work with are processed in the tab and never sent to a server.
@@ -266,11 +266,20 @@ df.to_csv("data.csv", index=False, encoding="utf-8-sig")`}</Code>
             browsers don’t send to servers. Anyone you give a link to can read what’s in it, and it stays in your browser
             history, so don’t share links that contain secrets.
           </p>
+        </details>
+
+        <details>
+          <summary>What usage data is counted</summary>
           <p>
-            To see which tools people use, the site counts page views with Umami, a privacy-friendly analytics service. It
-            uses no cookies and collects no personal data. A count includes the page’s address (without anything after # or
-            ?), the referring site, and your browser, screen size and language, never what you type or open. If your browser
-            sends Do Not Track, you aren’t counted.
+            To see which tools get used, the site sends usage counts to Umami, an analytics service that sets no cookies. A
+            count is sent when a page opens and when a tool produces a new result. Each one contains the page’s address
+            (without anything after # or ?), its title, the site you came from (its domain only), your screen size and
+            language, and for a tool result, which tool it was. It never contains what you type, paste, open or produce.
+          </p>
+          <p>
+            Like any web request, a count reaches Umami with your IP address and browser details, which Umami uses to tell
+            browsers, devices and approximate locations apart and to estimate how many different visitors there were. If
+            your browser sends Do Not Track, nothing is counted.
           </p>
         </details>
 

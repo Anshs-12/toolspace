@@ -10,6 +10,7 @@ import CodeEditor from './CodeEditor';
 import { OutputActions, Panel, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const EXAMPLE_CHECK = '{017F22E2-79B0-7CC3-98C4-DC0C0C07398F}';
 
@@ -30,6 +31,7 @@ export default function UuidTool() {
 
   const output = useMemo(() => raw.map((u) => formatUuid(u, { upper, dashes, braces })).join('\n'), [raw, upper, dashes, braces]);
   const result = useMemo(() => checkUuid(check), [check]);
+  useToolRun(countText === String(count) && output ? `${output}\u0000${result.status === 'empty' || result.status === 'invalid' ? '' : check.trim()}` : null);
 
   const commitCount = (text: string) => {
     setCountText(text);

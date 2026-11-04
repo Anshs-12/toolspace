@@ -1,4 +1,5 @@
 import { useDeferredValue, useMemo, useRef } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { jsonToCsv, type Delimiter } from '@/lib/jsonTools';
 import { DELIMITER_NAMES, csvToJson } from '@/lib/csvJson';
 import { parseJson } from '@/lib/jsonValue';
@@ -65,6 +66,7 @@ export default function JsonToCsv() {
     () => (!toCsv && deferredCsv.trim() ? csvToJson(deferredCsv, { delimiter: readDelimiter, header, types, nest }) : null),
     [toCsv, deferredCsv, readDelimiter, header, types, nest],
   );
+  useToolRun(toCsv ? result?.csv : fromCsv?.ok ? fromCsv.json : null);
 
   const directionToggle = (
     <ToggleGroup type="single" variant="outline" size="sm" value={direction} onValueChange={(v) => v && setDirection(v as Direction)} aria-label="Direction">

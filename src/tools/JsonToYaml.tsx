@@ -1,4 +1,5 @@
 import { useDeferredValue, useMemo, useRef } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { jsonToYaml } from '@/lib/jsonTools';
 import { EXAMPLE_YAML, yamlToJson } from '@/lib/yamlJson';
 import { Button } from '@/components/ui/button';
@@ -26,6 +27,7 @@ export default function JsonToYaml() {
   const deferredYaml = useDeferredValue(yamlText);
   const fromYaml = useMemo(() => (!toYaml && deferredYaml.trim() ? yamlToJson(deferredYaml) : null), [toYaml, deferredYaml]);
   const json = fromYaml?.ok ? fromYaml.json : '';
+  useToolRun(toYaml ? yaml : json);
 
   const directionToggle = (
     <ToggleGroup

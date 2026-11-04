@@ -20,6 +20,7 @@ import CodeEditor from './CodeEditor';
 import { IconButton, OutputActions, Panel } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const FORMATS: { value: MockFormat; label: string; file: string; mime: string }[] = [
   { value: 'json', label: 'JSON', file: 'mock-data.json', mime: 'application/json' },
@@ -63,6 +64,7 @@ export default function MockDataTool() {
   const fmt = FORMATS.find((f) => f.value === format)!;
   const dups = duplicateKeys(fields);
   const emptyKeys = fields.filter((f) => !f.key).length;
+  useToolRun(fields.length && !dups.length && !emptyKeys ? output : null);
 
   const update = (i: number, patch: Partial<MockField>) => setFields(fields.map((f, j) => (j === i ? { ...f, ...patch } : f)));
   const move = (i: number, d: -1 | 1) => {

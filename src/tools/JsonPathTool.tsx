@@ -7,6 +7,7 @@ import CodeEditor, { type CodeEditorHandle } from './CodeEditor';
 import { InputActions, JsonStatusLine, OutputActions, Panel, StatusLine, useJsonInput } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 type View = 'both' | 'values' | 'paths';
 const VIEWS: View[] = ['both', 'values', 'paths'];
@@ -54,6 +55,7 @@ export default function JsonPathTool() {
   }, [result, view, parsed.status]);
 
   const count = result?.ok ? result.matches.length : 0;
+  useToolRun(result?.ok && parsed.status === 'valid' && deferredExpr.trim() ? `${deferredExpr}\u0000${output}` : null);
   const jumpTo = (pos: number) => {
     exprRef.current?.focus();
     exprRef.current?.setSelectionRange(pos, Math.min(pos + 1, expr.length));

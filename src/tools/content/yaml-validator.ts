@@ -25,7 +25,7 @@ const content: ToolContent = {
       q: 'What about values JSON can’t hold?',
       a: '.inf and .nan become null in the JSON view, with a warning. Dates stay strings in YAML 1.2; in YAML 1.1 mode they’re read as timestamps and shown in ISO form. Aliases (*name) are expanded, and an alias that contains itself is reported instead of shown.',
     },
-    { q: 'Is my YAML uploaded?', a: 'No. It’s parsed in this tab with the open-source yaml library, and nothing is sent anywhere.' },
+    { q: 'Is my YAML uploaded?', a: 'No. It’s parsed in this tab with the open-source yaml library, and your YAML is never sent anywhere.' },
   ],
   example: {
     intro: 'NO and on are plain words here. In YAML 1.2 they stay strings, but a YAML 1.1 parser reads them as false and true, so the validator warns about both.',

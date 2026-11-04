@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useToolRun } from '@/lib/analytics';
 import { CircleAlert, CircleCheck, Clock } from 'lucide-react';
 import { CLAIM_NAMES, decodeJwt, keyKindFor, timeClaims, tokenStatus, verifyJwt, type VerifyResult } from '@/lib/jwt';
 import { relative } from '@/lib/timestamp';
@@ -43,6 +44,7 @@ export default function JwtTool() {
   const decoded = useMemo(() => (token.trim() ? decodeJwt(token) : null), [token]);
   const jwt = decoded?.ok ? decoded.jwt : null;
   const kind = jwt ? keyKindFor(jwt.header.alg) : null;
+  useToolRun(jwt ? `${jwt.headerText}\u0000${jwt.payloadText}` : null);
 
   useEffect(() => {
     setVerify(null);

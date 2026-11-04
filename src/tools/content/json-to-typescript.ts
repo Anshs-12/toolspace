@@ -28,7 +28,7 @@ const content: ToolContent = {
       q: 'Does the Zod schema need a particular version?',
       a: 'It uses z.object, z.array, z.union, z.record, z.unknown, .nullable() and .optional(), which exist in both Zod 3 and Zod 4. Schemas for nested objects are declared before the ones that use them.',
     },
-    { q: 'Is my JSON uploaded?', a: 'No. The types are worked out in this tab, and nothing is sent anywhere.' },
+    { q: 'Is my JSON uploaded?', a: 'No. The types are worked out in this tab, and your JSON is never sent anywhere.' },
   ],
   example: {
     intro: 'The second team member has an email and no lead flag, so both keys become optional. The empty tags array can’t say what it holds, so it stays unknown[].',

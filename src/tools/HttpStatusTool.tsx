@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { IconButton, StatusLine, copyText } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 const FILTERS = ['all', ...CLASSES.map((c) => c.id)];
 const CLASS_TONE: Record<string, string> = {
@@ -82,6 +83,7 @@ export default function HttpStatusTool() {
   const unofficial = useMemo(() => filterCodes(UNOFFICIAL_CODES, cls, query), [cls, query]);
   const groups = CLASSES.map((c) => ({ ...c, codes: standard.filter((s) => String(s.code)[0] === c.id) })).filter((g) => g.codes.length);
   const total = standard.length + unofficial.length;
+  useToolRun(query.trim() && total ? `${cls}\u0000${query.trim()}\u0000${[...standard, ...unofficial].map((c) => c.code).join(',')}` : null);
 
   return (
     <>

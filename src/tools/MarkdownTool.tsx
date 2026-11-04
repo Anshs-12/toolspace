@@ -5,6 +5,7 @@ import CodeEditor from './CodeEditor';
 import { IconButton, InputActions, Panel, copyText, downloadFile } from './shared';
 import ToolBar from './ToolBar';
 import { useSaved } from './saved';
+import { useToolRun } from '@/lib/analytics';
 
 /** The first heading, as the downloaded page's title. */
 function titleOf(md: string): string {
@@ -41,6 +42,7 @@ export default function MarkdownTool() {
   const deferred = useDeferredValue(md);
   // Sanitized: scripts and event handlers in the Markdown are removed
   const html = useMemo(() => renderMarkdown(deferred), [deferred]);
+  useToolRun(deferred.trim() ? html : null);
 
   return (
     <>

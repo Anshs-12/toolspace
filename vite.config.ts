@@ -165,9 +165,10 @@ function headTags(page: Page): HtmlTagDescriptor[] {
     { tag: 'script', attrs: { src: '/theme-init.js' }, injectTo: 'head' },
     // Registers the service worker that makes the site work offline (plain script from public/)
     { tag: 'script', attrs: { src: '/sw-register.js', defer: true }, injectTo: 'head' },
-    // Umami page-view counts: no cookies, no personal data. Our own copy of the script (public/umami.js), so no
-    // third-party code runs here. Counts only on the live domain; the URL is sent without its #hash (where share
-    // links keep your input) and ?query; visitors with Do Not Track on aren't counted. src/csp.ts allows the endpoint.
+    // Umami analytics, cookieless (README "Analytics"). The allowlist that rebuilds every payload, then our pinned copy
+    // of the Umami Cloud tracker (public/umami.js; no third-party script runs here). Both deferred, so they run in this
+    // order. Sends only on the live domain and not with Do Not Track on; src/csp.ts allows only the endpoint.
+    { tag: 'script', attrs: { src: '/umami-config.js', defer: true }, injectTo: 'head' },
     {
       tag: 'script',
       attrs: {
@@ -179,6 +180,7 @@ function headTags(page: Page): HtmlTagDescriptor[] {
         'data-exclude-hash': 'true',
         'data-exclude-search': 'true',
         'data-do-not-track': 'true',
+        'data-before-send': 'toolspaceUmamiBeforeSend',
       },
       injectTo: 'head',
     },
