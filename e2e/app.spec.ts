@@ -130,8 +130,22 @@ test.describe('privacy', () => {
   test('ships a Content Security Policy that blocks network requests', async ({ page }) => {
     await page.goto('/diff-checker/');
     const csp = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
-    expect(csp).toContain("connect-src 'none'");
+    // The only allowed destination is Umami's page-view endpoint
+    expect(csp).toContain('connect-src https://gateway.umami.is;');
+    expect(csp).toContain("script-src 'self' 'wasm-unsafe-eval';");
     expect(csp).toContain("default-src 'none'");
+  });
+
+  test('counts page views with Umami without the URL hash, query or test hits', async ({ page }) => {
+    await page.goto('/diff-checker/');
+    const tag = page.locator('script[src="/umami.js"]');
+    await expect(tag).toHaveAttribute('data-website-id', 'bfdd0fe7-099d-43ab-b329-2cee9f21a87f');
+    await expect(tag).toHaveAttribute('data-domains', 'toolspace.tech');
+    await expect(tag).toHaveAttribute('data-exclude-hash', 'true');
+    await expect(tag).toHaveAttribute('data-exclude-search', 'true');
+    await expect(tag).toHaveAttribute('data-do-not-track', 'true');
+    // Loaded and running, but it counts nothing here: this isn't toolspace.tech
+    await expect.poll(() => page.evaluate(() => typeof (window as { umami?: unknown }).umami)).toBe('object');
   });
 
   test('makes no network requests while diffing', async ({ page }) => {

@@ -708,7 +708,7 @@ export const PAGES: Page[] = [
     path: '/contact/',
     title: 'Contact toolspace - email, bugs and tool ideas',
     description:
-      'Get in touch with toolspace: email for questions and feedback, or open an issue on GitHub to report a bug or suggest a new tool. No forms, no tracking.',
+      'Get in touch with toolspace: email for questions and feedback, or open an issue on GitHub to report a bug or suggest a new tool. No forms, no cookies.',
     name: 'Contact',
     blurb: 'Email, bug reports and tool ideas.',
     priority: 0.3,

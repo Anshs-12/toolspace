@@ -23,8 +23,23 @@ no account, nothing uploaded. It lives at
 
 ## Privacy
 
-There is no backend. Production builds ship a Content Security Policy with
-`connect-src 'none'`, so the page cannot make network requests.
+There is no backend, and tool input never leaves the browser.
+
+The only network request a page makes is an anonymous page-view count to
+[Umami Cloud](https://umami.is): no cookies and no personal data. It is set
+up to stay that way:
+
+- The tracker script is served from this site (`public/umami.js`), so no
+  third-party code runs on the page.
+- The production Content Security Policy (`src/csp.ts`) has
+  `connect-src https://gateway.umami.is`: every other fetch, XHR or WebSocket is
+  blocked, so pasted text has nowhere to go.
+- URLs are counted without their `#hash` (where share links keep the input) or
+  `?query`. Visitors with Do Not Track on are not counted, and nothing is
+  counted outside toolspace.tech (dev servers, previews and tests).
+
+The settings are the `data-*` attributes on the script tag in `vite.config.ts`
+(`headTags`).
 
 ## Development
 

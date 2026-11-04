@@ -9,7 +9,7 @@ const content: ToolContent = {
     { title: 'Compare and download', body: 'Each file shows its old size, new size and the change. If the new file is bigger, keep the original instead.' },
   ],
   faq: [
-    { q: 'Are my images uploaded?', a: 'No. Decoding and re-encoding happen in this tab with the browser’s own image tools, and the page is blocked from sending data anywhere.' },
+    { q: 'Are my images uploaded?', a: 'No. Decoding and re-encoding happen in this tab with the browser’s own image tools, and the page is blocked from sending your data anywhere.' },
     { q: 'Why did my PNG barely shrink, or grow?', a: 'PNG is lossless, so saving it again keeps every pixel and the browser’s PNG encoder is not tuned for size. To make a PNG much smaller, save it as WebP or JPEG instead (JPEG has no transparency).' },
     { q: 'Which format should I pick?', a: 'WebP is usually the smallest and keeps transparency, and every current browser shows it. JPEG works everywhere and suits photos. PNG suits screenshots and flat graphics that need exact pixels.' },
     { q: 'Is the photo’s metadata kept?', a: 'No. Re-encoding through a canvas drops EXIF data such as camera details and GPS location, and ignores the EXIF rotation once it has been applied to the pixels.' },

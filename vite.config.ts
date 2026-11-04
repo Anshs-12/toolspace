@@ -5,7 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { build, defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { CSP } from './src/csp';
+import { CSP, UMAMI_HOST, UMAMI_WEBSITE_ID } from './src/csp';
 import { CONTACT_EMAIL, GOOGLE_SITE_VERIFICATION, PAGES, REPO_URL, SITE_NAME, SITE_URL, type Page, type PageId } from './src/site';
 import { markdownPath } from './src/lib/md/negotiate';
 import { TOOL_CONTENT } from './src/tools/content';
@@ -18,7 +18,7 @@ const htmlFile = (page: Page) => (page.path === '/' ? 'index.html' : `${page.pat
 /**
  * `import x from 'file.wasm?inline'` gives the module as a base64 data URL, so
  * it ships inside its (lazily loaded) script and is never fetched: the page's
- * Content Security Policy blocks fetches (connect-src 'none').
+ * Content Security Policy blocks fetches to anywhere but the Umami endpoint.
  */
 function wasmInline(): Plugin {
   return {
@@ -165,6 +165,23 @@ function headTags(page: Page): HtmlTagDescriptor[] {
     { tag: 'script', attrs: { src: '/theme-init.js' }, injectTo: 'head' },
     // Registers the service worker that makes the site work offline (plain script from public/)
     { tag: 'script', attrs: { src: '/sw-register.js', defer: true }, injectTo: 'head' },
+    // Umami page-view counts: no cookies, no personal data. Our own copy of the script (public/umami.js), so no
+    // third-party code runs here. Counts only on the live domain; the URL is sent without its #hash (where share
+    // links keep your input) and ?query; visitors with Do Not Track on aren't counted. src/csp.ts allows the endpoint.
+    {
+      tag: 'script',
+      attrs: {
+        src: '/umami.js',
+        defer: true,
+        'data-website-id': UMAMI_WEBSITE_ID,
+        'data-host-url': UMAMI_HOST,
+        'data-domains': new URL(SITE_URL).hostname,
+        'data-exclude-hash': 'true',
+        'data-exclude-search': 'true',
+        'data-do-not-track': 'true',
+      },
+      injectTo: 'head',
+    },
     // Restores the sidebar's scroll position before the first paint (plain script from public/)
     { tag: 'script', attrs: { src: '/sidebar-scroll.js' }, injectTo: 'body' },
     structuredData(page),

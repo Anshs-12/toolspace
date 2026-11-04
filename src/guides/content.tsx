@@ -117,7 +117,7 @@ print("\\n".join(difflib.unified_diff(normalize("old.json"), normalize("new.json
         <h3>Private data</h3>
         <p>
           API responses often hold tokens or customer data. Online tools that upload your JSON to a server put that data at risk.
-          Every toolspace tool runs in your browser, and the page is blocked from sending data anywhere.
+          Every toolspace tool runs in your browser, and the page is blocked from sending your data anywhere.
         </p>
       </>
     ),
@@ -265,6 +265,12 @@ df.to_csv("data.csv", index=False, encoding="utf-8-sig")`}</Code>
             Files are read locally and never uploaded. Share links keep the input in the part of the address after #, which
             browsers don’t send to servers. Anyone you give a link to can read what’s in it, and it stays in your browser
             history, so don’t share links that contain secrets.
+          </p>
+          <p>
+            To see which tools people use, the site counts page views with Umami, a privacy-friendly analytics service. It
+            uses no cookies and collects no personal data. A count includes the page’s address (without anything after # or
+            ?), the referring site, and your browser, screen size and language, never what you type or open. If your browser
+            sends Do Not Track, you aren’t counted.
           </p>
         </details>
 

@@ -8,8 +8,8 @@
  * - The large code-formatter engines aren't downloaded up front; each is saved
  *   the first time it's used, and works offline after that.
  *
- * It only handles requests to this site. Tool input never leaves the page, so
- * there is nothing else for it to see.
+ * It only handles requests to this site (the Umami page-view count goes past
+ * it). Tool input never leaves the page, so there is nothing else for it to see.
  */
 const VERSION = '__VERSION__';
 const PRECACHE = __PRECACHE__;

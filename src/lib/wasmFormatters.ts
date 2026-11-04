@@ -4,8 +4,8 @@
  * shfmt (shell). Each is loaded only when its language is used.
  *
  * The .wasm files are bundled into their script as base64 instead of being
- * fetched, because the page's Content Security Policy blocks every request
- * (connect-src 'none'). Compiling them needs script-src 'wasm-unsafe-eval'.
+ * fetched, because the page's Content Security Policy blocks requests to
+ * anywhere but the Umami endpoint. Compiling them needs script-src 'wasm-unsafe-eval'.
  */
 
 function bytes(dataUrl: string): Uint8Array {

@@ -11,7 +11,7 @@ const content: ToolContent = {
   faq: [
     { q: 'Which addresses does it find?', a: 'Anything shaped like name@domain.tld, including plus addressing (ada+news@example.com), subdomains and international addresses such as josé@exämple.de. It needs a dot in the domain, so user@localhost is skipped, and file names like logo@2x.png are left out.' },
     { q: 'How are duplicates detected?', a: 'The domain is compared without regard to case, so Ada@Example.COM and Ada@example.com count once. The part before the @ is compared exactly, because some mail servers treat it as case-sensitive. Turn on Lowercase to merge those too.' },
-    { q: 'Does it check that the addresses work?', a: 'No. It finds text that looks like an address; it can’t tell whether a mailbox exists. That would need a network request, and this page never makes one.' },
+    { q: 'Does it check that the addresses work?', a: 'No. It finds text that looks like an address; it can’t tell whether a mailbox exists. That would mean sending the addresses to a server, and this page never sends your text anywhere.' },
     { q: 'Are quoted or obfuscated addresses found?', a: 'No. Rare forms like "john smith"@example.com, and hidden ones like ada [at] example [dot] com, are not picked up.' },
   ],
   example: {

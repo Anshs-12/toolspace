@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { copyText } from '@/tools/shared';
 import { CONTACT_EMAIL } from './meta';
 
-/** The contact email as a mailto link and as plain text to copy. No form, no tracking. */
+/** The contact email as a mailto link and as plain text to copy. No form. */
 export default function ContactCard() {
   return (
     <div className="not-prose rounded-2xl border bg-card p-5">
