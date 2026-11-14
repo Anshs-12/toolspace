@@ -130,11 +130,12 @@ test.describe('privacy', () => {
   test('ships a Content Security Policy that blocks network requests', async ({ page }) => {
     await page.goto('/diff-checker/');
     const csp = await page.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
-    // The only outside hosts: Umami's endpoint, and Google Analytics' script and collection endpoint (used only after consent)
-    expect(csp).toContain('connect-src https://gateway.umami.is https://www.google-analytics.com;');
+    // The only outside hosts: Umami's endpoint and Clarity's
+    expect(csp).toContain('connect-src https://gateway.umami.is https://*.clarity.ms;');
     expect(csp).toContain("img-src 'self' data:;");
-    expect(csp).not.toContain('*.');
-    expect(csp).toContain("script-src 'self' 'wasm-unsafe-eval' https://www.googletagmanager.com;");
+    // The one wildcard is Clarity's upload host, which differs per project
+    expect(csp!.match(/\*\.[a-z.]+/g)).toEqual(['*.clarity.ms']);
+    expect(csp).toContain("script-src 'self' 'wasm-unsafe-eval' https://www.clarity.ms https://scripts.clarity.ms;");
     expect(csp).toContain("default-src 'none'");
   });
 

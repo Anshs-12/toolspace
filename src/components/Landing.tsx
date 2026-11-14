@@ -1,5 +1,5 @@
-import React from 'react';
-import { ConsentBanner, ConsentSettingsButton } from '@/components/ConsentBanner';
+import React, { useEffect } from 'react';
+import { startClarity } from '@/lib/clarity';
 import {
   ArrowUp,
   Check,
@@ -251,6 +251,8 @@ export const Paywall: React.FC = () => (
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
 export const Footer: React.FC<{ current: PageId }> = ({ current }) => {
+  // Every page has the footer: Clarity starts here (src/lib/clarity.ts decides whether it may)
+  useEffect(startClarity, []);
   const links: { label: string; href: string; id?: PageId; out?: boolean; wide?: boolean }[] = [
     { label: 'All tools', href: '/', id: 'home' },
     { label: 'About', href: pageById('about').path, id: 'about' },
@@ -259,7 +261,7 @@ export const Footer: React.FC<{ current: PageId }> = ({ current }) => {
     { label: 'Report a bug or request a feature', href: `${REPO_URL}/issues`, out: true, wide: true },
   ];
   return (
-    <footer className="mt-8 border-t">
+    <footer className="mt-8 border-t" data-clarity-unmask="True">
       <div className="page flex flex-col gap-6 py-10 md:flex-row md:items-start md:justify-between">
         <div className="max-w-[36ch]">
           <a href="/" className="inline-flex items-center gap-2 text-[16px] font-semibold tracking-[-0.02em]">
@@ -280,10 +282,8 @@ export const Footer: React.FC<{ current: PageId }> = ({ current }) => {
               {l.label}
             </a>
           ))}
-          <ConsentSettingsButton className="text-left text-muted-foreground transition-colors hover:text-foreground" />
         </nav>
       </div>
-      <ConsentBanner />
       <div className="page flex items-center justify-between gap-4 border-t py-5 text-[12.5px] text-muted-foreground">
         <span>MIT licensed · tools run in your browser</span>
         <a href="#top" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap hover:text-foreground">

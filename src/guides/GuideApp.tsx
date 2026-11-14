@@ -16,7 +16,7 @@ export default function GuideApp({ page }: { page: GuideId }) {
         current={page}
         title={guide.h1}
         description={guide.lede}
-        tool={<article className="guide">{guide.body}</article>}
+        tool={<article className="guide" data-clarity-unmask="True">{guide.body}</article>}
       />
       <Footer current={page} />
     </TooltipProvider>

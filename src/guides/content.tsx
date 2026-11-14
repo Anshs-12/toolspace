@@ -2,7 +2,6 @@ import React from 'react';
 import { REPO_URL } from '@/site';
 import ToolLink from './ToolLink';
 import ContactCard from './ContactCard';
-import { ConsentStatus } from '@/components/ConsentBanner';
 import { GUIDE_META, type GuideId } from './meta';
 
 export type { GuideId } from './meta';
@@ -280,27 +279,23 @@ df.to_csv("data.csv", index=False, encoding="utf-8-sig")`}</Code>
             browser sends Do Not Track, nothing is counted.
           </p>
           <p>
-            If you also accept on the cookie banner, toolspace uses Google Analytics to see which pages are viewed, which tools
-            are used and how pages are used (time on page, scrolling, clicks on links). Google Analytics sets cookies in
-            your browser (their names start with _ga), and Google receives your IP address, your browser and device
-            information, and the pages you view. When you use a tool, only the tool’s name is recorded. See{' '}
-            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">
-              how Google uses information from sites that use its services
+            The site also uses Microsoft Clarity, which records clicks, scrolling and mouse movement as heatmaps and
+            session replays, so we can see where pages are confusing. The tool areas are hidden in its recordings, so it
+            sees the page’s layout and fixed text but not what you type or what a tool shows. When you use a tool, only
+            the tool’s name is recorded. Clarity may set cookies (_clck and _clsk), and Microsoft receives your IP address
+            and browser and device information. See the{' '}
+            <a href="https://www.microsoft.com/privacy/privacystatement" target="_blank" rel="noopener noreferrer">
+              Microsoft Privacy Statement
             </a>
             .
           </p>
           <p>
-            What you type, paste, open or produce in a tool is excluded from analytics. Page addresses are sent without the
-            part after #, which is where share links keep their contents, and without query parameters other than
-            campaign tags (utm_…). Sharing a link is up to you: anyone you give
-            it to can read what’s in it.
+            What you type, paste, open or produce in a tool is excluded from analytics. Clarity doesn’t run on a page whose
+            address has a # in it, such as a share link, and stops as soon as a page puts one there, because that part is
+            where share links keep their contents. Sharing a link is up to you: anyone you give it to can read what’s in
+            it.
           </p>
-          <p>
-            Nothing loads from Google until you accept. If your browser sends Do Not Track, Google Analytics never loads,
-            even if you accept. Your choice is saved in this browser; if you change it
-            to reject, the _ga cookies are deleted and nothing more is sent.
-          </p>
-          <ConsentStatus />
+          <p>If your browser sends Do Not Track, neither Umami nor Clarity runs.</p>
         </details>
 
         <details>

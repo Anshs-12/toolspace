@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { trackToolRun } from './consent';
+import { clarityToolRun } from './clarity';
 
 /**
  * Counts successful tool use with both analytics services, each with only the
  * page's static tool ID: Umami (public/umami.js) as a `tool-run` event, whose
- * payload public/umami-config.js rebuilds from an allowlist; and Google
- * Analytics (src/lib/consent.ts, only after the visitor accepts) as `tool_run`.
+ * payload public/umami-config.js rebuilds from an allowlist; and Microsoft
+ * Clarity (src/lib/clarity.ts) as a `tool` tag and a `tool_run` event.
  * Nothing about the input or the result is sent.
  *
  * A tool reports its result with `useToolRun(key)`: a string that changes when
@@ -54,7 +54,7 @@ function sendToolRun() {
   const umami = (window as { umami?: Umami }).umami;
   // No tracker (blocked, not loaded, or off): nothing to do
   if (umami && typeof umami.track === 'function') void umami.track(TOOL_RUN_EVENT, { tool });
-  trackToolRun(tool);
+  clarityToolRun(tool);
 }
 
 export function useToolRun(result: string | null | undefined | false) {

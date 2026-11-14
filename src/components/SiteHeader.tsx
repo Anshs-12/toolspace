@@ -77,7 +77,7 @@ const SiteHeader: React.FC<SiteHeaderProps> = ({ current, app = false, resolvedT
   }, []);
 
   return (
-    <header className="site-header" data-ready={ready || undefined}>
+    <header className="site-header" data-ready={ready || undefined} data-clarity-unmask="True">
       <div className={cn(app ? 'page-wide' : 'page', 'flex h-16 items-center gap-3')}>
         <a
           href={current === 'home' ? '#top' : '/'}

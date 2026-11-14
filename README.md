@@ -25,14 +25,15 @@ no account, nothing uploaded. It lives at
 
 There is no backend. Tool input (text, files, tokens, images) is processed in
 the browser tab and is not uploaded. The site sends cookieless usage counts to
-[Umami Cloud](https://umami.is), and, only if a visitor accepts the cookie
-banner, uses Google Analytics 4. Both are described below and on the About page.
+[Umami Cloud](https://umami.is) and uses Microsoft Clarity for heatmaps and
+session recordings, with tool areas masked. Both are described below and on
+the About page.
 
 ## Analytics
 
-Two services, side by side. Umami runs for every visitor and sets no cookies;
-Google Analytics runs only for visitors who accept the cookie banner. Both
-count page views and tool runs with only the tool's ID, never tool input.
+Two services, both for every visitor on `toolspace.tech` with no banner, and
+neither with Do Not Track on. Umami sets no cookies. Page views and tool runs
+are counted with only the tool's ID, never tool input.
 
 ### Umami
 
@@ -72,7 +73,7 @@ count. Validators count only a valid verdict.
 Track on (`data-do-not-track`), and only to `https://gateway.umami.is/api/send`,
 the endpoint the Cloud script uses by default (set explicitly with
 `data-host-url`). The production Content Security Policy (`src/csp.ts`) allows
-that destination (plus Google Analytics', below) for requests and loads scripts only from this site. The
+that destination (plus Clarity's, below) for requests and loads scripts only from this site. The
 CSP limits where data can go; the allowlist above is what limits what is sent.
 
 **Tests.** `e2e/umami.spec.ts` serves the production build as
@@ -98,61 +99,37 @@ If they differ, read the diff (new payload fields, headers or endpoints), copy
 the new file under the header, update the date and hash in it, and run
 `npx playwright test e2e/umami.spec.ts`.
 
-### Google Analytics
+### Microsoft Clarity
 
-Google Analytics 4 (measurement ID `G-F1P7CTRGH3`), opt-in only.
+Heatmaps and session recordings (`src/lib/clarity.ts`, project ID in
+`CLARITY_ID`), started from the footer, which every page has.
 
-- **Consent** (`src/lib/consent.ts`, banner in `src/components/ConsentBanner.tsx`).
-  Nothing from Google loads until the visitor clicks Accept: no gtag.js, no
-  requests, no consent pings. Consent mode starts with `analytics_storage`
-  (and the ad signals) denied and grants only analytics storage on Accept.
-  The choice is kept in `localStorage` and can be changed from "Cookie
-  settings" in the footer or on the About page. Rejecting after accepting sets
-  `ga-disable-G-F1P7CTRGH3`, updates consent to denied and deletes every
-  cookie starting with `_ga`.
-- **Guards.** Only on `toolspace.tech` (never localhost), and never with Do Not
-  Track on, even after Accept.
-- **What GA is given** (`src/lib/consent.ts`, set with gtag's documented
-  `set`/`config` before gtag.js loads). `page_location` is origin + pathname
-  plus only the standard `utm_*` campaign tags (never the `#` fragment, where
-  share links keep their input); `page_title` the static title from the build;
-  `page_referrer` another site's origin only. Before gtag.js loads, every
-  other query parameter is removed from the address bar (the site uses none),
-  because GA's site-search event reads the real address bar. Page views are
-  sent by hand (`send_page_view: false`), once per page load. GA's own
-  events (session start, first visit, `user_engagement`, `scroll`, form and
-  outbound-click events) run unchanged; nothing rewrites them.
-- **`tool_run`** carries only `{ tool: "<page slug>" }`. `useToolRun`
-  (`src/lib/analytics.ts`) sends it when a tool shows a new successful result
-  after the visitor interacted with it, once it has stayed unchanged for 2
-  seconds. Errors, empty input, restored input and unchanged results don't
-  count.
-- **Places input could reach GA's automatic events, and what stops it:**
-  - the ignore-rule `<form>` in the diff checker has an explicit `action` (the
-    page path); its default is the page URL, which after sharing holds both
-    texts in the `#`, and GA's `form_start` reports it as `form_destination`.
-  - links in the Markdown preview come from the visitor's text: their clicks
-    don't propagate past the preview, so GA's outbound-click and
-    file-download tracking never sees their URLs or text. The links still
-    open.
-  Any new `<form>`, or any place that renders links from user input, needs
-  the same treatment; `e2e/google-analytics.spec.ts` covers the current ones.
-- **Consent switch** (`src/lib/gaGuard.ts`). While analytics isn't active (no
-  choice, rejected, revoked, Do Not Track), any request to a Google analytics
-  or ads host is dropped. It's needed because gtag.js still sends hits it
-  queued before a revoke. It never reads or changes a request while analytics
-  is active. It wraps `fetch`, `sendBeacon` and `XMLHttpRequest`; gtag.js's
-  `<img>` pixel and iframe transports are blocked by the CSP (no outside
-  images or frames).
-- **CSP** (`src/csp.ts`): scripts from `www.googletagmanager.com`, requests to
-  `www.google-analytics.com`. These were the only Google hosts gtag.js used in
-  testing; no wildcards.
-- **Tests.** `e2e/google-analytics.spec.ts` serves the build as
-  `https://toolspace.tech`, loads the real gtag.js and mocks every Google
-  collection endpoint. It covers no choice, Reject, Accept, revoke, Do Not
-  Track, the events GA still sends, and leaks: canary input, share links, a
-  canary query, the ignore-rule form, Markdown links, navigation and an
-  outside referrer.
+- **Loading.** For every visitor once the browser is idle (at most 2.5 s),
+  from Microsoft's tag (`www.clarity.ms/tag/<id>`). No consent banner and no
+  consent calls, the same as other small tool sites. The Bing pixel in
+  Microsoft's tag is blocked by the CSP (no outside images), so no Bing
+  cookies. Never with Do Not Track, never off `toolspace.tech`.
+- **Masking.** `<body>` gets `data-clarity-mask`, so everything is masked by
+  default, including popovers and toasts. Static parts are unmasked with
+  `data-clarity-unmask`: header, sidebar, page heading, the guide and FAQ
+  under a tool, guides, the home page, footer. The tool area (`#tool`) stays
+  masked. Any new static area that should show in recordings needs the
+  attribute; anything that shows input must not have it.
+- **The `#`.** Clarity records the full address and can't drop the fragment,
+  where share links keep input. It never starts on a page opened with a `#`,
+  and stops for good when the page puts one in the address (the diff
+  checker's Share): a `history` wrapper sets the flag before the address
+  changes, `consent(false)` ends the session, `_clck`/`_clsk` are deleted,
+  and the request gate (`src/lib/requestGate.ts`) drops every Clarity request
+  after that.
+- **Events.** A tool run sets the `tool` tag and records a `tool_run` event.
+- **CSP.** Scripts from `www.clarity.ms` and `scripts.clarity.ms`; requests
+  to `https://*.clarity.ms` (the upload host differs per project).
+- **Tests.** `e2e/clarity.spec.ts` serves Microsoft's loader with the real
+  clarity.js and a mock upload, gunzips every upload and checks: no banner,
+  masked tool input (with the unmasked heading as a control), no start on a
+  `#` page, a full stop after the diff checker's Share, Do Not Track, and
+  nothing off the live site.
 
 ## Development
 

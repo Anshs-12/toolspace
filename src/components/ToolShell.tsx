@@ -242,7 +242,7 @@ export function Sidebar({ current }: { current: PageId }) {
   // The home page's own link sits at the bottom; don't scroll down to it
   useSidebarScroll(ref, current !== 'home');
   return (
-    <aside ref={ref} className="tool-sidebar" aria-label="Tools">
+    <aside ref={ref} className="tool-sidebar" aria-label="Tools" data-clarity-unmask="True">
       <nav className="flex flex-col gap-6" aria-label="Tools">
         {TOOL_GROUPS.map((group) => (
           <div key={group.label}>
@@ -295,7 +295,8 @@ export default function ToolShell({
       <Sidebar current={current} />
       <main id="top" className="min-w-0 pt-6 pb-16 lg:pl-8">
         <div className="mb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
-          <div className="min-w-0">
+          {/* Static text, shown in Clarity recordings; the tool below stays masked (src/lib/clarity.ts) */}
+          <div className="min-w-0" data-clarity-unmask="True">
             <h1 className="text-[24px] leading-tight font-semibold tracking-[-0.025em]">{title}</h1>
             <p className="mt-1 max-w-[80ch] text-[14.5px] text-muted-foreground">{description}</p>
           </div>
@@ -304,7 +305,7 @@ export default function ToolShell({
         <section id="tool" aria-label={title}>
           {tool}
         </section>
-        {children}
+        {children && <div data-clarity-unmask="True">{children}</div>}
       </main>
     </div>
   );

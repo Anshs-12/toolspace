@@ -9,8 +9,8 @@ import { expect, test, type BrowserContext, type Page } from '@playwright/test';
  * endpoint is answered by a mock that records what was sent. Nothing reaches
  * the real site or the real analytics account; any other request is aborted
  * and reported. Service workers are blocked so every request passes the routes.
- * Each test starts with Google Analytics rejected (its banner would cover the
- * page); e2e/google-analytics.spec.ts covers GA.
+ * Microsoft Clarity's tag is answered with an empty script here;
+ * e2e/clarity.spec.ts covers Clarity.
  */
 
 const PROD = 'https://toolspace.tech';
@@ -39,7 +39,6 @@ test.use({ serviceWorkers: 'block' });
 async function production(context: BrowserContext, baseURL: string) {
   const hits: Hit[] = [];
   const unexpected: string[] = [];
-  await context.addInitScript(() => localStorage.setItem('toolspace-analytics-consent', 'denied'));
   await context.route('**/*', async (route) => {
     const req = route.request();
     const url = new URL(req.url());
@@ -64,6 +63,7 @@ async function production(context: BrowserContext, baseURL: string) {
       });
     }
     if (url.origin === baseURL) return route.continue();
+    if (/(^|\.)clarity\.ms$/.test(url.hostname)) return route.fulfill({ status: 200, contentType: 'application/javascript', body: '' });
     unexpected.push(`${req.method()} ${req.url()}`);
     return route.abort();
   });

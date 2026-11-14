@@ -84,7 +84,7 @@ export default function HomeApp() {
       <SiteHeader current="home" app resolvedTheme={resolved} onThemeChange={setTheme} />
       <div className="page-wide tool-shell">
         <Sidebar current="home" />
-        <main id="top" className="min-w-0 pt-10 pb-16 lg:pl-10">
+        <main id="top" className="min-w-0 pt-10 pb-16 lg:pl-10" data-clarity-unmask="True">
           <section className="text-center lg:pt-4">
             <h1 className="text-[clamp(30px,4.6vw,50px)] leading-[1.08] font-semibold tracking-[-0.04em]">
               All the developer tools, in one place.
@@ -146,6 +146,7 @@ export default function HomeApp() {
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Filter tools"
                   aria-label="Filter tools"
+                  data-clarity-mask="True"
                   spellCheck={false}
                   autoComplete="off"
                   className="min-w-0 flex-1 bg-transparent text-[14px] outline-none placeholder:text-faint"

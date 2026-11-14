@@ -41,8 +41,8 @@ test.describe('search and sharing', () => {
     await expect(footer.getByRole('link', { name: 'Report a bug or request a feature' })).toHaveAttribute('href', /github\.com\/.+\/issues$/);
     await expect(footer.getByRole('link', { name: 'GitHub' })).toHaveAttribute('target', '_blank');
     await expect(page.getByRole('link', { name: 'toolspace on GitHub' })).toHaveAttribute('rel', 'noopener noreferrer');
-    await expect(page.getByRole('banner').getByRole('link', { name: 'open source', exact: true })).toHaveAttribute('href', /github\.com\/Anshs-12\/diffdrop$/);
-    await expect(page.getByRole('heading', { level: 1 }).getByRole('link', { name: 'Open source.' })).toHaveAttribute('href', /github\.com\/Anshs-12\/diffdrop$/);
+    await expect(page.getByRole('banner').getByRole('link', { name: 'open source', exact: true })).toHaveAttribute('href', /github\.com\/Anshs-12\/toolspace$/);
+    await expect(page.getByRole('heading', { level: 1 }).getByRole('link', { name: 'Open source.' })).toHaveAttribute('href', /github\.com\/Anshs-12\/toolspace$/);
     await expect(page.getByRole('navigation', { name: 'Tools' }).getByRole('link', { name: 'JSON diff' })).toHaveAttribute('href', '/json-diff/');
   });
 
@@ -53,7 +53,7 @@ test.describe('search and sharing', () => {
     // Popular tools up top, and the sidebar lists every tool
     await expect(page.getByRole('heading', { name: 'Popular tools' })).toBeVisible();
     await expect(page.getByRole('complementary', { name: 'Tools' }).getByRole('link', { name: 'All tools' })).toHaveAttribute('aria-current', 'page');
-    await expect(page.getByRole('heading', { level: 1 }).getByRole('link', { name: 'Open source.' })).toHaveAttribute('href', /github\.com\/Anshs-12\/diffdrop$/);
+    await expect(page.getByRole('heading', { level: 1 }).getByRole('link', { name: 'Open source.' })).toHaveAttribute('href', /github\.com\/Anshs-12\/toolspace$/);
     const tools = page.locator('#tools');
     for (const path of ['/diff-checker/', '/json-diff/', '/json-formatter/', '/json-validator/', '/json-to-csv/', '/json-to-yaml/', '/json-viewer/']) {
       await expect(tools.locator(`a[href="${path}"]`)).toBeVisible();

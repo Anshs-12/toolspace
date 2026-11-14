@@ -9,7 +9,7 @@ export const SITE_URL = 'https://toolspace.tech';
 /** The site's previous address; the worker (src/worker.ts) redirects it here. */
 export const OLD_HOST = 'diffdrop.anshx12.workers.dev';
 
-export const REPO_URL = 'https://github.com/Anshs-12/diffdrop';
+export const REPO_URL = 'https://github.com/Anshs-12/toolspace';
 
 /** The site's name as it writes it (lowercase), used in titles, JSON-LD, llms.txt and ai.txt. */
 export const SITE_NAME = 'toolspace';
@@ -700,7 +700,7 @@ export const PAGES: Page[] = [
     description:
       'Learn what toolspace is: free, open source developer tools that run in your browser, so the text, files and data you work with never leave your device.',
     name: 'About',
-    blurb: 'What toolspace is, how your input stays on your device, and what Umami and Google Analytics count.',
+    blurb: 'What toolspace is, how your input stays on your device, and what Umami and Clarity record.',
     priority: 0.4,
   },
   {

@@ -12,7 +12,7 @@ const content: ToolContent = {
     { q: 'Will resizing make my image blurry?', a: 'Making an image smaller keeps it sharp: large reductions are done in halving steps with high-quality smoothing, which avoids jagged edges. Making it larger can’t add detail, so enlarged images look soft.' },
     { q: 'How do I resize without stretching?', a: 'Keep the aspect-ratio lock on. You set one side and the other is worked out from the original proportions.' },
     { q: 'Is there a size limit?', a: 'Browsers cap canvases at about 16,000 pixels on a side and roughly 16 megapixels in total on some devices, so very large outputs are refused with a message.' },
-    { q: 'Are my images uploaded?', a: 'No. The image is decoded and redrawn in this tab and is never sent anywhere. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. If you accept analytics cookies, Google Analytics also records which pages you view.' },
+    { q: 'Are my images uploaded?', a: 'No. The image is decoded and redrawn in this tab and is never sent anywhere. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. Microsoft Clarity also records clicks and scrolling to show how pages are used, with tool areas hidden.' },
   ],
   mistakes: [
     { title: 'Unlocking the ratio by accident', body: 'With the lock off, a new width alone squashes the image. Turn the lock back on, or set both sides on purpose.' },
