@@ -1,4 +1,5 @@
 import React from 'react';
+import { ConsentBanner, ConsentSettingsButton } from '@/components/ConsentBanner';
 import {
   ArrowUp,
   Check,
@@ -250,12 +251,12 @@ export const Paywall: React.FC = () => (
 const external = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
 export const Footer: React.FC<{ current: PageId }> = ({ current }) => {
-  const links: { label: string; href: string; id?: PageId; out?: boolean }[] = [
+  const links: { label: string; href: string; id?: PageId; out?: boolean; wide?: boolean }[] = [
     { label: 'All tools', href: '/', id: 'home' },
     { label: 'About', href: pageById('about').path, id: 'about' },
     { label: 'Contact', href: pageById('contact').path, id: 'contact' },
     { label: 'GitHub', href: REPO_URL, out: true },
-    { label: 'Report a bug or request a feature', href: `${REPO_URL}/issues`, out: true },
+    { label: 'Report a bug or request a feature', href: `${REPO_URL}/issues`, out: true, wide: true },
   ];
   return (
     <footer className="mt-8 border-t">
@@ -274,15 +275,17 @@ export const Footer: React.FC<{ current: PageId }> = ({ current }) => {
               href={l.href}
               {...(l.out ? external : {})}
               aria-current={l.id && l.id === current ? 'page' : undefined}
-              className="text-muted-foreground transition-colors last:col-span-2 hover:text-foreground aria-[current=page]:text-foreground"
+              className={`text-muted-foreground transition-colors hover:text-foreground aria-[current=page]:text-foreground ${l.wide ? 'col-span-2 sm:col-span-1' : ''}`}
             >
               {l.label}
             </a>
           ))}
+          <ConsentSettingsButton className="text-left text-muted-foreground transition-colors hover:text-foreground" />
         </nav>
       </div>
+      <ConsentBanner />
       <div className="page flex items-center justify-between gap-4 border-t py-5 text-[12.5px] text-muted-foreground">
-        <span>MIT licensed · everything runs in your browser</span>
+        <span>MIT licensed · tools run in your browser</span>
         <a href="#top" className="inline-flex shrink-0 items-center gap-1 whitespace-nowrap hover:text-foreground">
           Back to top <ArrowUp className="size-3.5" aria-hidden="true" />
         </a>

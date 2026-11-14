@@ -5,7 +5,7 @@
  *
  * The .wasm files are bundled into their script as base64 instead of being
  * fetched, because the page's Content Security Policy blocks requests to
- * anywhere but the Umami endpoint. Compiling them needs script-src 'wasm-unsafe-eval'.
+ * anywhere but the analytics endpoints. Compiling them needs script-src 'wasm-unsafe-eval'.
  */
 
 function bytes(dataUrl: string): Uint8Array {

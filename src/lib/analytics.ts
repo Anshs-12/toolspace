@@ -1,10 +1,12 @@
 import { useEffect, useRef } from 'react';
+import { trackToolRun } from './consent';
 
 /**
- * Counts successful tool use with Umami (public/umami.js), as a `tool-run`
- * event whose only property is the page's static tool ID. Nothing about the
- * input or the result is sent: public/umami-config.js rebuilds every payload
- * from an allowlist and cancels anything else.
+ * Counts successful tool use with both analytics services, each with only the
+ * page's static tool ID: Umami (public/umami.js) as a `tool-run` event, whose
+ * payload public/umami-config.js rebuilds from an allowlist; and Google
+ * Analytics (src/lib/consent.ts, only after the visitor accepts) as `tool_run`.
+ * Nothing about the input or the result is sent.
  *
  * A tool reports its result with `useToolRun(key)`: a string that changes when
  * the result changes (usually the output itself), or null/'' while there is no
@@ -18,7 +20,7 @@ import { useEffect, useRef } from 'react';
  *   - and differs from the last result counted (so an unchanged result counts once).
  */
 
-/** The event name; public/umami-config.js accepts only this one. */
+/** The Umami event name; public/umami-config.js accepts only this one. */
 export const TOOL_RUN_EVENT = 'tool-run';
 /** How long a new result must stay unchanged before it counts. */
 export const TOOL_RUN_SETTLE_MS = 2000;
@@ -48,9 +50,11 @@ type Umami = { track: (name: string, data: Record<string, string>) => unknown };
 
 function sendToolRun() {
   const tool = toolId();
+  if (!tool) return;
   const umami = (window as { umami?: Umami }).umami;
   // No tracker (blocked, not loaded, or off): nothing to do
-  if (tool && umami && typeof umami.track === 'function') void umami.track(TOOL_RUN_EVENT, { tool });
+  if (umami && typeof umami.track === 'function') void umami.track(TOOL_RUN_EVENT, { tool });
+  trackToolRun(tool);
 }
 
 export function useToolRun(result: string | null | undefined | false) {

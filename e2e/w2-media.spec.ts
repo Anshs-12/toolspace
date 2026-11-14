@@ -203,5 +203,8 @@ test('svg optimizer cleans markup and strips scripts', async ({ page }) => {
   await expect.poll(() => editorText(page, 'Optimized SVG')).toContain('<title>Check badge</title>');
   await expect.poll(() => editorText(page, 'Optimized SVG')).not.toContain('inkscape');
   await expect(page.getByRole('button', { name: 'Copy', exact: true })).toBeVisible();
+  // Chrome reports the input's on* handlers as blocked by the Content Security Policy when the SVG is parsed:
+  // that's the policy doing its job (nothing runs), so those reports are expected here and nothing else is
+  g.errors.splice(0, g.errors.length, ...g.errors.filter((e) => !/^Executing inline event handler violates the following Content Security Policy/.test(e)));
   await clean(g);
 });

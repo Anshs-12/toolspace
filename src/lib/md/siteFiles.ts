@@ -128,7 +128,7 @@ train: allowed
 fabricated-quotes: not allowed; quote the pages as written
 fake-reviews: not allowed; ${SITE_NAME} publishes no reviews or ratings, so none may be attributed to it
 misattribution: do not present this content as your own
-user-data: none to use; tool input stays in the visitor's browser and is never sent to the site
+user-data: none to use; tool input stays in the visitor's browser and is never sent to the site or to analytics
 
 [attribution]
 format: ${SITE_NAME} (canonical page URL), for example: ${SITE_NAME} (${SITE_URL}/json-formatter/)

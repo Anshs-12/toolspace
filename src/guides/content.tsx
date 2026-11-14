@@ -2,6 +2,7 @@ import React from 'react';
 import { REPO_URL } from '@/site';
 import ToolLink from './ToolLink';
 import ContactCard from './ContactCard';
+import { ConsentStatus } from '@/components/ConsentBanner';
 import { GUIDE_META, type GuideId } from './meta';
 
 export type { GuideId } from './meta';
@@ -268,19 +269,38 @@ df.to_csv("data.csv", index=False, encoding="utf-8-sig")`}</Code>
           </p>
         </details>
 
-        <details>
-          <summary>What usage data is counted</summary>
+        <details id="analytics">
+          <summary>Analytics and cookies</summary>
           <p>
             To see which tools get used, the site sends usage counts to Umami, an analytics service that sets no cookies. A
             count is sent when a page opens and when a tool produces a new result. Each one contains the page’s address
             (without anything after # or ?), its title, the site you came from (its domain only), your screen size and
-            language, and for a tool result, which tool it was. It never contains what you type, paste, open or produce.
+            language, and for a tool result, which tool it was. Like any web request, a count reaches Umami with your IP
+            address and browser details, which Umami uses to tell browsers, devices and approximate locations apart. If your
+            browser sends Do Not Track, nothing is counted.
           </p>
           <p>
-            Like any web request, a count reaches Umami with your IP address and browser details, which Umami uses to tell
-            browsers, devices and approximate locations apart and to estimate how many different visitors there were. If
-            your browser sends Do Not Track, nothing is counted.
+            If you also accept on the cookie banner, toolspace uses Google Analytics to see which pages are viewed, which tools
+            are used and how pages are used (time on page, scrolling, clicks on links). Google Analytics sets cookies in
+            your browser (their names start with _ga), and Google receives your IP address, your browser and device
+            information, and the pages you view. When you use a tool, only the tool’s name is recorded. See{' '}
+            <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">
+              how Google uses information from sites that use its services
+            </a>
+            .
           </p>
+          <p>
+            What you type, paste, open or produce in a tool is excluded from analytics. Page addresses are sent without the
+            part after #, which is where share links keep their contents, and without query parameters other than
+            campaign tags (utm_…). Sharing a link is up to you: anyone you give
+            it to can read what’s in it.
+          </p>
+          <p>
+            Nothing loads from Google until you accept. If your browser sends Do Not Track, Google Analytics never loads,
+            even if you accept. Your choice is saved in this browser; if you change it
+            to reject, the _ga cookies are deleted and nothing more is sent.
+          </p>
+          <ConsentStatus />
         </details>
 
         <details>

@@ -700,7 +700,7 @@ export const PAGES: Page[] = [
     description:
       'Learn what toolspace is: free, open source developer tools that run in your browser, so the text, files and data you work with never leave your device.',
     name: 'About',
-    blurb: 'What toolspace is, how your input stays on your device, and what usage data is counted.',
+    blurb: 'What toolspace is, how your input stays on your device, and what Umami and Google Analytics count.',
     priority: 0.4,
   },
   {
@@ -708,7 +708,7 @@ export const PAGES: Page[] = [
     path: '/contact/',
     title: 'Contact toolspace - email, bugs and tool ideas',
     description:
-      'Get in touch with toolspace: email for questions and feedback, or open an issue on GitHub to report a bug or suggest a new tool. No forms, no cookies.',
+      'Get in touch with toolspace: email for questions and feedback, or open an issue on GitHub to report a bug or suggest a new tool. No forms, no sign-up.',
     name: 'Contact',
     blurb: 'Email, bug reports and tool ideas.',
     priority: 0.3,

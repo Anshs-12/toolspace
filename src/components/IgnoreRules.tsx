@@ -85,6 +85,9 @@ const IgnoreRules: React.FC<IgnoreRulesProps> = ({ patterns, onChange }) => {
         )}
 
         <form
+          // An explicit action (the page's path): a form's default action is the page URL, which after
+          // sharing holds both texts in its #fragment, and analytics form events report the action
+          action={typeof window === 'undefined' ? undefined : window.location.pathname}
           className="mt-3 flex gap-2"
           onSubmit={(e) => {
             e.preventDefault();

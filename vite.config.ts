@@ -18,7 +18,7 @@ const htmlFile = (page: Page) => (page.path === '/' ? 'index.html' : `${page.pat
 /**
  * `import x from 'file.wasm?inline'` gives the module as a base64 data URL, so
  * it ships inside its (lazily loaded) script and is never fetched: the page's
- * Content Security Policy blocks fetches to anywhere but the Umami endpoint.
+ * Content Security Policy blocks fetches to anywhere but the analytics endpoints.
  */
 function wasmInline(): Plugin {
   return {
@@ -167,7 +167,7 @@ function headTags(page: Page): HtmlTagDescriptor[] {
     { tag: 'script', attrs: { src: '/sw-register.js', defer: true }, injectTo: 'head' },
     // Umami analytics, cookieless (README "Analytics"). The allowlist that rebuilds every payload, then our pinned copy
     // of the Umami Cloud tracker (public/umami.js; no third-party script runs here). Both deferred, so they run in this
-    // order. Sends only on the live domain and not with Do Not Track on; src/csp.ts allows only the endpoint.
+    // order. Sends only on the live domain and not with Do Not Track on; src/csp.ts allows its endpoint.
     { tag: 'script', attrs: { src: '/umami-config.js', defer: true }, injectTo: 'head' },
     {
       tag: 'script',

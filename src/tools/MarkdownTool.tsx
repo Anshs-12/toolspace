@@ -81,6 +81,10 @@ export default function MarkdownTool() {
           <div
             className="markdown-body tool-editor overflow-auto px-5 py-4"
             aria-label="Rendered Markdown"
+            // Links here come from the visitor's Markdown: their clicks stay inside the preview, so page-level
+            // listeners (analytics link and download tracking) never see those URLs. The links still work.
+            onClick={(e) => e.stopPropagation()}
+            onAuxClick={(e) => e.stopPropagation()}
             // eslint-disable-next-line react/no-danger -- sanitized by DOMPurify in renderMarkdown
             dangerouslySetInnerHTML={{ __html: html || '<p class="md-empty">The preview appears here.</p>' }}
           />

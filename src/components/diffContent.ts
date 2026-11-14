@@ -16,7 +16,7 @@ export const DIFF_CONTENT: Record<
     ],
     faq: [
       { q: 'Is there a size limit?', a: 'No fixed limit. Files with hundreds of thousands of lines work; the only limit is your browser’s memory.' },
-      { q: 'Is my text uploaded?', a: 'No. The diff is computed in this tab and your text is never sent anywhere. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. Share links keep the texts in the part of the URL after #, which browsers never send.' },
+      { q: 'Is my text uploaded?', a: 'No. The diff is computed in this tab and your text is never sent anywhere. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. If you accept analytics cookies, Google Analytics also records which pages you view. Share links keep the texts in the part of the URL after #, which browsers never send.' },
       { q: 'Can it ignore whitespace or case?', a: 'Yes. Ignore whitespace, case, or lines matching your own patterns, and the diff updates instantly.' },
     ],
   },
