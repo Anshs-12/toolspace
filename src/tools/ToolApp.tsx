@@ -125,7 +125,7 @@ export default function ToolApp({ page }: { page: PageId }) {
           </div>
         }
       >
-        <ToolGuide steps={content.steps} faq={content.faq} example={content.example} mistakes={content.mistakes} related={content.related} />
+        <ToolGuide steps={content.steps} faq={content.faq} example={content.example} mistakes={content.mistakes} related={content.related} sources={content.sources} />
       </ToolShell>
       <Footer current={page} />
       <Toaster theme={resolved} position="bottom-center" />

@@ -30,6 +30,11 @@ const content: ToolContent = {
     { title: 'Giving a host the network or broadcast address', body: 'On /30 and larger subnets, the first and last addresses aren’t usable host addresses.' },
     { title: 'Relying on address classes', body: 'Classes A, B and C were replaced by CIDR in 1993. A 10.x address isn’t automatically a /8; the prefix length decides.' },
   ],
+  sources: [
+    { title: 'RFC 4632: Classless Inter-domain Routing (CIDR)', url: 'https://datatracker.ietf.org/doc/html/rfc4632', about: 'prefix notation like /24 and how blocks are sized' },
+    { title: 'RFC 1918: Address Allocation for Private Internets', url: 'https://datatracker.ietf.org/doc/html/rfc1918', about: 'the private IPv4 ranges' },
+    { title: 'RFC 3021: Using 31-Bit Prefixes on Point-to-Point Links', url: 'https://datatracker.ietf.org/doc/html/rfc3021', about: 'why a /31 has two usable addresses' },
+  ],
   related: ['number-base-converter', 'chmod-calculator', 'http-status', 'unix-timestamp'],
 };
 

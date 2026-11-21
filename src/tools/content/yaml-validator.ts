@@ -41,6 +41,9 @@ const content: ToolContent = {
     { title: 'A colon and space inside a value', body: 'title: Part 2: the end is an error, because ": " starts a new mapping. Quote the value.' },
     { title: 'Leading zeros', body: 'In YAML 1.1, 0755 is an octal number (493). In YAML 1.2 it’s 755. Quote values like file modes or ZIP codes to keep the exact text.' },
   ],
+  sources: [
+    { title: 'YAML 1.2.2 specification', url: 'https://yaml.org/spec/1.2.2/', about: 'the YAML version used to check files' },
+  ],
   related: ['json-to-yaml', 'json-validator', 'json-formatter'],
 };
 

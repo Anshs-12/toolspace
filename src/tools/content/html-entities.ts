@@ -28,6 +28,9 @@ const content: ToolContent = {
     { title: 'Escaping only < and >', body: 'An unescaped & or quote can still break an attribute value or start an entity. Escape all five special characters.' },
     { title: 'Using entities to stop script injection in JavaScript or URLs', body: 'HTML escaping protects HTML text and attributes. Inside a <script> block, a URL or CSS, each context needs its own escaping.' },
   ],
+  sources: [
+    { title: 'Named character references (HTML Standard)', url: 'https://html.spec.whatwg.org/multipage/named-characters.html', about: 'the full list of named entities browsers understand' },
+  ],
   related: ['url-encoder', 'base64', 'html-beautifier', 'markdown-preview'],
 };
 

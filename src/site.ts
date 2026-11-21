@@ -106,7 +106,7 @@ export const PAGES: Page[] = [
     path: '/',
     title: 'toolspace - free, open source developer tools',
     description:
-      'Free, open source developer tools that run in your browser: diff checker, JSON diff, formatter, validator, JSON to CSV and YAML, and a viewer. No uploads.',
+      'Free, open source developer tools that run in your browser: diff checker, JSON formatter, Base64, regex, JWT decoder, image compressor and more. No signup.',
     name: 'All tools',
     blurb: 'Every toolspace tool on one page.',
     priority: 1.0,

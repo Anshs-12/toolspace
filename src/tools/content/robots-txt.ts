@@ -29,6 +29,9 @@ const content: ToolContent = {
     { title: 'Using it to hide private pages', body: 'robots.txt is public and only a request. Anyone can read it, and it lists exactly the paths you’d rather keep quiet. Protect private pages with a login.' },
     { title: 'Wrong place or case', body: 'The file must be at /robots.txt on each host (and each subdomain), and paths are case-sensitive: /Admin and /admin are different.' },
   ],
+  sources: [
+    { title: 'RFC 9309: Robots Exclusion Protocol', url: 'https://datatracker.ietf.org/doc/html/rfc9309', about: 'the robots.txt standard, including how Allow and Disallow are matched' },
+  ],
   related: ['meta-tag-generator', 'regex-tester', 'url-encoder', 'slug-generator'],
 };
 

@@ -20,6 +20,10 @@ const content: ToolContent = {
     { title: 'Shrinking bytes but not pixels', body: 'A 6000 px photo shown 800 px wide wastes most of its size. Resize it first, then compress.' },
     { title: 'Judging quality at a glance', body: 'Look at faces, text and smooth gradients up close; that is where compression shows first.' },
   ],
+  sources: [
+    { title: 'HTMLCanvasElement.toBlob() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/toBlob', about: 'the browser function that re-encodes images at a chosen quality' },
+    { title: 'Image file type and format guide on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/Media/Guides/Formats/Image_types', about: 'when to use JPEG, PNG or WebP' },
+  ],
   related: ['image-resizer', 'favicon-generator', 'svg-optimizer'],
 };
 

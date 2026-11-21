@@ -319,6 +319,7 @@ export function ToolGuide({
   example,
   mistakes,
   related,
+  sources,
 }: {
   steps: { title: string; body: string }[];
   faq: { q: string; a: string }[];
@@ -326,6 +327,7 @@ export function ToolGuide({
   related?: PageId[];
   example?: { intro: string; inputLabel: string; input: string; outputLabel: string; output: string; note?: string };
   mistakes?: { title: string; body: string }[];
+  sources?: { title: string; url: string; about: string }[];
 }) {
   return (
     <>
@@ -393,6 +395,24 @@ export function ToolGuide({
         </dl>
       </div>
     </section>
+      {sources && sources.length > 0 && (
+        <section id="sources" className="mt-10 border-t pt-8" aria-labelledby="sources-heading">
+          <h2 id="sources-heading" className="text-[15px] font-semibold">
+            Sources
+          </h2>
+          <p className="mt-1 max-w-[80ch] text-[14px] text-muted-foreground">The standards and references the tool and the answers above are based on.</p>
+          <ul className="mt-3 space-y-1.5 text-[14px]">
+            {sources.map((s) => (
+              <li key={s.url}>
+                <a href={s.url} className="font-medium underline underline-offset-4 hover:text-foreground/80" rel="noopener noreferrer">
+                  {s.title}
+                </a>
+                <span className="text-muted-foreground"> ({new URL(s.url).hostname.replace(/^www\./, '')}): {s.about}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       {related && related.length > 0 && (
         <nav className="mt-10 border-t pt-8" aria-label="Related tools">
           <h2 className="text-[15px] font-semibold">Related tools</h2>

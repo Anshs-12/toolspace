@@ -29,6 +29,10 @@ const content: ToolContent = {
     { title: 'Ignoring hover and focus states', body: 'A button that passes at rest can fail when hovered. Check each state’s colors.' },
     { title: 'Testing text on a photo with one color', body: 'Text over an image meets many backgrounds. Check against the lightest and darkest parts, or add an overlay.' },
   ],
+  sources: [
+    { title: 'Understanding SC 1.4.3: Contrast (Minimum)', url: 'https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html', about: 'the WCAG 4.5:1 and 3:1 thresholds and how the ratio is worked out' },
+    { title: 'WCAG 2.2 (W3C Recommendation)', url: 'https://www.w3.org/TR/WCAG22/', about: 'the full accessibility guidelines' },
+  ],
   related: ['color-converter', 'color-palette', 'css-gradient'],
 };
 

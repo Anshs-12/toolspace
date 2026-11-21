@@ -602,7 +602,15 @@ const App: React.FC<{ variant: Variant }> = ({ variant }) => {
             </div>
         }
       >
-        <ToolGuide stepsTitle={DIFF_CONTENT[variant].stepsTitle} steps={DIFF_CONTENT[variant].steps} faq={DIFF_CONTENT[variant].faq} />
+        <ToolGuide
+          stepsTitle={DIFF_CONTENT[variant].stepsTitle}
+          steps={DIFF_CONTENT[variant].steps}
+          faq={DIFF_CONTENT[variant].faq}
+          example={DIFF_CONTENT[variant].example}
+          mistakes={DIFF_CONTENT[variant].mistakes}
+          related={DIFF_CONTENT[variant].related}
+          sources={DIFF_CONTENT[variant].sources}
+        />
         {!isJson && (
           <>
             <Features />

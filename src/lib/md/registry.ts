@@ -35,6 +35,9 @@ const listItem = (id: PageId) => `- ${link(pageById(id).name, pageById(id).path)
 
 const faq = (items: { q: string; a: string }[]) => items.map(({ q, a }) => `### ${plain(escapeText(q))}\n\n${plain(a)}`).join('\n\n');
 
+const sources = (items: { title: string; url: string; about: string }[] | undefined) =>
+  items && items.length > 0 && blocks('## Sources', items.map((s) => `- ${link(s.title, s.url)}: ${plain(s.about)}`).join('\n'));
+
 const steps = (items: { title: string; body: string }[]) => items.map((s, i) => `${i + 1}. **${plain(s.title)}:** ${plain(s.body)}`).join('\n');
 
 /** A tool page: what it does, a worked example, common mistakes, how to use it, questions. */
@@ -59,6 +62,7 @@ function toolPage(id: ToolId, page: Page): MarkdownPage {
       c.mistakes && blocks('## Common mistakes', c.mistakes.map((m) => `### ${plain(escapeText(m.title))}\n\n${plain(m.body)}`).join('\n\n')),
       blocks('## How it works', steps(c.steps)),
       c.faq.length > 0 && blocks('## Questions', faq(c.faq)),
+      sources(c.sources),
     ),
     related: c.related,
   };
@@ -73,10 +77,22 @@ function diffPage(variant: 'text' | 'json', page: Page): MarkdownPage {
     body: blocks(
       plain(c.description),
       `This is an interactive tool that runs in the browser: ${link(`open the ${page.name}`, page.path)} to use it. Nothing typed into it is uploaded.`,
+      c.example &&
+        blocks(
+          '## Worked example',
+          plain(c.example.intro),
+          `**${c.example.inputLabel}**`,
+          codeBlock(c.example.input),
+          `**${c.example.outputLabel}**`,
+          codeBlock(c.example.output),
+          c.example.note && plain(c.example.note),
+        ),
+      blocks('## Common mistakes', c.mistakes.map((m) => `### ${plain(escapeText(m.title))}\n\n${plain(m.body)}`).join('\n\n')),
       blocks(`## ${c.stepsTitle}`, steps(c.steps)),
       blocks('## Questions', faq(c.faq)),
+      sources(c.sources),
     ),
-    related: variant === 'text' ? ['json-diff', 'guide-compare-json'] : ['diff-checker', 'guide-compare-json', 'json-formatter'],
+    related: c.related,
   };
 }
 

@@ -90,6 +90,11 @@ function structuredData(page: Page): HtmlTagDescriptor {
       mainEntityOfPage: url,
     });
   } else {
+    const sources = isToolPage(page.id)
+      ? TOOL_CONTENT[page.id].sources
+      : page.id === 'diff-checker' || page.id === 'json-diff'
+        ? DIFF_CONTENT[page.id === 'json-diff' ? 'json' : 'text'].sources
+        : undefined;
     graph.push({
       '@type': 'SoftwareApplication',
       name: page.id === 'home' ? 'toolspace' : `${page.name} by toolspace`,
@@ -99,6 +104,8 @@ function structuredData(page: Page): HtmlTagDescriptor {
       operatingSystem: 'Any (runs in the browser)',
       isAccessibleForFree: true,
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      // The references listed under "Sources" on the page
+      ...(sources?.length ? { citation: sources.map((s) => ({ '@type': 'CreativeWork', name: s.title, url: s.url })) } : {}),
     });
   }
   const faq = isToolPage(page.id)

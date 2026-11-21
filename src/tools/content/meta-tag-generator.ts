@@ -50,6 +50,9 @@ const content: ToolContent = {
     { title: 'Unescaped quotes', body: 'A " inside content="…" ends the attribute early and breaks the tag. Escape it as &quot; (this tool does it for you).' },
     { title: 'A leftover noindex', body: 'A noindex tag copied from a staging site keeps the live page out of search results. Check the robots tag before you publish.' },
   ],
+  sources: [
+    { title: 'The Open Graph protocol', url: 'https://ogp.me/', about: 'the og: tags link previews are built from' },
+  ],
   related: ['robots-txt', 'html-entities', 'slug-generator', 'url-encoder'],
 };
 

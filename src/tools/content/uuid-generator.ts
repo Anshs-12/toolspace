@@ -21,6 +21,9 @@ const content: ToolContent = {
     { title: 'Comparing UUIDs as case-sensitive strings', body: 'UUIDs are case-insensitive: 550E8400… and 550e8400… are the same ID. Normalise to lower case before comparing or storing.' },
     { title: 'Storing UUIDs as 36-character text', body: 'Most databases have a native UUID type that stores the 16 bytes. Text takes more than twice the space and compares more slowly.' },
   ],
+  sources: [
+    { title: 'RFC 9562: Universally Unique IDentifiers (UUIDs)', url: 'https://datatracker.ietf.org/doc/html/rfc9562', about: 'the UUID standard, including versions 4 and 7' },
+  ],
   related: ['password-generator', 'hash-generator', 'unix-timestamp', 'mock-json'],
 };
 

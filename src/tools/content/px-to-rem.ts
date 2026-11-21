@@ -28,6 +28,9 @@ const content: ToolContent = {
     { title: 'Converting media query breakpoints blindly', body: 'rem and em in media queries are based on the browser’s default font size, not your html font-size, so a 62.5% root doesn’t apply there.' },
     { title: 'Rounding too hard', body: 'Two decimals can turn 13px into 0.81rem, which is 12.96px. Keep 4 decimals if you need sizes to match a design exactly.' },
   ],
+  sources: [
+    { title: 'CSS length units on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length', about: 'how rem and em relate to font sizes' },
+  ],
   related: ['css-beautifier', 'aspect-ratio', 'color-converter', 'css-gradient'],
 };
 

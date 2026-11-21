@@ -47,6 +47,16 @@ export interface ToolContent {
   mistakes?: { title: string; body: string }[];
   /** Other pages worth linking from this one ("Related tools"). */
   related?: PageId[];
+  /** Standards and references behind the page's claims, shown under "Sources" (a test checks they're https and unique). */
+  sources?: Source[];
+}
+
+/** An outside reference: what it is, and what on the page it backs up. */
+export interface Source {
+  title: string;
+  url: string;
+  /** What it covers, in a few words ("the JSON standard the validator follows"). */
+  about: string;
 }
 
 export interface WorkedExample {
@@ -78,6 +88,23 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'Is there a size limit?', a: 'No fixed limit. Files of tens of megabytes work; the only limit is your browser’s memory.' },
       { q: 'Is my JSON sent anywhere?', a: 'No. Formatting happens in this tab and your JSON is never sent anywhere. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. Microsoft Clarity also records clicks and scrolling to show how pages are used, with tool areas hidden.' },
     ],
+    example: {
+      intro: 'A one-line API response, formatted with 2 spaces. The price keeps its trailing zero: 1.10 stays 1.10, where JSON.parse and most formatters would turn it into 1.1.',
+      inputLabel: 'minified',
+      input: '{"id":7,"name":"Ada","tags":["admin","editor"],"price":1.10,"active":true}',
+      outputLabel: 'formatted (2 spaces)',
+      output: '{\n  "id": 7,\n  "name": "Ada",\n  "tags": [\n    "admin",\n    "editor"\n  ],\n  "price": 1.10,\n  "active": true\n}\n',
+    },
+    mistakes: [
+      { title: 'Pasting JavaScript instead of JSON', body: 'Unquoted keys, single quotes, comments and trailing commas are fine in JavaScript but not in JSON. The error points at the first one.' },
+      { title: 'Expecting the formatter to fix errors', body: 'Formatting needs valid JSON to start from. Fix the line in the error message first; the JSON validator explains each kind of error.' },
+      { title: 'Sorting keys in a file people edit', body: 'Sort keys is useful before comparing two files, but it reorders the whole file. Leave it off to keep the original order.' },
+      { title: 'Sending formatted JSON from an API', body: 'Indentation and line breaks add bytes to every response. Send it minified and format it only when you need to read it.' },
+    ],
+    sources: [
+      { title: 'RFC 8259: The JSON Data Interchange Format', url: 'https://datatracker.ietf.org/doc/html/rfc8259', about: 'the JSON standard the formatter and validator follow' },
+      { title: 'JSON.parse() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse', about: 'how browsers read JSON, and the rules it shares with this page' },
+    ],
     related: ['json-validator', 'json-viewer', 'json-diff', 'json-to-typescript'],
   },
   'json-validator': {
@@ -93,6 +120,25 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'Which JSON standard is used?', a: 'Strict JSON (RFC 8259), the same rules as JSON.parse in every browser.' },
       { q: 'Does it catch duplicate keys?', a: 'Yes. Duplicate keys are technically allowed, so the JSON still counts as valid, but you get a warning with the line and column, because most parsers silently keep only the last value.' },
       { q: 'Is my JSON sent anywhere?', a: 'No. Validation happens in this tab; your JSON is never uploaded.' },
+    ],
+    example: {
+      intro: 'JSON copied from JavaScript code, with a comma after the last item. The validator names the problem and its exact place.',
+      inputLabel: 'json',
+      input: '{\n  "name": "Ada",\n  "roles": ["admin", "editor",],\n}',
+      outputLabel: 'result',
+      output: 'Trailing comma before "]" at line 3, column 31',
+      note: 'Remove that comma and the validator reports the next one: the comma at the end of line 3, before the closing } on line 4.',
+    },
+    mistakes: [
+      { title: 'Trailing commas', body: 'A comma after the last item of an object or array is allowed in JavaScript, but not in JSON.' },
+      { title: 'Single quotes', body: 'JSON strings and keys need "double quotes". \'Ada\' is invalid.' },
+      { title: 'Comments', body: 'JSON has no comments. Files like tsconfig.json accept them, but strict parsers don’t; use YAML or JSON5 if you need them.' },
+      { title: 'Missing quotes around keys', body: '{name: "Ada"} is a JavaScript object, not JSON. Every key must be a quoted string.' },
+      { title: 'Special values', body: 'Values like undefined, NaN and Infinity are not JSON. Use null, or a string if you need to keep the value.' },
+    ],
+    sources: [
+      { title: 'RFC 8259: The JSON Data Interchange Format', url: 'https://datatracker.ietf.org/doc/html/rfc8259', about: 'the JSON standard, which defines what valid JSON is' },
+      { title: 'JSON.parse() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse', about: 'the browser parser that applies the same rules' },
     ],
     related: ['json-formatter', 'yaml-validator', 'json-viewer', 'json-diff'],
   },
@@ -111,6 +157,23 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'Why are my numbers strings in the JSON?', a: 'CSV has no types, so every value stays a string unless you turn on number and true/false detection. Even then, values that would change are kept as text: IDs with leading zeros like 007, 1.10, and numbers too long to store exactly.' },
       { q: 'Which CSV files can it read?', a: 'Standard CSV (RFC 4180): quoted fields with commas, line breaks or doubled quotes ("") inside, Windows or Unix line endings, and a byte order mark at the start. An unclosed quote is reported with its line and column.' },
       { q: 'Is my data uploaded?', a: 'No. The conversion runs in this tab; your data never leaves your browser.' },
+    ],
+    example: {
+      intro: 'Two users. The nested address.city gets its own column, and the roles list stays as JSON in a single cell, with its quotes doubled as CSV requires.',
+      inputLabel: 'json',
+      input: '[{"id":1,"name":"Ada","address":{"city":"London"},"roles":["admin","editor"]},{"id":2,"name":"Grace","address":{"city":"Arlington"},"roles":[]}]',
+      outputLabel: 'csv',
+      output: 'id,name,address.city,roles\n1,Ada,London,"[""admin"",""editor""]"\n2,Grace,Arlington,[]\n',
+    },
+    mistakes: [
+      { title: 'Turning off formula escaping for data you didn’t write', body: 'A cell starting with =, +, - or @ can run as a formula when the file is opened in a spreadsheet (CSV injection). Keep Escape formulas on unless you need those cells exactly as they are.' },
+      { title: 'Expecting types to survive a round trip', body: 'CSV stores only text. Turn on number and true/false detection when converting back, and expect IDs like 007 to stay text.' },
+      { title: 'Using commas where Excel expects semicolons', body: 'In many European locales Excel splits columns on semicolons. If every row lands in one column, download with Semicolon instead.' },
+      { title: 'Flattening very nested data', body: 'Every nested key becomes a column, so deep or uneven objects make very wide files. Pick out the array you need first, for example with the JSONPath tester.' },
+    ],
+    sources: [
+      { title: 'RFC 4180: Common Format for CSV Files', url: 'https://datatracker.ietf.org/doc/html/rfc4180', about: 'the CSV rules for quoting, doubled quotes and line breaks' },
+      { title: 'CSV Injection (OWASP)', url: 'https://owasp.org/www-community/attacks/CSV_Injection', about: 'why cells starting with = + - or @ are escaped' },
     ],
     related: ['guide-json-to-csv', 'json-viewer', 'json-formatter', 'mock-json'],
   },
@@ -142,6 +205,10 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { title: 'Tabs for indentation', body: 'YAML forbids tabs for indentation; a single tab makes the file invalid. Use spaces.' },
       { title: 'A colon inside a value', body: 'An unquoted "key: value: more" starts a new mapping. Quote values that contain ": " or start with characters like @, `, * or &.' },
       { title: 'Leading zeros', body: 'File modes like 0755 are read as octal numbers in YAML 1.1. Quote them to keep the exact text.' },
+    ],
+    sources: [
+      { title: 'YAML 1.2.2 specification', url: 'https://yaml.org/spec/1.2.2/', about: 'the YAML version used when reading YAML' },
+      { title: 'RFC 8259: The JSON Data Interchange Format', url: 'https://datatracker.ietf.org/doc/html/rfc8259', about: 'the JSON standard' },
     ],
     related: ['yaml-validator', 'json-formatter', 'json-to-typescript'],
   },
@@ -188,6 +255,24 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'Why is my decoded text garbled?', a: 'Either the data isn’t text (an image or a zip, for example), or the text was encoded from something other than UTF-8. Binary data is shown as a hex view with a download instead.' },
       { q: 'Is my data uploaded?', a: 'No. Encoding and decoding happen in this tab and your data is never sent anywhere. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. Microsoft Clarity also records clicks and scrolling to show how pages are used, with tool areas hidden.' },
     ],
+    example: {
+      intro: 'Three short texts, each encoded on its own. Every 3 bytes become 4 characters, so Base64 is about a third longer than the original, and = pads the end when the length isn’t a multiple of 3. In café ☕, é takes 2 bytes and ☕ takes 3 in UTF-8.',
+      inputLabel: 'text',
+      input: 'Hello, world!\ncafé ☕\n<<???>>',
+      outputLabel: 'base64',
+      output: 'SGVsbG8sIHdvcmxkIQ==\nY2Fmw6kg4piV\nPDw/Pz8+Pg==',
+      note: 'URL-safe Base64 writes the last one as PDw_Pz8-Pg: - and _ instead of + and /, and no padding.',
+    },
+    mistakes: [
+      { title: 'Using Base64 to hide secrets', body: 'Base64 is an encoding, not encryption. Anyone can decode it, so it protects nothing on its own.' },
+      { title: 'Putting standard Base64 in a URL', body: '+ and / have meanings in URLs and get changed on the way. Use the URL-safe alphabet for URLs, file names and JWTs.' },
+      { title: 'Calling btoa() on any text', body: 'JavaScript’s btoa() accepts only characters up to U+00FF, so btoa("☕") throws an error. Encode the text to UTF-8 bytes first, as this tool does.' },
+      { title: 'Embedding large images as data: URLs', body: 'The Base64 is about a third bigger than the file, and browsers can’t cache it separately. Keep data: URLs for small icons.' },
+    ],
+    sources: [
+      { title: 'RFC 4648: The Base16, Base32, and Base64 Data Encodings', url: 'https://datatracker.ietf.org/doc/html/rfc4648', about: 'the Base64 alphabets, padding and the URL-safe variant (section 5)' },
+      { title: 'btoa() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa', about: 'why the built-in function fails on characters beyond Latin-1' },
+    ],
     related: ['hash-generator', 'url-encoder', 'jwt-decoder', 'html-entities'],
   },
   'unix-timestamp': {
@@ -203,6 +288,23 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'Seconds or milliseconds?', a: 'Unix tools and most APIs use seconds (10 digits today); JavaScript’s Date.now() and Java use milliseconds (13 digits). Microseconds (16) and nanoseconds (19) appear in databases and tracing. The converter detects which one you pasted.' },
       { q: 'What is the year 2038 problem?', a: 'Systems that store seconds in a signed 32-bit integer overflow on 19 January 2038 at 03:14:07 UTC (timestamp 2147483647). 64-bit timestamps, used here, run for billions of years.' },
       { q: 'Is anything sent to a server?', a: 'No. All conversion uses your browser’s own clock and time zone data.' },
+    ],
+    example: {
+      intro: 'The same moment in seconds and in milliseconds. The converter tells them apart by the number of digits.',
+      inputLabel: 'timestamp',
+      input: '1760700000\n1760700000000',
+      outputLabel: 'ISO 8601 (UTC)',
+      output: '2025-10-17T11:20:00Z\n2025-10-17T11:20:00Z',
+    },
+    mistakes: [
+      { title: 'Mixing seconds and milliseconds', body: 'Read as milliseconds, 1760700000 is a date in January 1970. If a date lands in 1970 or far in the future, the unit is wrong.' },
+      { title: 'Storing local time', body: 'A timestamp is always UTC. Convert to a time zone only when you show the date to someone.' },
+      { title: 'Saving it in a 32-bit integer', body: 'A signed 32-bit number of seconds runs out on 19 January 2038. Use a 64-bit type.' },
+      { title: 'Adding 86,400 seconds for “tomorrow”', body: 'Days with a daylight saving change last 23 or 25 hours in local time. Add calendar days in the time zone instead.' },
+    ],
+    sources: [
+      { title: 'POSIX: Seconds Since the Epoch (The Open Group)', url: 'https://pubs.opengroup.org/onlinepubs/9799919799/basedefs/V1_chap04.html', about: 'the definition of Unix time, which ignores leap seconds' },
+      { title: 'Date.now() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now', about: 'why JavaScript counts in milliseconds' },
     ],
     related: ['cron-generator', 'jwt-decoder', 'uuid-generator'],
   },
@@ -220,6 +322,25 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'Which algorithms can it verify?', a: 'HS256, HS384 and HS512 with a shared secret; RS256/384/512, PS256/384/512 and ES256/384/512 with a public key in PEM or JWK form; and EdDSA (Ed25519) in browsers that support it.' },
       { q: 'Can it decode encrypted tokens (JWE)?', a: 'No. Encrypted tokens have five parts and need the private key to read; this tool decodes signed tokens (JWS), the common kind.' },
     ],
+    example: {
+      intro: 'The well-known sample token from the JWT documentation. Its three parts are separated by dots: header, payload and signature.',
+      inputLabel: 'token',
+      input: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c',
+      outputLabel: 'header and payload',
+      output: '{\n  "alg": "HS256",\n  "typ": "JWT"\n}\n{\n  "sub": "1234567890",\n  "name": "John Doe",\n  "iat": 1516239022\n}',
+      note: 'iat (issued at) is 18 January 2018, 01:30:22 UTC. There is no exp claim, so this token never expires, which would be a problem for a real one.',
+    },
+    mistakes: [
+      { title: 'Putting secrets in the payload', body: 'The payload is only Base64url, so anyone holding the token can read it. Keep passwords and personal data out.' },
+      { title: 'Trusting a token you only decoded', body: 'Decoding shows what a token claims, not that it’s genuine. Servers must verify the signature before using any claim.' },
+      { title: 'Letting the token choose the algorithm', body: 'A server that accepts whatever alg the header names can be tricked with "none" or a swapped key type. Fix the expected algorithm on the server.' },
+      { title: 'Writing exp in milliseconds', body: 'exp, iat and nbf are seconds since 1970. A 13-digit value means a date thousands of years away.' },
+    ],
+    sources: [
+      { title: 'RFC 7519: JSON Web Token (JWT)', url: 'https://datatracker.ietf.org/doc/html/rfc7519', about: 'the token format and its registered claims (exp, iat, nbf, sub and more)' },
+      { title: 'RFC 7515: JSON Web Signature (JWS)', url: 'https://datatracker.ietf.org/doc/html/rfc7515', about: 'how the signature is made and checked' },
+      { title: 'RFC 8725: JWT Best Current Practices', url: 'https://datatracker.ietf.org/doc/html/rfc8725', about: 'the algorithm and validation mistakes listed above' },
+    ],
     related: ['base64', 'unix-timestamp', 'hash-generator', 'json-formatter'],
   },
   'regex-tester': {
@@ -236,6 +357,17 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'How many matches are shown?', a: 'Up to 10,000, which is enough for any text you’d check by eye. The count tells you if there are more.' },
       { q: 'Is my text uploaded?', a: 'No. Matching happens in this tab.' },
     ],
+    mistakes: [
+      { title: 'Forgetting the g flag', body: 'Without global, only the first match is found and only the first one is replaced.' },
+      { title: 'A greedy .* matching too much', body: '".*" on two quoted words matches from the first quote to the last. Use ".*?" or "[^"]*" to stop at the nearest quote.' },
+      { title: 'An unescaped dot', body: '. matches any character, so 1.5 also matches 105. Write \\. for a literal dot.' },
+      { title: 'Expecting ^ and $ to match each line', body: 'They match the start and end of the whole text unless the multiline flag is on.' },
+      { title: 'Nesting quantifiers', body: 'Patterns like (a+)+ can take exponential time on text that almost matches. Rewrite them without the nested repeat.' },
+    ],
+    sources: [
+      { title: 'Regular expressions guide on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions', about: 'the JavaScript regex syntax and flags this tester uses' },
+      { title: 'Regular expression Denial of Service (OWASP)', url: 'https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS', about: 'catastrophic backtracking and why some patterns hang' },
+    ],
     related: ['line-cleaner', 'list-to-sql', 'slug-generator'],
   },
   'url-encoder': {
@@ -251,6 +383,24 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'Why do spaces become + sometimes and %20 other times?', a: 'HTML forms send data as application/x-www-form-urlencoded, where a space is +. Everywhere else in a URL a space is %20. Pick Form or Component to match what you’re working with.' },
       { q: 'Why does decoding fail?', a: 'A % must be followed by two hex digits, and the bytes must form valid UTF-8. The error says exactly which escape is wrong.' },
       { q: 'Is anything sent anywhere?', a: 'No. Encoding, decoding and parsing all happen in this tab.' },
+    ],
+    example: {
+      intro: 'One query value in two styles. = & and / are escaped because they mean something in a URL, and € becomes three escapes, one for each of its UTF-8 bytes. Form style writes spaces as +.',
+      inputLabel: 'text',
+      input: 'price=10&currency=€ / month',
+      outputLabel: 'Component · Form',
+      output: 'price%3D10%26currency%3D%E2%82%AC%20%2F%20month\nprice%3D10%26currency%3D%E2%82%AC+%2F+month',
+    },
+    mistakes: [
+      { title: 'Encoding a whole URL as a component', body: 'Component style escapes :// and every /, which breaks the link. Use Full URL for a complete address.' },
+      { title: 'Encoding twice', body: 'Encoding already-encoded text turns %20 into %2520. Decode first if you’re not sure.' },
+      { title: 'Using + for a space in a path', body: '+ means a space only in form data. In a path it’s a literal plus, so use %20 there.' },
+      { title: 'Leaving & or = in a query value', body: 'An unescaped & starts a new parameter and cuts the value short. Encode each value with Component style.' },
+    ],
+    sources: [
+      { title: 'RFC 3986: URI Generic Syntax', url: 'https://datatracker.ietf.org/doc/html/rfc3986', about: 'percent-encoding and which characters are reserved' },
+      { title: 'URL Standard (WHATWG)', url: 'https://url.spec.whatwg.org/', about: 'how browsers parse URLs and encode form data with +' },
+      { title: 'encodeURIComponent() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent', about: 'the difference between component and full-URL encoding' },
     ],
     related: ['base64', 'html-entities', 'slug-generator', 'qr-code'],
   },
@@ -297,6 +447,7 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { title: 'Forgetting the word after a colon', body: 'The first word after a colon starts a subtitle and is capitalized: "The End: A Story", not "The End: a Story".' },
       { title: 'Changing brand names and acronyms', body: 'iPhone, eBay and NASA keep their own capitals. The converter leaves words with inner capitals and all-caps words alone.' },
     ],
+    related: ['case-converter', 'slug-generator', 'word-counter'],
   },
   'word-counter': {
     h1: 'Word counter',
@@ -315,6 +466,11 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { q: 'How is reading time worked out?', a: 'At 238 words a minute, the average adult silent reading speed found by a large 2019 review; speaking time uses 150 words a minute.' },
       { q: 'Is my text saved or uploaded?', a: 'It’s never uploaded. It is kept in this browser so it’s still here when you come back; “Forget input” clears it.' },
     ],
+    sources: [
+      { title: 'How many words do we read per minute? (Brysbaert, 2019)', url: 'https://doi.org/10.1016/j.jml.2019.104047', about: 'the review behind the 238 words a minute reading speed' },
+      { title: 'Counting characters (X developer docs)', url: 'https://docs.x.com/fundamentals/counting-characters', about: 'how X counts links, emoji and CJK characters' },
+    ],
+    related: ['case-converter', 'title-case', 'line-cleaner', 'lorem-ipsum'],
   },
   'password-generator': {
     h1: 'Password generator',
@@ -326,8 +482,12 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
     ],
     faq: [
       { q: 'Is it safe to generate passwords online?', a: 'This page creates them with crypto.getRandomValues in your browser, and the password never leaves your device. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. Microsoft Clarity also records clicks and scrolling to show how pages are used, with tool areas hidden. Store it in a password manager.' },
-      { q: 'How long should a password be?', a: 'At least 12 characters; 16 or more for important accounts. Each extra character multiplies the work for an attacker far more than adding symbols does.' },
+      { q: 'How long should a password be?', a: 'At least 15 characters when the password alone protects the account, which is the minimum in NIST’s current guidelines; 16 or more is a good default. Each extra character multiplies the work for an attacker far more than adding symbols does.' },
       { q: 'What does "exclude ambiguous characters" do?', a: 'Leaves out characters that look alike, such as I, l, 1, O and 0, which helps when a password has to be read or typed by hand.' },
+    ],
+    sources: [
+      { title: 'NIST SP 800-63B: Authentication and Authenticator Management', url: 'https://pages.nist.gov/800-63-4/sp800-63b.html', about: 'current password guidance, including the 15-character minimum' },
+      { title: 'Crypto.getRandomValues() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues', about: 'the browser’s cryptographic random number generator used here' },
     ],
     related: ['hash-generator', 'uuid-generator', 'qr-code'],
   },
@@ -465,5 +625,6 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { title: 'Tables without the separator row', body: 'A table needs the | --- | line under the header; without it the pipes show as plain text.' },
       { title: 'Under-indented nested lists', body: 'Nested items must line up with the parent item’s text: 2 spaces under "- ", 3 under "1. ".' },
     ],
+    related: ['html-entities', 'html-beautifier', 'word-counter'],
   },
 };

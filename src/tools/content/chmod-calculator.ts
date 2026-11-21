@@ -27,6 +27,9 @@ const content: ToolContent = {
     { title: 'Recursive chmod on mixed trees', body: 'chmod -R 755 makes every file executable. Use find with -type f and -type d to set files and directories separately.' },
     { title: 'Loose SSH key permissions', body: 'ssh refuses a private key that others can read. Keep keys at 600 and ~/.ssh at 700.' },
   ],
+  sources: [
+    { title: 'chmod(1) manual page', url: 'https://man7.org/linux/man-pages/man1/chmod.1.html', about: 'numeric and symbolic modes, setuid, setgid and the sticky bit' },
+  ],
   related: ['subnet-calculator', 'number-base-converter', 'cron-generator', 'hash-generator'],
 };
 

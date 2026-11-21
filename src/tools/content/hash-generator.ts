@@ -28,6 +28,9 @@ const content: ToolContent = {
     { title: 'Trusting MD5 to prove a file is genuine', body: 'MD5 catches corruption, but an attacker can craft a different file with the same MD5. Compare SHA-256 when it’s published.' },
     { title: 'Comparing hex in different cases', body: 'A9993E… and a9993e… are the same hash. The compare box ignores case, spaces and a trailing file name.' },
   ],
+  sources: [
+    { title: 'SubtleCrypto.digest() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest', about: 'the browser’s built-in SHA hashing, and why SHA-1 shouldn’t be used for security' },
+  ],
   related: ['base64', 'uuid-generator', 'password-generator', 'jwt-decoder'],
 };
 

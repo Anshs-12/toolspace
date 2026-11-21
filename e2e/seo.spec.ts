@@ -113,7 +113,7 @@ test.describe('/json-diff', () => {
     await expect(page.getByRole('heading', { level: 1 })).toHaveText('JSON diff');
     await expect(page.getByRole('complementary', { name: 'Tools' }).getByRole('link', { name: 'JSON diff' })).toHaveAttribute('aria-current', 'page');
     await expect(page.getByRole('heading', { name: 'How to compare two JSON files' })).toBeVisible();
-    await expect(page.getByRole('navigation', { name: 'Tools' }).getByRole('link', { name: 'Diff checker' })).toHaveAttribute('href', '/diff-checker/');
+    await expect(page.getByRole('navigation', { name: 'Tools', exact: true }).getByRole('link', { name: 'Diff checker' })).toHaveAttribute('href', '/diff-checker/');
   });
 
   test('flags invalid JSON with its line and column', async ({ page }) => {

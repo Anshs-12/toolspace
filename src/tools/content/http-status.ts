@@ -21,6 +21,10 @@ const content: ToolContent = {
     { title: 'Redirecting forms with 301', body: 'Browsers turn a redirected POST into a GET with 301 and 302, so the form data is lost. Use 303 after handling a POST, or 307/308 to resend it.' },
     { title: '500 for bad input', body: '5xx means the server failed. If the client sent something invalid, return a 4xx so it knows to fix the request rather than retry.' },
   ],
+  sources: [
+    { title: 'RFC 9110: HTTP Semantics', url: 'https://datatracker.ietf.org/doc/html/rfc9110', about: 'the official meaning of each status code' },
+    { title: 'HTTP response status codes on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status', about: 'browser behavior and examples for each code' },
+  ],
   related: ['url-encoder', 'jwt-decoder', 'json-formatter', 'robots-txt'],
 };
 

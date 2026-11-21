@@ -28,6 +28,9 @@ const content: ToolContent = {
     { title: 'Forgetting the server’s time zone', body: 'A job set for 09:00 on a UTC server runs at 09:00 UTC, which may be the middle of the night where you are.' },
     { title: 'Assuming */7 means every seven days', body: 'In the day-of-month field, */7 means days 1, 8, 15, 22 and 29, restarting each month. The gap from the 29th to the next 1st is shorter.' },
   ],
+  sources: [
+    { title: 'crontab(5) manual page', url: 'https://man7.org/linux/man-pages/man5/crontab.5.html', about: 'the five-field cron syntax, ranges, steps and names' },
+  ],
   related: ['unix-timestamp', 'regex-tester', 'chmod-calculator', 'http-status'],
 };
 
