@@ -39,7 +39,7 @@ export function qrSvg(qr: Qr, opts: { margin: number; fg: string; bg: string; sc
 /** Text for common QR payloads. */
 export const QR_TEMPLATES = {
   wifi: (ssid: string, password: string, security: 'WPA' | 'WEP' | 'nopass', hidden: boolean) => {
-    const esc = (s: string) => s.replace(/([\;,:"])/g, '\\$1');
+    const esc = (s: string) => s.replace(/([\\;,:"])/g, '\\$1');
     return `WIFI:T:${security};S:${esc(ssid)};${security === 'nopass' ? '' : `P:${esc(password)};`}${hidden ? 'H:true;' : ''};`;
   },
   email: (to: string, subject: string, body: string) => {
