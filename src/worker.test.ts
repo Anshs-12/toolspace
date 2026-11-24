@@ -13,6 +13,14 @@ describe('worker', () => {
     expect(root.headers.get('location')).toBe('https://toolspace.tech/');
   });
 
+  it('sends plain http on the site host to https, permanently, keeping path and query', async () => {
+    const res = await worker.fetch(new Request('http://toolspace.tech/json-formatter/?a=1'), env);
+    expect(res.status).toBe(301);
+    expect(res.headers.get('location')).toBe('https://toolspace.tech/json-formatter/?a=1');
+    const local = await worker.fetch(new Request('http://localhost:8787/word-counter/'), env);
+    expect(local.status).toBe(200);
+  });
+
   it('serves the site normally on the new domain', async () => {
     const res = await worker.fetch(new Request(`${SITE_URL}/word-counter/`), env);
     expect(res.status).toBe(200);
