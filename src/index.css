@@ -1342,3 +1342,43 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Copy buttons: the icon turns into a tick that draws itself (see lib/copyFeedback.ts) */
+[data-copied] > svg:not(.copy-tick) {
+  display: none;
+}
+.copy-tick {
+  color: var(--color-add, #16a34a);
+  color: light-dark(#15803d, #4ade80);
+}
+.copy-tick path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: copy-tick-draw 0.35s ease-out forwards;
+}
+.copy-tick {
+  animation: copy-tick-pop 0.35s ease-out;
+}
+@keyframes copy-tick-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes copy-tick-pop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .copy-tick,
+  .copy-tick path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
