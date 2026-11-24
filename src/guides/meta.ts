@@ -1,6 +1,6 @@
 /** Titles and dates of guides and other text pages, kept free of React so the build config can read them. */
 
-export type GuideId = 'guide-compare-json' | 'guide-json-to-csv' | 'about' | 'contact';
+export type GuideId = 'guide-compare-json' | 'guide-json-to-csv' | 'guide-compare-files' | 'about' | 'contact';
 
 export { CONTACT_EMAIL } from '../site';
 
@@ -15,6 +15,12 @@ export const GUIDE_META: Record<GuideId, { h1: string; lede: string; published: 
     h1: 'JSON to CSV for Excel: nested objects, arrays and encoding',
     lede: 'How to turn JSON, especially nested JSON from an API, into a CSV that opens cleanly in Excel or Google Sheets.',
     published: '2026-10-17',
+    kind: 'guide',
+  },
+  'guide-compare-files': {
+    h1: 'How to compare two files or code online',
+    lede: 'See exactly what changed between two versions of a file or piece of code, and how to read the result, including a unified diff.',
+    published: '2026-11-24',
     kind: 'guide',
   },
   'about': {
