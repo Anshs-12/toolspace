@@ -1,3 +1,4 @@
+import '@/lib/copyFeedback';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { CircleAlert, CircleCheck, Copy, Download, FolderOpen, Trash2, TriangleAlert } from 'lucide-react';
