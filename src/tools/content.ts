@@ -483,6 +483,7 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
     faq: [
       { q: 'Is it safe to generate passwords online?', a: 'This page creates them with crypto.getRandomValues in your browser, and the password never leaves your device. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. Microsoft Clarity also records clicks and scrolling to show how pages are used, with tool areas hidden. Store it in a password manager.' },
       { q: 'How long should a password be?', a: 'At least 15 characters when the password alone protects the account, which is the minimum in NIST’s current guidelines; 16 or more is a good default. Each extra character multiplies the work for an attacker far more than adding symbols does.' },
+      { q: 'Is this a non-dictionary password generator?', a: 'It doesn’t use a word list. The tool picks each character at random from the sets you choose, rather than selecting words, so it is not a passphrase generator. Random characters can still spell a short word fragment by chance, so there is no guarantee that a result contains no dictionary word or pattern. The strength shown comes from length and the character sets used, not from avoiding words.' },
       { q: 'What does "exclude ambiguous characters" do?', a: 'Leaves out characters that look alike, such as I, l, 1, O and 0, which helps when a password has to be read or typed by hand.' },
     ],
     sources: [
