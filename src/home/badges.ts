@@ -22,6 +22,7 @@ export const BADGES: Badge[] = [
   { name: 'Million Dot Homepage', href: 'https://milliondothomepage.com/product/toolspace', logo: '/badges/milliondothomepage.png' },
   { name: 'ShinyLaunch', href: 'https://shinylaunch.com/product/toolspace', logo: '/badges/shinylaunch.png' },
   { name: 'LaunchClash', href: 'https://launchclash.com/product/toolspace', logo: '/badges/launchclash.png' },
+  { name: 'What\'s New Today', href: 'https://whatisnew.today/p/toolspace?ref=badge', logo: '/badges/whatisnewtoday.svg' },
   { name: 'Startup Fast', href: 'https://startupfa.st', logo: '/badges/startupfast.png' },
   { name: 'DeepLaunch', href: 'https://deeplaunch.io', logo: '/badges/deeplaunch.png' },
 ];
