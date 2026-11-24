@@ -73,6 +73,7 @@ export default function HomeApp() {
   const { resolved, setChoice: setTheme } = useTheme();
   const [category, setCategory] = useState('All');
   const [query, setQuery] = useState('');
+  const [showMoreBadges, setShowMoreBadges] = useState(false);
 
   const shown = useMemo(() => {
     const inCategory = category === 'All' ? TOOLS : TOOL_GROUPS.find((g) => g.label === category)!.ids.map(pageById);
@@ -191,7 +192,7 @@ export default function HomeApp() {
             <section className="mt-14 flex flex-col items-center gap-3 border-t pt-10" aria-label="Featured on sites">
               <p className="font-mono text-[11.5px] text-muted-foreground">featured on</p>
               <ul className="flex flex-wrap items-center justify-center gap-3" aria-label="Featured on">
-                {BADGES.map((b) => (
+                {BADGES.filter((b) => !b.more || showMoreBadges).map((b) => (
                   <li key={b.name}>
                     <a
                       href={b.href}
@@ -212,6 +213,15 @@ export default function HomeApp() {
                   </li>
                 ))}
               </ul>
+              {BADGES.some((b) => b.more) && !showMoreBadges && (
+                <button
+                  type="button"
+                  onClick={() => setShowMoreBadges(true)}
+                  className="rounded-lg border px-3 py-1.5 font-mono text-[11.5px] text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  More
+                </button>
+              )}
             </section>
           )}
         </main>

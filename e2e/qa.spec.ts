@@ -91,6 +91,8 @@ test('real icon files and the manifest are linked, served and allowed by the sec
 test('home page shows the "featured on" badges, linking out in a new tab', async ({ page }) => {
   await page.goto('/');
   // Same size for every badge, logos served from this site
+  await expect(page.getByRole('link', { name: 'Featured on Twelve Tools' })).toHaveCount(0);
+  await page.getByRole('button', { name: 'More', exact: true }).click();
   const sizes = await page.getByRole('list', { name: 'Featured on' }).getByRole('link').evaluateAll((els) => els.map((e) => `${e.getBoundingClientRect().width}x${e.getBoundingClientRect().height}`));
   expect(new Set(sizes).size).toBe(1);
   for (const src of await page.getByRole('list', { name: 'Featured on' }).locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).src))) {
@@ -112,6 +114,11 @@ test('home page shows the "featured on" badges, linking out in a new tab', async
   for (const name of ['Startup Benchmarks', 'Million Dot Homepage', 'ShinyLaunch', 'LaunchClash', 'Startup Fast']) {
     await expect(badges.getByRole('link', { name: `Featured on ${name}` })).toHaveCount(1);
   }
+  // Newer listings sit behind a More button
+  await expect(badges.getByRole('link', { name: 'Featured on Twelve Tools' })).toHaveAttribute('href', 'https://twelve.tools/toolspace-tech');
+  await expect(badges.getByRole('link', { name: 'Featured on Post Your Build Ideas' })).toHaveCount(1);
+  await expect(badges.getByRole('link', { name: 'Featured on TechTools Launchpad' })).toHaveCount(1);
+  await expect(page.getByRole('button', { name: 'More', exact: true })).toHaveCount(0);
   // Long names fit without being cut off
   expect(await badges.locator('.truncate').evaluateAll((els) => els.filter((e) => e.scrollWidth > e.clientWidth).map((e) => e.textContent))).toEqual([]);
 });
