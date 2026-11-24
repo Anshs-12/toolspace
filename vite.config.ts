@@ -125,7 +125,7 @@ function structuredData(page: Page): HtmlTagDescriptor {
   }
   if (page.id === 'home') {
     graph.push({ ...ORGANIZATION, '@id': `${SITE_URL}/#organization` });
-    graph.push({ '@type': 'WebSite', name: 'toolspace', url: `${SITE_URL}/`, publisher: { '@id': `${SITE_URL}/#organization` } });
+    graph.push({ '@type': 'WebSite', name: 'toolspace', alternateName: 'toolspace.tech', url: `${SITE_URL}/`, publisher: { '@id': `${SITE_URL}/#organization` } });
   } else {
     graph.push(breadcrumb(page));
   }
