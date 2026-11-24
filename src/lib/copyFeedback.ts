@@ -10,6 +10,10 @@ let lastButton: Element | null = null;
 let lastAt = 0;
 
 if (typeof document !== 'undefined') {
+  // A floating tick would detach from its control if the page moves, so drop it on scroll or resize
+  const dropBadges = () => document.querySelectorAll('.copy-badge').forEach((n) => n.remove());
+  window.addEventListener('scroll', dropBadges, { capture: true, passive: true });
+  window.addEventListener('resize', dropBadges, { passive: true });
   document.addEventListener(
     'click',
     (e) => {
@@ -22,6 +26,7 @@ if (typeof document !== 'undefined') {
 }
 
 const timers = new WeakMap<Element, number>();
+const badges = new WeakMap<Element, Element>();
 
 function tick(): SVGSVGElement {
   const svg = document.createElementNS(SVG_NS, 'svg');
@@ -45,23 +50,53 @@ export function markCopied() {
   const btn = lastButton;
   if (!btn || !btn.isConnected || Date.now() - lastAt > 3000) return;
   const icon = btn.querySelector(':scope > svg:not(.copy-tick)');
-  if (!icon) return;
   const prev = timers.get(btn);
   if (prev) {
     window.clearTimeout(prev);
     btn.querySelectorAll(':scope > .copy-tick').forEach((n) => n.remove());
+    badges.get(btn)?.remove();
   }
-  const el = tick();
-  // Same size and classes as the icon it replaces, so layout does not move
-  el.setAttribute('class', `${icon.getAttribute('class') ?? ''} copy-tick`.trim());
+  let el: Element | null = null;
+  if (icon) {
+    el = tick();
+    // Same size and classes as the icon it replaces, so layout does not move
+    el.setAttribute('class', `${icon.getAttribute('class') ?? ''} copy-tick`.trim());
+    btn.insertBefore(el, icon);
+  } else if (btn.closest('td')) {
+    // JSON table cells are packed edge to edge, so there is no room for a tick without covering text.
+    // The cell itself flashes green instead (CSS on [data-copied]); the "Copied" toast confirms it.
+  } else {
+    // No icon (color swatches, JSON paths): a small tick floats near the control. It lives on <body>
+    // (position: fixed), so it never clips and never shifts layout, and sits where it covers no text.
+    const r = btn.getBoundingClientRect();
+    const badge = document.createElement('span');
+    badge.className = 'copy-badge';
+    badge.setAttribute('aria-hidden', 'true');
+    const size = 20;
+    let x: number;
+    let y: number;
+    if (btn.hasAttribute('data-hex')) {
+      x = r.right - size - 4; // inside the swatch's top-right corner, over the color
+      y = r.top + 4;
+    } else {
+      x = r.right + 6; // just right of the path row, in empty space
+      y = r.top + (r.height - size) / 2;
+    }
+    badge.style.left = `${Math.min(Math.max(x, 2), window.innerWidth - size - 2)}px`;
+    badge.style.top = `${Math.max(y, 2)}px`;
+    badge.appendChild(tick());
+    document.body.appendChild(badge);
+    badges.set(btn, badge);
+    el = badge;
+  }
   btn.setAttribute('data-copied', '');
-  btn.insertBefore(el, icon);
   timers.set(
     btn,
     window.setTimeout(() => {
-      el.remove();
+      el?.remove();
       btn.removeAttribute('data-copied');
       timers.delete(btn);
+      badges.delete(btn);
     }, TICK_MS),
   );
 }
