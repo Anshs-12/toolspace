@@ -11,6 +11,8 @@ export interface Badge {
   href: string;
   /** Logo file in public/badges/. */
   logo: string;
+  /** Shown behind the "More" button: listings that are live and checked. */
+  more?: boolean;
 }
 
 export const BADGES: Badge[] = [
@@ -25,4 +27,7 @@ export const BADGES: Badge[] = [
   { name: 'What\'s New Today', href: 'https://whatisnew.today/p/toolspace?ref=badge', logo: '/badges/whatisnewtoday.svg' },
   { name: 'Startup Fast', href: 'https://startupfa.st', logo: '/badges/startupfast.png' },
   { name: 'DeepLaunch', href: 'https://deeplaunch.io', logo: '/badges/deeplaunch.png' },
+  { name: 'Twelve Tools', href: 'https://twelve.tools/toolspace-tech', logo: '/badges/twelvetools.svg', more: true },
+  { name: 'Post Your Build Ideas', href: 'https://postyourbuildideas.com/launches/toolspace-7295', logo: '/badges/postyourbuildideas.svg', more: true },
+  { name: 'TechTools Launchpad', href: 'https://techtools.cz/tools/launchpad/?tool=12519', logo: '/badges/techtools.svg', more: true },
 ];
