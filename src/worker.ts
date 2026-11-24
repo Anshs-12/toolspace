@@ -1,6 +1,7 @@
 /**
- * Cloudflare Worker in front of the static site (see wrangler.jsonc). Requests
- * to the site's old workers.dev address are sent to the same path and query on
+ * Cloudflare Worker in front of the static site (see wrangler.jsonc). Plain
+ * http requests for the site's own host get a permanent (301) redirect to https,
+ * and requests to the site's old workers.dev address are sent to the same path and query on
  * the current domain with a permanent (301) redirect; everything else is served
  * from the built files, plus the markdown versions of pages for AI agents:
  *   /json-formatter.md, /index.md                 markdown by URL
@@ -45,6 +46,10 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     if (url.hostname === OLD_HOST) {
+      return Response.redirect(`${SITE_URL}${url.pathname}${url.search}`, 301);
+    }
+    // One address per page: http on the site's own host goes to the same path and query on https
+    if (url.protocol === 'http:' && url.hostname === new URL(SITE_URL).hostname) {
       return Response.redirect(`${SITE_URL}${url.pathname}${url.search}`, 301);
     }
     const { pathname } = url;
