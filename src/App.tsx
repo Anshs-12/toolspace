@@ -1,3 +1,4 @@
+import '@/lib/copyFeedback';
 import React, { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { toast } from 'sonner';
 import { ArrowRight, CircleCheck } from 'lucide-react';
