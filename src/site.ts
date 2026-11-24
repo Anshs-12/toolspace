@@ -33,6 +33,7 @@ export type PageId =
   | 'url-encoder'
   | 'guide-compare-json'
   | 'guide-json-to-csv'
+  | 'guide-compare-files'
   | 'case-converter'
   | 'title-case'
   | 'word-counter'
@@ -251,6 +252,16 @@ export const PAGES: Page[] = [
       'How to turn JSON into a CSV that opens cleanly in Excel: flattening nested objects, handling arrays, UTF-8 and the BOM, delimiters and formula injection.',
     name: 'JSON to CSV for Excel',
     blurb: 'Nested objects, arrays, encoding and Excel quirks.',
+    priority: 0.6,
+  },
+  {
+    id: 'guide-compare-files',
+    path: '/guides/compare-two-files-online/',
+    title: 'How to compare two files or code online',
+    description:
+      'Compare two files or pieces of code side by side: ignore whitespace and case, read a unified diff and save a .patch. Free tool, runs in your browser.',
+    name: 'Comparing two files',
+    blurb: 'Side by side, whitespace and case, reading a unified diff.',
     priority: 0.6,
   },
   {
@@ -894,6 +905,12 @@ export const KEYWORDS: Partial<Record<PageId, string[]>> = {
   'guide-json-to-csv': [
     'guide',
     'excel csv'
+  ],
+  'guide-compare-files': [
+    'guide',
+    'how to compare files',
+    'unified diff',
+    'patch file'
   ],
   'about': ['why free', 'privacy', 'open source', 'who makes it'],
   'contact': [
