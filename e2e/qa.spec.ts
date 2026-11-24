@@ -105,6 +105,7 @@ test('home page shows the "featured on" badges, linking out in a new tab', async
   await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
   await expect(badges.getByRole('link', { name: 'Featured on FindAlternate' })).toHaveAttribute('href', 'https://www.findalternate.com/toolspace');
   await expect(badges.getByRole('link', { name: 'Featured on ScrollLaunch' })).toHaveAttribute('href', /^https:\/\/www\.scrolllaunch\.com\/products\/toolspace/);
+  await expect(badges.getByRole('link', { name: "Featured on What's New Today" })).toHaveAttribute('href', 'https://whatisnew.today/p/toolspace?ref=badge');
   await expect(badges.getByRole('link', { name: 'Featured on DeepLaunch' })).toHaveAttribute('href', 'https://deeplaunch.io');
   await expect(badges.getByRole('link', { name: 'Featured on CodeHype' })).toHaveAttribute('href', /^https:\/\/www\.codehype\.ai\/product\/toolspace/);
   // Every badge is shown
