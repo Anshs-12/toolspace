@@ -257,6 +257,8 @@ describe('qr codes', () => {
   it('builds Wi-Fi, email and phone payloads', () => {
     expect(QR_TEMPLATES.wifi('My;Net', 'p@ss:1', 'WPA', false)).toBe('WIFI:T:WPA;S:My\\;Net;P:p@ss\\:1;;');
     expect(QR_TEMPLATES.wifi('Open', '', 'nopass', true)).toBe('WIFI:T:nopass;S:Open;H:true;;');
+    // a backslash is escaped too, so a password like pa\ss is not read back as pass
+    expect(QR_TEMPLATES.wifi('Net', 'pa\\ss', 'WPA', false)).toBe('WIFI:T:WPA;S:Net;P:pa\\\\ss;;');
     expect(QR_TEMPLATES.email('a@b.co', 'Hi there', '')).toBe('mailto:a@b.co?subject=Hi%20there');
     expect(QR_TEMPLATES.phone('+1 (555) 010-9999')).toBe('tel:+15550109999');
   });
