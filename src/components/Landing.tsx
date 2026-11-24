@@ -259,6 +259,7 @@ export const Footer: React.FC<{ current: PageId }> = ({ current }) => {
     { label: 'Contact', href: pageById('contact').path, id: 'contact' },
     { label: 'GitHub', href: REPO_URL, out: true },
     { label: 'Report a bug or request a feature', href: `${REPO_URL}/issues`, out: true, wide: true },
+    { label: 'Twelve Tools', href: 'https://twelve.tools', out: true },
   ];
   return (
     <footer className="mt-8 border-t" data-clarity-unmask="True">
