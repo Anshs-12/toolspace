@@ -242,6 +242,119 @@ df.to_csv("data.csv", index=False, encoding="utf-8-sig")`}</Code>
       </>
     ),
   },
+  'guide-compare-files': {
+    ...GUIDE_META['guide-compare-files'],
+    body: (
+      <>
+        <p>
+          You have two versions of something: a config file before and after an edit, two drafts of a document, or a function
+          before and after a refactor. You want to see what is different without reading both top to bottom. That is what a
+          diff does, and reading one well takes only a few ideas.
+        </p>
+
+        <h2>What a diff shows</h2>
+        <p>
+          A diff is the shortest list of lines to remove and add to turn the first text into the second. Lines that are the same
+          on both sides are left alone, so what you see is only what changed. A good comparison also marks which words changed
+          inside a changed line, so a one-character edit does not look like a whole new line.
+        </p>
+
+        <h2>Compare two files step by step</h2>
+        <ol>
+          <li>
+            <strong>Put the older version on the left</strong> and the newer one on the right. Swapped, every addition shows as a
+            removal.
+          </li>
+          <li>
+            <strong>Paste the text or drop the files</strong> in. In the diff checker the files are read on your machine and
+            never uploaded.
+          </li>
+          <li>
+            <strong>Read red and green.</strong> Red lines were removed, green lines were added, and changed words inside a line
+            are marked.
+          </li>
+          <li>
+            <strong>Move through the changes</strong> with the arrows instead of scrolling a long file.
+          </li>
+        </ol>
+        <ToolLink id="diff-checker" />
+
+        <h2>When everything looks changed</h2>
+        <p>A comparison that lights up the whole file usually has one of three causes:</p>
+        <ul>
+          <li>
+            <strong>Line endings.</strong> A file saved on Windows ends each line with CRLF, one saved on Linux or macOS with LF.
+            Turn on ignore whitespace to compare only the text.
+          </li>
+          <li>
+            <strong>Indentation.</strong> Tabs versus spaces, or a different indent width, changes the start of every line.
+          </li>
+          <li>
+            <strong>Case.</strong> If capitalisation does not matter for your comparison, ignore case so it does not hide the real
+            edits.
+          </li>
+        </ul>
+        <p>
+          For code, run both versions through the <a href="/code-beautifier/">code beautifier</a> first so formatting differences
+          disappear and only real changes remain. For JSON, use the <a href="/json-diff/">JSON diff</a>, which also sorts keys.
+        </p>
+
+        <h2>Reading a unified diff</h2>
+        <p>
+          Git and the <code>diff -u</code> command write changes in unified format. A small example, a config file where two lines
+          changed and one was added:
+        </p>
+        <Code>{`--- a/config.old.yml
++++ b/config.yml
+@@ -1,4 +1,5 @@
+ host: localhost
+-port: 8080
+-debug: true
++port: 9090
++debug: false
+ retries: 3
++timeout: 30`}</Code>
+        <ul>
+          <li>
+            Lines starting with <code>-</code> were removed and lines starting with <code>+</code> were added. Lines starting with a
+            space are unchanged context.
+          </li>
+          <li>
+            The <code>@@ -1,4 +1,5 @@</code> line says where the change sits: the old file’s lines 1 to 4 became the new
+            file’s lines 1 to 5.
+          </li>
+          <li>
+            The first two lines name the old file (<code>---</code>) and the new file (<code>+++</code>).
+          </li>
+        </ul>
+        <p>
+          The diff checker can download exactly this as a <code>.patch</code> file, which tools like <code>git apply</code> and{' '}
+          <code>patch</code> can apply to the original.
+        </p>
+
+        <h2>Common problems</h2>
+        <ul>
+          <li>
+            <strong>Sharing a link with private text.</strong> A share link carries both texts inside it, so anyone with the link
+            can read them. Do not share links that contain passwords, keys or private data.
+          </li>
+          <li>
+            <strong>Comparing minified or reordered data as plain text.</strong> One long line hides the real change. Format the
+            data first, or use a tool made for that format.
+          </li>
+          <li>
+            <strong>Expecting a diff to understand meaning.</strong> A diff compares characters and lines. Moving a block of code
+            shows as a removal in one place and an addition in another.
+          </li>
+        </ul>
+        <ToolLink id="line-cleaner" />
+        <p>
+          The line cleaner removes duplicate and blank lines and sorts lines, which helps when only the order or the blank lines
+          differ.
+        </p>
+      </>
+    ),
+  },
   'about': {
     ...GUIDE_META['about'],
     body: (

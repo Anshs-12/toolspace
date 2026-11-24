@@ -68,7 +68,7 @@ export interface WorkedExample {
   note?: string;
 }
 
-export type ToolId = Exclude<PageId, 'home' | 'diff-checker' | 'json-diff' | 'guide-compare-json' | 'guide-json-to-csv' | 'about' | 'contact'>;
+export type ToolId = Exclude<PageId, 'home' | 'diff-checker' | 'json-diff' | 'guide-compare-json' | 'guide-json-to-csv' | 'guide-compare-files' | 'about' | 'contact'>;
 
 export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
   ...NEW_TOOL_CONTENT,

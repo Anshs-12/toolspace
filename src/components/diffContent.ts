@@ -53,7 +53,7 @@ export const DIFF_CONTENT: Record<Variant, DiffPageContent> = {
       { title: 'Diffing minified or reordered JSON as text', body: 'One long line, or the same keys in a different order, hides the real change. Use the JSON diff, which formats both sides and sorts keys first.' },
       { title: 'Sharing a link with private text', body: 'A share link carries both texts inside it. Anyone with the link can read them, so don’t share links to passwords, keys or private data.' },
     ],
-    related: ['json-diff', 'guide-compare-json', 'code-beautifier', 'line-cleaner'],
+    related: ['json-diff', 'guide-compare-files', 'guide-compare-json', 'code-beautifier', 'line-cleaner'],
     sources: [
       { title: 'An O(ND) Difference Algorithm and Its Variations (Myers, 1986)', url: 'https://doi.org/10.1007/BF01840446', about: 'the algorithm the diff checker uses to find the shortest set of changes' },
       { title: 'git diff documentation', url: 'https://git-scm.com/docs/git-diff', about: 'the unified diff format used by Download .patch' },
