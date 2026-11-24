@@ -112,7 +112,7 @@ export const PAGES: Page[] = [
     blurb: 'Every toolspace tool on one page.',
     priority: 1.0,
     aiSummary:
-      'The home page of toolspace, a free and open source collection of developer tools (diff, JSON, encoding, text, code, image and web utilities) that run entirely in the browser, with no sign-up and no uploads.',
+      'The home page of toolspace (toolspace.tech), a free and open source collection of developer tools (diff, JSON, encoding, text, code, image and web utilities) that run entirely in the browser, with no sign-up and no uploads.',
   },
   {
     id: 'diff-checker',

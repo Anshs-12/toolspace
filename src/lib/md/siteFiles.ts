@@ -17,7 +17,7 @@ import { CATALOG_PATH, markdownFile, markdownPath } from './negotiate';
 
 /** The site in a few sentences, shared by llms.txt, llms-full.txt and ai.txt. */
 export const SITE_DESCRIPTION =
-  'toolspace is a free, open source collection of developer tools that run entirely in the browser: a diff checker, JSON tools, encoders and decoders, text, code, image and web utilities. Nothing typed or opened in a tool is uploaded, and there is no account, paid plan or usage limit.';
+  'toolspace (toolspace.tech) is a free, open source collection of developer tools that run entirely in the browser: a diff checker, JSON tools, encoders and decoders, text, code, image and web utilities. Nothing typed or opened in a tool is uploaded, and there is no account, paid plan or usage limit.';
 
 /** Paths kept out of crawling for everyone: the build's internal copies of the markdown (use the .md URLs instead). */
 export const PRIVATE_PATHS = ['/_md/'];
