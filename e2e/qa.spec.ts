@@ -94,7 +94,7 @@ test('home page shows the "featured on" badges, linking out in a new tab', async
   const sizes = await page.getByRole('list', { name: 'Featured on' }).getByRole('link').evaluateAll((els) => els.map((e) => `${e.getBoundingClientRect().width}x${e.getBoundingClientRect().height}`));
   expect(new Set(sizes).size).toBe(1);
   for (const src of await page.getByRole('list', { name: 'Featured on' }).locator('img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).src))) {
-    expect(new URL(src).pathname).toMatch(/^\/badges\/[a-z]+\.png$/);
+    expect(new URL(src).pathname).toMatch(/^\/badges\/[a-z]+\.(png|svg)$/);
   }
   // The home page never states how many tools there are
   expect(await page.locator('main').innerText()).not.toMatch(/\b\d+\s+tools\b/i);
