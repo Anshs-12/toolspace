@@ -91,6 +91,16 @@ export const GUIDES: Record<GuideId, Guide> = {
           meaning, such as steps, rankings or coordinates.
         </p>
 
+        <h2>Reading the changes as a list of paths</h2>
+        <p>
+          Under the format button, <strong>Changes by path</strong> lists what differs in the parsed JSON, one line per change:{' '}
+          <code>$.items[1].name</code> changed, <code>$.id</code> added, <code>$.tags[*]</code> removed. It never edits the
+          editors. Object keys are matched by name, and a changed type (a number that became a string) is flagged. Arrays are
+          compared by position unless <strong>Ignore array order</strong> is on; then items are compared as an unordered list
+          with duplicates counted, and shown as <code>[*]</code> because their position no longer means anything. Numbers are
+          compared as JavaScript numbers, so integers with 16 or more digits can look equal when they are not.
+        </p>
+
         <h2>Doing it on the command line</h2>
         <p>
           With <code>jq</code> installed, <code>-S</code> sorts keys and the output is pretty-printed, so this gives the same
