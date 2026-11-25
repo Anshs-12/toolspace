@@ -327,9 +327,11 @@ const App: React.FC<{ variant: Variant }> = ({ variant }) => {
   const leftJson = useMemo(() => (isJson ? checkJson(originalText) : null), [isJson, originalText]);
   const rightJson = useMemo(() => (isJson ? checkJson(changedText) : null), [isJson, changedText]);
 
+  const [sortArrays, setSortArrays] = useState(false);
+
   const handleFormatJson = useCallback(() => {
-    const a = formatJson(originalText);
-    const b = formatJson(changedText);
+    const a = formatJson(originalText, true, sortArrays);
+    const b = formatJson(changedText, true, sortArrays);
     if (a == null && b == null) {
       toast.error('Neither side is valid JSON yet');
       return;
@@ -342,8 +344,8 @@ const App: React.FC<{ variant: Variant }> = ({ variant }) => {
     if (a != null) setOriginalText(a);
     if (b != null) setChangedText(b);
     if (a == null || b == null) toast(`Formatted ${a == null ? 'b' : 'a'} only; the other side isn't valid JSON`);
-    else toast.success('Formatted both sides, keys sorted A–Z');
-  }, [originalText, changedText, pushUndo]);
+    else toast.success(sortArrays ? 'Formatted both sides, keys sorted A–Z and array items put in order' : 'Formatted both sides, keys sorted A–Z');
+  }, [originalText, changedText, pushUndo, sortArrays]);
 
   const patch = useCallback(
     () => (result ? generatePatch(lines, result.eof, originalName ?? 'original', changedName ?? 'changed') : ''),
@@ -552,7 +554,7 @@ const App: React.FC<{ variant: Variant }> = ({ variant }) => {
               )}
 
               {isJson && leftJson && rightJson && (
-                <JsonBar left={leftJson} right={rightJson} onFormat={handleFormatJson} />
+                <JsonBar left={leftJson} right={rightJson} onFormat={handleFormatJson} sortArrays={sortArrays} onSortArraysChange={setSortArrays} />
               )}
 
               <EditorPanel
