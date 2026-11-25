@@ -16,6 +16,7 @@ import { SAMPLE_CHANGED, SAMPLE_JSON_CHANGED, SAMPLE_JSON_ORIGINAL, SAMPLE_ORIGI
 import { checkJson, formatJson } from '@/lib/json';
 import type { Variant } from '@/variant';
 import JsonBar from '@/components/JsonBar';
+import JsonChanges from '@/components/JsonChanges';
 import { detectLang } from '@/lib/syntax';
 import { summarizeDiff } from '@/lib/summary';
 import { Button } from '@/components/ui/button';
@@ -555,6 +556,10 @@ const App: React.FC<{ variant: Variant }> = ({ variant }) => {
 
               {isJson && leftJson && rightJson && (
                 <JsonBar left={leftJson} right={rightJson} onFormat={handleFormatJson} sortArrays={sortArrays} onSortArraysChange={setSortArrays} />
+              )}
+
+              {isJson && leftJson?.status === 'valid' && rightJson?.status === 'valid' && (
+                <JsonChanges originalText={originalText} changedText={changedText} ignoreArrayOrder={sortArrays} />
               )}
 
               <EditorPanel
