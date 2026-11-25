@@ -54,8 +54,8 @@ export const GUIDES: Record<GuideId, Guide> = {
             <strong>Sort keys</strong> alphabetically, recursively, in every object. Equal objects now have identical lines.
           </li>
           <li>
-            <strong>Keep array order.</strong> Arrays are ordered in JSON: <code>[1,2]</code> and <code>[2,1]</code> really are
-            different, so they must not be sorted.
+            <strong>Keep array order by default.</strong> Arrays are ordered in JSON: <code>[1,2]</code> and <code>[2,1]</code>{' '}
+            really are different, so sorting them is a choice you make, not a default (see the next section).
           </li>
           <li>
             <strong>Diff the result</strong> line by line, with changed values marked word by word.
@@ -63,6 +63,33 @@ export const GUIDES: Record<GuideId, Guide> = {
         </ol>
         <p>The JSON diff does all four with one click on “Format JSON &amp; sort keys”, in your browser:</p>
         <ToolLink id="json-diff" />
+
+        <h2>When array order doesn't matter</h2>
+        <p>
+          Some arrays are really sets: a list of tags, or records an API returns in no promised order. For those, turn on{' '}
+          <strong>Ignore array order</strong> in the JSON diff and click the format button again. Every array, at any depth, is
+          put in a fixed order before the diff, and the text in both editors is rewritten (undo is available).
+        </p>
+        <ul>
+          <li>
+            Items are not merged: <code>[1,1,2]</code> and <code>[1,2]</code> still differ, because the duplicate is kept.
+          </li>
+          <li>
+            Types stay distinct: <code>1</code>, <code>"1"</code>, <code>null</code> and <code>true</code> are four different
+            items.
+          </li>
+          <li>
+            Objects inside an array are ordered by their content with keys sorted, so <code>{`{"id":1,"n":"a"}`}</code> matches
+            the same object with its keys in another order.
+          </li>
+          <li>
+            Nested arrays are sorted too, then the outer array is ordered by the sorted result.
+          </li>
+        </ul>
+        <p>
+          Because the order is lost on both sides, it also hides a real change in order. Leave it off when the order carries
+          meaning, such as steps, rankings or coordinates.
+        </p>
 
         <h2>Doing it on the command line</h2>
         <p>

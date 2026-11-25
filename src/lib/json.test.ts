@@ -17,6 +17,39 @@ describe('formatJson', () => {
     expect(formatJson('[3,1,2]')).toBe('[\n  3,\n  1,\n  2\n]\n');
   });
 
+  describe('sortArrays (ignore array order)', () => {
+    const f = (t: string) => formatJson(t, true, true)!;
+    it('is off by default', () => {
+      expect(formatJson('[3,1,2]', true)).toBe('[\n  3,\n  1,\n  2\n]\n');
+    });
+    it('makes the same items in another order identical', () => {
+      expect(f('[3,1,2]')).toBe(f('[2,3,1]'));
+    });
+    it('keeps duplicates: [1,1,2] and [1,2] stay different', () => {
+      expect(f('[1,2,1]')).toBe(f('[1,1,2]'));
+      expect(f('[1,1,2]')).not.toBe(f('[1,2]'));
+      expect(JSON.parse(f('[2,1,1]'))).toEqual([1, 1, 2]);
+    });
+    it('keeps number, string, null and boolean apart', () => {
+      expect(f('[1]')).not.toBe(f('["1"]'));
+      expect(f('[null]')).not.toBe(f('["null"]'));
+      expect(f('[true]')).not.toBe(f('["true"]'));
+      expect(f('[1,"1",null,true,{"a":1},[1]]')).toBe(f('[[1],{"a":1},true,null,"1",1]'));
+    });
+    it('sorts arrays of objects by content, ignoring key order inside', () => {
+      expect(f('[{"id":2,"n":"b"},{"id":1,"n":"a"}]')).toBe(f('[{"n":"a","id":1},{"n":"b","id":2}]'));
+      expect(f('[{"id":1,"n":"a"}]')).not.toBe(f('[{"id":1,"n":"b"}]'));
+    });
+    it('applies at every depth, including arrays inside arrays and objects', () => {
+      expect(f('{"a":[[3,1],[2]],"b":{"c":[2,1]}}')).toBe(f('{"b":{"c":[1,2]},"a":[[2],[1,3]]}'));
+      expect(f('{"a":[[1,2],[3]]}')).not.toBe(f('{"a":[[1],[2,3]]}'));
+    });
+    it('still reports a changed value as a change', () => {
+      const opts = { ignoreWhitespace: false, ignoreCase: false, charLevel: false, ignorePatterns: [] };
+      expect(computeDiff(f('[1,2,3]'), f('[3,2,4]'), opts).hunks.length).toBeGreaterThan(0);
+    });
+  });
+
   it('returns null for invalid or empty input', () => {
     expect(formatJson('{"a":')).toBeNull();
     expect(formatJson('   ')).toBeNull();
