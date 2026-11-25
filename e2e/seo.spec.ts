@@ -136,6 +136,23 @@ test.describe('/json-diff', () => {
     await expect(page.getByText('a and b are identical')).toHaveCount(0);
   });
 
+  test('ignore array order is off by default, opt-in, and keeps duplicates', async ({ page }) => {
+    await page.goto('/json-diff/');
+    await fillEditors(page, '{"t":[3,1,2]}', '{"t":[2,3,1]}');
+    // Off by default: formatting keeps array order, so the arrays still differ
+    await page.getByRole('button', { name: 'Format JSON & sort keys' }).click();
+    await expect(page.getByText('a and b are identical')).toHaveCount(0);
+
+    await page.getByRole('switch', { name: 'Ignore array order' }).click();
+    await page.getByRole('button', { name: 'Format JSON, sort keys & arrays' }).click();
+    await expect(page.getByText('a and b are identical')).toBeVisible();
+
+    // A duplicate is a real difference
+    await fillEditors(page, '{"t":[1,1,2]}', '{"t":[2,1]}');
+    await page.getByRole('button', { name: 'Format JSON, sort keys & arrays' }).click();
+    await expect(page.getByText('a and b are identical')).toHaveCount(0);
+  });
+
   test('loads a JSON example', async ({ page }) => {
     await page.goto('/json-diff/');
     await page.getByRole('button', { name: 'Load a JSON example' }).click();
