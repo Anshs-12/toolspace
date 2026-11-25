@@ -8,11 +8,21 @@ export type JsonCheck =
   | { status: 'invalid'; message: string; line: number | null; column: number | null };
 
 /** Sort object keys recursively so key order never shows up as a change. */
-function sortKeys(value: unknown): unknown {
-  if (Array.isArray(value)) return value.map(sortKeys);
+function sortKeys(value: unknown, sortArrays = false): unknown {
+  if (Array.isArray(value)) {
+    const items = value.map((item) => sortKeys(item, sortArrays));
+    if (!sortArrays) return items;
+    // Every item is kept (duplicates stay duplicates); only the order changes.
+    // Items are ordered by their own sorted-keys JSON text, so 1 and "1" stay
+    // different and equal items end up next to each other.
+    return items
+      .map((item) => [JSON.stringify(item), item] as const)
+      .sort((a, b) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0))
+      .map(([, item]) => item);
+  }
   if (value && typeof value === 'object') {
     const out: Record<string, unknown> = {};
-    for (const key of Object.keys(value).sort()) out[key] = sortKeys((value as Record<string, unknown>)[key]);
+    for (const key of Object.keys(value).sort()) out[key] = sortKeys((value as Record<string, unknown>)[key], sortArrays);
     return out;
   }
   return value;
@@ -173,13 +183,15 @@ export function checkJson(text: string): JsonCheck {
 
 /**
  * Pretty-print JSON with 2-space indentation and (optionally) sorted keys.
+ * With sortArrays, every array (at any depth) is also put in a fixed order, so
+ * two arrays holding the same items in a different order format identically.
  * Returns null when the text isn't valid JSON. Keeps a final newline.
  */
-export function formatJson(text: string, sort = true): string | null {
+export function formatJson(text: string, sort = true, sortArrays = false): string | null {
   if (!text.trim()) return null;
   try {
     const value = JSON.parse(text) as unknown;
-    return JSON.stringify(sort ? sortKeys(value) : value, null, 2) + '\n';
+    return JSON.stringify(sort ? sortKeys(value, sortArrays) : value, null, 2) + '\n';
   } catch {
     return null;
   }
