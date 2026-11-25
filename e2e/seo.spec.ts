@@ -153,6 +153,28 @@ test.describe('/json-diff', () => {
     await expect(page.getByText('a and b are identical')).toHaveCount(0);
   });
 
+  test('changes by path lists real changes and follows the array order switch', async ({ page }) => {
+    await page.goto('/json-diff/');
+    await fillEditors(page, '{"a":1,"t":[3,1,2],"o":{"x":"1"}}', '{"a":2,"t":[2,3,1,1],"o":{"x":1},"n":true}');
+    const panel = page.getByLabel('Changes by path');
+    await expect(panel).toContainText('Changes by path');
+    await panel.locator('summary').click();
+    const list = page.getByTestId('json-changes');
+    await expect(list).toContainText('$.a');
+    await expect(list).toContainText('$.o.x');
+    await expect(list).toContainText('(string -> number)');
+    await expect(list).toContainText('$.n');
+    // by position: array differs
+    await expect(list).toContainText('$.t[0]');
+    await page.getByRole('switch', { name: 'Ignore array order' }).click();
+    // unordered: only the extra duplicate 1 is reported, shown as [*]
+    await expect(list).toContainText('$.t[*]');
+    await expect(list).not.toContainText('$.t[0]');
+    await expect(page.getByText('The line diff below only changes after you click Format.')).toBeVisible();
+    // the editors are untouched
+    await expect(page.locator('.cm-content').first()).toContainText('"t":[3,1,2]');
+  });
+
   test('loads a JSON example', async ({ page }) => {
     await page.goto('/json-diff/');
     await page.getByRole('button', { name: 'Load a JSON example' }).click();
