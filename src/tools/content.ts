@@ -175,7 +175,42 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { title: 'RFC 4180: Common Format for CSV Files', url: 'https://datatracker.ietf.org/doc/html/rfc4180', about: 'the CSV rules for quoting, doubled quotes and line breaks' },
       { title: 'CSV Injection (OWASP)', url: 'https://owasp.org/www-community/attacks/CSV_Injection', about: 'why cells starting with = + - or @ are escaped' },
     ],
-    related: ['guide-json-to-csv', 'json-viewer', 'json-formatter', 'mock-json'],
+    related: ['csv-to-json', 'guide-json-to-csv', 'json-viewer', 'json-formatter', 'mock-json'],
+  },
+  'csv-to-json': {
+    h1: 'CSV to JSON converter',
+    lede: 'Turn a CSV or TSV file into JSON you can feed to an app or API. The first row becomes the keys, the delimiter is detected for you, and quoted cells with commas or line breaks inside are read correctly. Runs in your browser.',
+    steps: [
+      { title: 'Paste or open the CSV', body: 'Any standard CSV or TSV: comma, semicolon or tab separated, with Windows or Unix line endings. The delimiter is detected unless you pick one yourself.' },
+      { title: 'Set how the rows are read', body: 'Keep Header row on to use the first row as the keys of each object, or turn it off for an array of arrays. Detect numbers and true/false converts 42, true and null; Nest dotted keys rebuilds columns like address.city into nested objects.' },
+      { title: 'Copy or download the JSON', body: 'One object per row, formatted with 2-space indentation. Blank or repeated column names are given unique keys, and short rows are padded with empty strings, so no cell is silently dropped.' },
+    ],
+    faq: [
+      { q: 'What JSON do I get back?', a: 'With a header row, an array of objects: each row becomes one object keyed by the column names. Without one, an array of arrays, one inner array per row, so position carries the meaning.' },
+      { q: 'Can it read cells that contain commas or line breaks?', a: 'Yes. Standard CSV quoting is followed (RFC 4180): a field wrapped in double quotes may contain the delimiter, doubled quotes and line breaks. A quote that is never closed is reported with the line and column where it opened, and the Go to error button jumps there.' },
+      { q: 'How do I get numbers instead of strings?', a: 'Turn on Detect numbers and true/false. Values like 42, 3.14, true, false and null become JSON values, and cells holding a JSON list or object are read back as such. Anything that would change as a number stays text: IDs with leading zeros like 007, values like 1.10, and numbers too long to store exactly.' },
+      { q: 'The whole file landed in one column. What happened?', a: 'The delimiter guess was wrong, which happens with files that mix separators. Pick the delimiter yourself in the toolbar: Comma, Semicolon or Tab. Semicolons are common in exports from Excel in many European locales.' },
+      { q: 'What about nested data, like an address.city column?', a: 'Turn on Nest dotted keys and columns with dots in their names become nested objects again, so address.city ends up as {"address": {"city": ...}}. Names that would clash or have an empty part stay flat.' },
+      { q: 'Is my file uploaded anywhere?', a: 'No. The conversion runs in this tab; your data never leaves your browser. The page sends only cookieless usage counts (which page and tool, plus basic browser details), never your input. Microsoft Clarity also records clicks and scrolling to show how pages are used, with tool areas hidden.' },
+    ],
+    example: {
+      intro: 'A three-column export. The roles cell holds a JSON list, so with type detection on it comes back as a real array; without it the cell stays a string.',
+      inputLabel: 'csv',
+      input: 'id,name,roles\n1,Ada,"[""admin"",""editor""]"\n2,Grace,[]',
+      outputLabel: 'json',
+      output: '[\n  {\n    "id": "1",\n    "name": "Ada",\n    "roles": "[\"admin\",\"editor\"]"\n  },\n  {\n    "id": "2",\n    "name": "Grace",\n    "roles": "[]"\n  }\n]',
+    },
+    mistakes: [
+      { title: 'Expecting numbers to survive CSV', body: 'CSV stores only text, so every cell is a string until Detect numbers and true/false is on. Even then, values that would change stay text: 007 keeps its leading zeros and 1.10 keeps its trailing zero.' },
+      { title: 'Leaving Header row on for data without one', body: 'The first row of real data becomes the keys and disappears from the result. Turn Header row off to get an array of arrays instead.' },
+      { title: 'Ignoring the line and column in an error', body: 'An unclosed quote almost always means an export or paste dropped a closing quote, and every row after it reads wrong. The error names the line and column where the quote opened; fix the source there, not by editing later rows.' },
+      { title: 'Reformatting before converting', body: 'There is no need to clean the file first. A byte order mark, CRLF or LF endings, blank lines and quoted line breaks are all handled; converting the original export avoids introducing new mistakes.' },
+    ],
+    sources: [
+      { title: 'RFC 4180: Common Format for CSV Files', url: 'https://datatracker.ietf.org/doc/html/rfc4180', about: 'the quoting, doubled-quote and line-break rules this converter follows' },
+      { title: 'The JSON Data Interchange Syntax (ECMA-404)', url: 'https://ecma-international.org/publications-and-standards/standards/ecma-404/', about: 'the JSON grammar the output is written in' },
+    ],
+    related: ['json-to-csv', 'json-formatter', 'json-validator', 'json-viewer'],
   },
   'json-to-yaml': {
     h1: 'JSON to YAML converter',
