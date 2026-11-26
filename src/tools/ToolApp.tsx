@@ -14,6 +14,7 @@ const TOOLS = {
   'json-formatter': lazy(() => import('./JsonFormatter')),
   'json-validator': lazy(() => import('./JsonValidator')),
   'json-to-csv': lazy(() => import('./JsonToCsv')),
+  'csv-to-json': lazy(() => import('./CsvToJson')),
   'json-to-yaml': lazy(() => import('./JsonToYaml')),
   'json-viewer': lazy(() => import('./JsonViewer')),
   base64: lazy(() => import('./Base64Tool')),
