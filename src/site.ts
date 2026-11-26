@@ -944,3 +944,6 @@ export function pageById(id: PageId): Page {
 
 /** Google Search Console ownership tag (homepage only). */
 export const GOOGLE_SITE_VERIFICATION = 'K_izTuuq4Dnpo4aI4si3l061iVT7OJFH0enBQXFDvCg';
+
+/** What's New Today ownership tag (homepage only); removable after the claim verifies. */
+export const WHATISNEW_VERIFY = '6f0a3b9f8dbe0f41b8f1eb580ad6c755';
