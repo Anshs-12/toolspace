@@ -6,7 +6,7 @@ import { build, defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { CSP, UMAMI_HOST, UMAMI_WEBSITE_ID } from './src/csp';
-import { CONTACT_EMAIL, GOOGLE_SITE_VERIFICATION, PAGES, REPO_URL, SITE_NAME, SITE_URL, type Page, type PageId } from './src/site';
+import { CONTACT_EMAIL, GOOGLE_SITE_VERIFICATION, PAGES, REPO_URL, SITE_NAME, SITE_URL, WHATISNEW_VERIFY, type Page, type PageId } from './src/site';
 import { markdownPath } from './src/lib/md/negotiate';
 import { TOOL_CONTENT } from './src/tools/content';
 import { DIFF_CONTENT } from './src/components/diffContent';
@@ -148,7 +148,12 @@ function headTags(page: Page): HtmlTagDescriptor[] {
     // For AI agents: what the page is, and where its markdown version is (served by src/worker.ts)
     meta({ name: 'ai-summary', content: page.aiSummary ?? page.description }),
     { tag: 'link', attrs: { rel: 'alternate', type: 'text/markdown', href: `${SITE_URL}${markdownPath(page.path)}` }, injectTo: 'head' },
-    ...(page.id === 'home' ? [meta({ name: 'google-site-verification', content: GOOGLE_SITE_VERIFICATION })] : []),
+    ...(page.id === 'home'
+      ? [
+          meta({ name: 'google-site-verification', content: GOOGLE_SITE_VERIFICATION }),
+          meta({ name: 'whatisnew-verify', content: WHATISNEW_VERIFY }),
+        ]
+      : []),
     { tag: 'link', attrs: { rel: 'canonical', href: url }, injectTo: 'head' },
     meta({ property: 'og:site_name', content: 'toolspace' }),
     meta({ property: 'og:title', content: page.title }),
