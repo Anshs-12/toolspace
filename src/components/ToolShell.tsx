@@ -73,6 +73,7 @@ export const TOOL_ICONS: Record<ToolPageId, typeof Columns2> = {
   'json-formatter': WandSparkles,
   'json-validator': ShieldCheck,
   'json-to-csv': Sheet,
+  'csv-to-json': Sheet,
   'json-to-yaml': FileCode,
   'json-viewer': ListTree,
   base64: Binary,
@@ -134,7 +135,7 @@ export const TOOL_ICONS: Record<ToolPageId, typeof Columns2> = {
 export const TOOL_GROUPS: { label: string; ids: ToolPageId[] }[] = [
   // Within each group, the most searched-for tool comes first
   { label: 'Compare', ids: ['diff-checker', 'json-diff'] },
-  { label: 'JSON', ids: ['json-formatter', 'json-validator', 'json-to-csv', 'json-to-yaml', 'json-viewer', 'json-to-typescript', 'yaml-validator', 'jsonpath-tester'] },
+  { label: 'JSON', ids: ['json-formatter', 'json-validator', 'json-to-csv', 'csv-to-json', 'json-to-yaml', 'json-viewer', 'json-to-typescript', 'yaml-validator', 'jsonpath-tester'] },
   { label: 'Encode', ids: ['base64', 'unix-timestamp', 'jwt-decoder', 'url-encoder', 'hash-generator', 'number-base-converter', 'html-entities'] },
   { label: 'Text', ids: ['word-counter', 'case-converter', 'title-case', 'lorem-ipsum', 'line-cleaner', 'slug-generator', 'list-to-sql', 'email-extractor'] },
   { label: 'Generate', ids: ['qr-code', 'password-generator', 'uuid-generator', 'mock-json'] },
