@@ -24,6 +24,7 @@ export type PageId =
   | 'json-formatter'
   | 'json-validator'
   | 'json-to-csv'
+  | 'csv-to-json'
   | 'json-to-yaml'
   | 'json-viewer'
   | 'base64'
@@ -162,6 +163,16 @@ export const PAGES: Page[] = [
       'Convert JSON to CSV or CSV to JSON online. Nested objects become columns, quoted fields are read correctly, and Excel opens it cleanly. In your browser.',
     name: 'JSON to CSV',
     blurb: 'Turn a JSON array into a spreadsheet-ready CSV file.',
+    priority: 0.8,
+  },
+  {
+    id: 'csv-to-json',
+    path: '/csv-to-json/',
+    title: 'CSV to JSON converter - free, online | toolspace',
+    description:
+      'Convert CSV or TSV to JSON online. The header row becomes the keys, the delimiter is detected, and numbers can stay numbers. Free, in your browser.',
+    name: 'CSV to JSON',
+    blurb: 'Turn a spreadsheet export into JSON for your app or API.',
     priority: 0.8,
   },
   {
@@ -764,6 +775,12 @@ export const KEYWORDS: Partial<Record<PageId, string[]>> = {
     'excel',
     'spreadsheet',
     'export'
+  ],
+  'csv-to-json': [
+    'convert csv to json',
+    'tsv to json',
+    'spreadsheet to json',
+    'import'
   ],
   'json-to-yaml': [
     'convert json to yaml',
