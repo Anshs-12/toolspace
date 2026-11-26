@@ -40,8 +40,8 @@ function Toggle({ id, label, checked, onChange, title }: { id: string; label: st
   );
 }
 
-export default function JsonToCsv() {
-  const [direction, setDirection] = useSaved<Direction>('direction', 'json-csv', (v) => DIRECTIONS.some((d) => d.value === v));
+export default function JsonToCsv({ defaultDirection = 'json-csv' }: { defaultDirection?: Direction }) {
+  const [direction, setDirection] = useSaved<Direction>('direction', defaultDirection, (v) => DIRECTIONS.some((d) => d.value === v));
   const { text, setText, parsed } = useJsonInput();
   const [delimiterId, setDelimiterId] = useSaved('delimiter', 'comma', (v) => DELIMITERS.some((d) => d.id === v));
   // On by default: a cell like =HYPERLINK(...) from untrusted data would run when the CSV is opened
