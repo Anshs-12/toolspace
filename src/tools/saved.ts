@@ -14,7 +14,7 @@ import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from
  */
 
 /** Pages whose input is never saved or put in a link. */
-export const PRIVATE_TOOLS = new Set(['password-generator', 'jwt-decoder']);
+export const PRIVATE_TOOLS = new Set(['password-generator', 'jwt-decoder', 'i18n-json-checker']);
 
 const PREFIX = 'toolspace-input:';
 /** Inputs larger than this (characters, all fields together) aren't saved, so storage never fills up. */
