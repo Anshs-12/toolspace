@@ -392,6 +392,120 @@ df.to_csv("data.csv", index=False, encoding="utf-8-sig")`}</Code>
       </>
     ),
   },
+  'guide-json-errors': {
+    ...GUIDE_META['guide-json-errors'],
+    body: (
+      <>
+        <p>
+          You edited a config file, saved an API response, or pasted JSON from somewhere, and the parser refuses it:
+          “Unexpected token”, “Unexpected end of JSON input”, or just a red squiggle in the editor. JSON’s rules are few
+          but absolute, and one stray character breaks the whole document. These are the errors behind almost every
+          failure, and the fix for each one.
+        </p>
+
+        <h2>Why JSON is so strict</h2>
+        <p>
+          JSON looks like JavaScript object syntax because that is where it came from, but it is a data format, not a
+          programming language. It allows a small, fixed grammar: double-quoted strings, one number format, no comments,
+          no conveniences. That strictness is the point: a file that parses to the same data in every language. The cost
+          is that things JavaScript forgives, JSON rejects outright.
+        </p>
+
+        <h2>Trailing commas</h2>
+        <p>
+          The classic JSON error. A comma after the last item is fine in JavaScript and Python, but JSON expects a value
+          after every comma:
+        </p>
+        <Code>{'{\n  "name": "app",\n  "version": "1.0.0",\n}'}</Code>
+        <p>
+          Remove the comma after <code>"1.0.0"</code>. Parsers often point at the <code>{'}'}</code> or <code>{']'}</code> on
+          the next line, which sends people hunting in the wrong place: the real problem is the comma just before it.
+        </p>
+
+        <h2>Single quotes</h2>
+        <p>
+          JSON strings must be double-quoted. Single quotes, and backticks from template literals, are not valid JSON:
+        </p>
+        <Code>{"{'name': 'app'}"}</Code>
+        <p>
+          Swap the outer quotes for double quotes: <code>{'{"name": "app"}'}</code>. Apostrophes inside a string
+          (<code>"it's"</code>) are content, not syntax, and can stay as they are.
+        </p>
+
+        <h2>Unquoted keys</h2>
+        <p>
+          JavaScript lets object keys go bare; JSON requires every key to be a double-quoted string. This shows up
+          whenever an object literal is copied out of JavaScript source:
+        </p>
+        <Code>{'{name: "app", version: "1.0.0"}'}</Code>
+        <p>
+          Quote every key: <code>{'{"name": "app", "version": "1.0.0"}'}</code>.
+        </p>
+
+        <h2>Comments</h2>
+        <p>
+          JSON has no comments: not <code>//</code>, not <code>/* */</code>, not <code>#</code>. If a config file needs
+          them, use a format that allows them, such as JSONC (what VS Code parses), JSON5 or YAML, and strip the
+          comments before the file goes to a strict JSON parser.
+        </p>
+
+        <h2>Text before or after the JSON</h2>
+        <p>A JSON document is exactly one value, with nothing before or after it. Three frequent offenders:</p>
+        <ul>
+          <li>
+            <strong>Anti-hijacking prefixes.</strong> Some APIs start a response with a short prefix such as{' '}
+            <code>{")]}'"}</code>. Strip the prefix before parsing.
+          </li>
+          <li>
+            <strong>One object per line.</strong> A log file with a JSON object on every line is NDJSON
+            (newline-delimited JSON), not one JSON document. Parse each line separately.
+          </li>
+          <li>
+            <strong>Two values pasted together.</strong> Split them, or wrap them in an array.
+          </li>
+        </ul>
+
+        <h2>Unescaped characters in strings</h2>
+        <p>
+          A literal line break cannot appear inside a JSON string; write it as <code>\n</code>. And a backslash starts
+          an escape sequence, so a lone backslash followed by the wrong letter is an error. Windows paths hit this
+          constantly:
+        </p>
+        <Code>{'"path": "C:\\users\\new"'}</Code>
+        <p>
+          Here <code>\n</code> reads as a newline and <code>\u</code> expects four hex digits, so the path breaks.
+          Double every backslash:
+        </p>
+        <Code>{'"path": "C:\\\\users\\\\new"'}</Code>
+
+        <h2>Numbers: leading zeros, NaN and Infinity</h2>
+        <p>
+          JSON numbers follow one strict format: no leading zeros (<code>01</code> is invalid), no hex
+          (<code>0x1F</code>), no plus sign, and no <code>NaN</code> or <code>Infinity</code>, which exist in JavaScript
+          but not in JSON. Where a value is genuinely missing or unlimited, use <code>null</code>.
+        </p>
+
+        <h2>Duplicate keys</h2>
+        <p>
+          Not a syntax error, but a quiet data bug: the specification says keys should be unique, yet most parsers
+          accept duplicates and silently keep the last value. The file parses, the data is wrong. Worth checking when
+          valid JSON behaves oddly.
+        </p>
+
+        <h2>Find the exact error fast</h2>
+        <p>
+          Hunting one bad character in a large file is slow. A validator that reports the exact line and column, and
+          says in plain words what it expected, turns that hunt into one edit:
+        </p>
+        <ToolLink id="json-validator" />
+        <p>
+          Paste the file, jump to the reported position, fix it, check again. Once the file parses, the{' '}
+          <ToolLink id="json-formatter">JSON formatter</ToolLink> pretty-prints it, which makes structural mistakes,
+          like a closing brace one level too early, visible at a glance.
+        </p>
+      </>
+    ),
+  },
   'about': {
     ...GUIDE_META['about'],
     body: (
