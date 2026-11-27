@@ -68,7 +68,7 @@ export interface WorkedExample {
   note?: string;
 }
 
-export type ToolId = Exclude<PageId, 'home' | 'diff-checker' | 'json-diff' | 'guide-compare-json' | 'guide-json-to-csv' | 'guide-compare-files' | 'about' | 'contact'>;
+export type ToolId = Exclude<PageId, 'home' | 'diff-checker' | 'json-diff' | 'guide-compare-json' | 'guide-json-to-csv' | 'guide-compare-files' | 'guide-json-errors' | 'about' | 'contact'>;
 
 export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
   ...NEW_TOOL_CONTENT,
@@ -105,7 +105,7 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { title: 'RFC 8259: The JSON Data Interchange Format', url: 'https://datatracker.ietf.org/doc/html/rfc8259', about: 'the JSON standard the formatter and validator follow' },
       { title: 'JSON.parse() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse', about: 'how browsers read JSON, and the rules it shares with this page' },
     ],
-    related: ['json-validator', 'json-viewer', 'json-diff', 'json-to-typescript'],
+    related: ['json-validator', 'json-viewer', 'json-diff', 'json-to-typescript', 'guide-json-errors'],
   },
   'json-validator': {
     h1: 'JSON validator',
@@ -140,7 +140,7 @@ export const TOOL_CONTENT: Record<ToolId, ToolContent> = {
       { title: 'RFC 8259: The JSON Data Interchange Format', url: 'https://datatracker.ietf.org/doc/html/rfc8259', about: 'the JSON standard, which defines what valid JSON is' },
       { title: 'JSON.parse() on MDN', url: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse', about: 'the browser parser that applies the same rules' },
     ],
-    related: ['json-formatter', 'yaml-validator', 'json-viewer', 'json-diff'],
+    related: ['json-formatter', 'yaml-validator', 'json-viewer', 'json-diff', 'guide-json-errors'],
   },
   'json-to-csv': {
     h1: 'JSON to CSV converter',
