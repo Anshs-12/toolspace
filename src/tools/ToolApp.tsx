@@ -13,6 +13,7 @@ import { useSavedStatus } from './saved';
 const TOOLS = {
   'json-formatter': lazy(() => import('./JsonFormatter')),
   'json-validator': lazy(() => import('./JsonValidator')),
+  'i18n-json-checker': lazy(() => import('./I18nJsonCheckerTool')),
   'json-to-csv': lazy(() => import('./JsonToCsv')),
   'csv-to-json': lazy(() => import('./CsvToJson')),
   'json-to-yaml': lazy(() => import('./JsonToYaml')),
