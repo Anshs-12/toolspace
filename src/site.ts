@@ -23,6 +23,7 @@ export type PageId =
   | 'json-diff'
   | 'json-formatter'
   | 'json-validator'
+  | 'i18n-json-checker'
   | 'json-to-csv'
   | 'csv-to-json'
   | 'json-to-yaml'
@@ -154,6 +155,16 @@ export const PAGES: Page[] = [
       'Validate JSON online and find errors fast: the exact line and column, a plain explanation, duplicate-key warnings. Free; your JSON stays in your browser.',
     name: 'JSON validator',
     blurb: 'Check JSON syntax and see exactly where it breaks.',
+    priority: 0.8,
+  },
+  {
+    id: 'i18n-json-checker',
+    path: '/i18n-json-checker/',
+    title: 'i18n JSON checker - sync locale files | toolspace',
+    description:
+      'Compare JSON locale files across languages: missing keys, untranslated strings, placeholder mismatches. Fix and download synced files in your browser.',
+    name: 'i18n JSON checker',
+    blurb: 'Find missing keys across locale files and sync them.',
     priority: 0.8,
   },
   {
@@ -780,6 +791,13 @@ export const KEYWORDS: Partial<Record<PageId, string[]>> = {
     'json lint',
     'json check',
     'syntax error'
+  ],
+  'i18n-json-checker': [
+    'check missing translation keys',
+    'locale json diff',
+    'translation file checker',
+    'sync locale files',
+    'i18n checker'
   ],
   'json-to-csv': [
     'convert json to csv',
