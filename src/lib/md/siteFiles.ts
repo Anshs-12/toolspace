@@ -50,7 +50,7 @@ Sitemap: ${SITE_URL}/sitemap.xml
 }
 
 export function llmsTxt(): string {
-  const guides: PageId[] = ['guide-compare-json', 'guide-json-to-csv', 'guide-compare-files'];
+  const guides: PageId[] = ['guide-compare-json', 'guide-json-to-csv', 'guide-compare-files', 'guide-json-errors'];
   return `# ${SITE_NAME}
 
 > ${SITE_DESCRIPTION}
@@ -83,7 +83,7 @@ ${TOOL_ONLY_GROUPS.map((g) => `## Tools: ${g.label}\n${g.ids.map((id) => mdLink(
 
 /** Order for llms-full.txt: core pages, guides, tools by category. */
 function fullOrder(): PageId[] {
-  const order: PageId[] = ['home', 'about', 'contact', 'guide-compare-json', 'guide-json-to-csv', 'guide-compare-files', ...TOOL_ONLY_GROUPS.flatMap((g) => g.ids)];
+  const order: PageId[] = ['home', 'about', 'contact', 'guide-compare-json', 'guide-json-to-csv', 'guide-compare-files', 'guide-json-errors', ...TOOL_ONLY_GROUPS.flatMap((g) => g.ids)];
   // Anything not placed above (a page added later) still goes in, at the end
   for (const p of PAGES) if (!order.includes(p.id)) order.push(p.id);
   return [...new Set(order)];

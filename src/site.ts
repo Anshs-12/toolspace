@@ -35,6 +35,7 @@ export type PageId =
   | 'guide-compare-json'
   | 'guide-json-to-csv'
   | 'guide-compare-files'
+  | 'guide-json-errors'
   | 'case-converter'
   | 'title-case'
   | 'word-counter'
@@ -273,6 +274,16 @@ export const PAGES: Page[] = [
       'Compare two files or pieces of code side by side: ignore whitespace and case, read a unified diff and save a .patch. Free tool, runs in your browser.',
     name: 'Comparing two files',
     blurb: 'Side by side, whitespace and case, reading a unified diff.',
+    priority: 0.6,
+  },
+  {
+    id: 'guide-json-errors',
+    path: '/guides/fix-invalid-json/',
+    title: 'How to fix invalid JSON: common errors and fixes',
+    description:
+      'Trailing commas, single quotes, unquoted keys, comments: the JSON errors everyone hits, why each one happens and how to fix it, with examples.',
+    name: 'Fixing invalid JSON',
+    blurb: 'Why one stray comma breaks the whole file, and the fix for each error.',
     priority: 0.6,
   },
   {
@@ -928,6 +939,13 @@ export const KEYWORDS: Partial<Record<PageId, string[]>> = {
     'how to compare files',
     'unified diff',
     'patch file'
+  ],
+  'guide-json-errors': [
+    'guide',
+    'json parse error',
+    'unexpected token',
+    'trailing comma',
+    'json syntax error'
   ],
   'about': ['why free', 'privacy', 'open source', 'who makes it'],
   'contact': [

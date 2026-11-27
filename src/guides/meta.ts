@@ -1,6 +1,6 @@
 /** Titles and dates of guides and other text pages, kept free of React so the build config can read them. */
 
-export type GuideId = 'guide-compare-json' | 'guide-json-to-csv' | 'guide-compare-files' | 'about' | 'contact';
+export type GuideId = 'guide-compare-json' | 'guide-json-to-csv' | 'guide-compare-files' | 'guide-json-errors' | 'about' | 'contact';
 
 export { CONTACT_EMAIL } from '../site';
 
@@ -21,6 +21,12 @@ export const GUIDE_META: Record<GuideId, { h1: string; lede: string; published: 
     h1: 'How to compare two files or code online',
     lede: 'See exactly what changed between two versions of a file or piece of code, and how to read the result, including a unified diff.',
     published: '2026-11-24',
+    kind: 'guide',
+  },
+  'guide-json-errors': {
+    h1: 'How to fix invalid JSON: common errors and fixes',
+    lede: 'JSON gives no second chances: one stray comma or single quote breaks the whole file. The errors everyone hits, why they happen and how to fix each one.',
+    published: '2026-11-27',
     kind: 'guide',
   },
   'about': {

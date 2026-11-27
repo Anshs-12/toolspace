@@ -84,6 +84,7 @@ export const TOOL_ICONS: Record<ToolPageId, typeof Columns2> = {
   'guide-compare-json': BookOpen,
   'guide-json-to-csv': BookOpen,
   'guide-compare-files': BookOpen,
+  'guide-json-errors': BookOpen,
   'case-converter': CaseSensitive,
   'title-case': Heading,
   'word-counter': ScanText,
@@ -144,7 +145,7 @@ export const TOOL_GROUPS: { label: string; ids: ToolPageId[] }[] = [
   { label: 'Web', ids: ['meta-tag-generator', 'robots-txt', 'http-status', 'subnet-calculator', 'user-agent-parser'] },
   { label: 'Code', ids: ['code-beautifier', 'regex-tester', 'markdown-preview', 'cron-generator', 'chmod-calculator'] },
   { label: 'Formatters', ids: ['sql-formatter', 'python-formatter', 'javascript-beautifier', 'java-beautifier', 'html-beautifier', 'css-beautifier', 'xml-formatter'] },
-  { label: 'Guides', ids: ['guide-compare-json', 'guide-json-to-csv', 'guide-compare-files'] },
+  { label: 'Guides', ids: ['guide-compare-json', 'guide-json-to-csv', 'guide-compare-files', 'guide-json-errors'] },
 ];
 
 /**
