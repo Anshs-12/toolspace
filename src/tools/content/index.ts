@@ -15,6 +15,7 @@ import favicon_generator from './favicon-generator';
 import svg_optimizer from './svg-optimizer';
 import json_to_typescript from './json-to-typescript';
 import yaml_validator from './yaml-validator';
+import i18n_json_checker from './i18n-json-checker';
 import line_cleaner from './line-cleaner';
 import list_to_sql from './list-to-sql';
 import mock_json from './mock-json';
@@ -51,6 +52,7 @@ export const NEW_TOOL_CONTENT = {
   'svg-optimizer': svg_optimizer,
   'json-to-typescript': json_to_typescript,
   'yaml-validator': yaml_validator,
+  'i18n-json-checker': i18n_json_checker,
   'line-cleaner': line_cleaner,
   'list-to-sql': list_to_sql,
   'mock-json': mock_json,
