@@ -217,11 +217,11 @@ function pages(): Plugin {
     },
     generateBundle() {
       // robots.txt, llms.txt and ai.txt are written by prerender(), from src/lib/md/siteFiles.ts
-      // lastmod is the build date: when a deploy changes a page, the next sitemap says so.
-      const today = new Date().toISOString().slice(0, 10);
+      // lastmod comes from each page's own recorded change date (see Page.lastmod);
+      // a build timestamp would misreport every page as freshly modified.
       const urls = PAGES.map(
         (p) =>
-          `  <url>\n    <loc>${SITE_URL}${p.path}</loc>\n    <lastmod>${today}</lastmod>\n    <priority>${p.priority.toFixed(1)}</priority>\n  </url>`,
+          `  <url>\n    <loc>${SITE_URL}${p.path}</loc>\n${p.lastmod ? `    <lastmod>${p.lastmod}</lastmod>\n` : ''}    <priority>${p.priority.toFixed(1)}</priority>\n  </url>`,
       ).join('\n');
       this.emitFile({
         type: 'asset',
