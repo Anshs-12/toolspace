@@ -2,29 +2,36 @@
 
 Everything they paywall. Free. Your text stays in your browser.
 
-toolspace is a diff checker that runs entirely in your browser: unlimited use,
-no account, nothing uploaded. It lives at
-[toolspace.tech](https://toolspace.tech).
+**[toolspace.tech](https://toolspace.tech)** · [MIT license](LICENSE)
 
-## Features
+toolspace is a collection of developer tools that run entirely in the
+browser: diff checking, JSON and data conversion, formatters, encoders,
+generators and more. Unlimited use, no account, nothing uploaded. Every tool
+gets its own page, built to real HTML at deploy time so the heading, how-to
+and FAQ are there before any JavaScript runs.
 
-- Myers O(ND) line diff (the algorithm behind `git diff`), linear-space like
-  git's, run in a Web Worker
-- Built for large files: 500,000 lines show up in about a second; the diff view
-  and the CodeMirror editors only render what is on screen
-- Highlights in the editors while you type, or a separate split / unified view
-- Word- or character-level changes inside modified lines
-- Ignore whitespace, case, or anything matching your own regex rules
-- Syntax colors, folding of unchanged lines, line wrap
-- Line-by-line merge with undo
-- Export a `.patch` that `git apply` accepts, or save a PDF
-- Change summary, plus an on-device AI summary in browsers that have one
-- Share links that keep both texts after the `#`, so no server ever sees them
+## Highlights
+
+- **Client-side by design.** There is no backend. Tool input (text, files,
+  tokens, images) is processed in the browser tab and is not uploaded.
+- **One page per tool.** Each tool is a real route with its own title,
+  description, canonical URL, how-to and FAQ, prerendered to static HTML.
+- **Built for large input.** The diff engine is Myers O(ND) (the algorithm
+  behind `git diff`), linear-space, in a Web Worker: 500,000 lines diff in
+  about a second, and the editors only render what is on screen.
+- **Merge, patch, share.** Line-by-line merge with undo, `.patch` export that
+  `git apply` accepts, and share links that keep both texts after the `#`,
+  so no server ever sees them.
+- **Readable by agents.** Every page is also served as Markdown
+  (`/json-formatter.md`, or `Accept: text/markdown` on the page URL), plus
+  `llms.txt`, `llms-full.txt` and `ai.txt` at the root.
+- **Honest sitemaps.** `sitemap.xml` carries a `<lastmod>` per page, recorded
+  from when that page's own content last changed, not the build date.
 
 ## Privacy
 
-There is no backend. Tool input (text, files, tokens, images) is processed in
-the browser tab and is not uploaded. The site sends cookieless usage counts to
+There is no backend. Tool input is processed in the browser tab and is not
+uploaded. The site sends cookieless usage counts to
 [Umami Cloud](https://umami.is) and uses Microsoft Clarity for heatmaps and
 session recordings, with tool areas masked. Both are described below and on
 the About page.
@@ -73,20 +80,22 @@ count. Validators count only a valid verdict.
 Track on (`data-do-not-track`), and only to `https://gateway.umami.is/api/send`,
 the endpoint the Cloud script uses by default (set explicitly with
 `data-host-url`). The production Content Security Policy (`src/csp.ts`) allows
-that destination (plus Clarity's, below) for requests and loads scripts only from this site. The
-CSP limits where data can go; the allowlist above is what limits what is sent.
+that destination (plus Clarity's, below) for requests and loads scripts only
+from this site. The CSP limits where data can go; the allowlist above is what
+limits what is sent.
 
 **Tests.** `e2e/umami.spec.ts` serves the production build as
 `https://toolspace.tech` inside the test browser and answers the collection
-endpoint with a mock, so tracking really runs without reaching Umami. It
-types canary inputs, runs tools, opens a share link and navigates, then checks
-the decoded payloads and headers contain no input, query or fragment.
+endpoint with a mock, so tracking really runs without reaching Umami. It types
+canary inputs, runs tools, opens a share link and navigates, then checks the
+decoded payloads and headers contain no input, query or fragment.
 
 #### Updating the pinned tracker
 
 `public/umami.js` is a copy of `https://cloud.umami.is/script.js`, served from
-this site (a method [Umami documents](https://umami.is/docs/bypass-ad-blockers))
-so no third-party script runs on the page. It doesn't update itself. To update:
+this site (a method
+[Umami documents](https://umami.is/docs/bypass-ad-blockers)) so no third-party
+script runs on the page. It doesn't update itself. To update:
 
 ```sh
 curl -sS https://cloud.umami.is/script.js -o /tmp/umami.js
@@ -131,7 +140,18 @@ Heatmaps and session recordings (`src/lib/clarity.ts`, project ID in
   `#` page, a full stop after the diff checker's Share, Do Not Track, and
   nothing off the live site.
 
+## Tech stack
+
+React 19, TypeScript, Vite, Tailwind CSS 4, CodeMirror 6, Prettier and
+WebAssembly formatters in the page. Tested with Vitest (unit and property
+tests) and Playwright (browser, privacy and performance tests). Deployed on
+Cloudflare: a static site behind a small Worker (`src/worker.ts`,
+`wrangler.jsonc`) that redirects the old address and serves the Markdown
+versions.
+
 ## Development
+
+Requires Node.js.
 
 ```sh
 npm install
@@ -161,6 +181,37 @@ npm run test:all   # everything
   on screen within limits, keep under 200 rows in the DOM, scroll in one frame,
   and typing in a 100k-line document must stay under 100 ms per keystroke.
 
+Browser tests use your installed Google Chrome. To use Playwright's bundled
+Chromium instead (e.g. in CI): `npx playwright install chromium` and run with
+`PW_CHANNEL=`.
+
+## How the site is built
+
+- `src/site.ts` is the single registry. The `PAGES` list holds every page's
+  id, path, title, description, keywords and `lastmod`; titles, meta and
+  social tags, the sitemap, `robots.txt`, `llms.txt`/`ai.txt` and the
+  cross-links between tools are all generated from it.
+- Each page is a small HTML shell (e.g. `json-formatter/index.html`) that
+  mounts the app with `data-page="<id>"`. Vite builds every page as its own
+  entry, injects the head tags from `PAGES`, then prerenders each route
+  (`src/prerender.tsx`) so the HTML is complete without JavaScript.
+- Tool logic lives in `src/lib/` as plain functions with unit tests; the UI
+  wraps it in `src/tools/`. Long guides live in `guides/`.
+- `src/worker.ts` sits in front of the static files on Cloudflare: it 301s
+  the old `workers.dev` address, serves unknown URLs as a real 404, and
+  answers Markdown requests (`/<page>.md`, content negotiation, `/api/md/`).
+
+## Adding a tool
+
+1. Add the page to `PAGES` in `src/site.ts` (id, path, title, description,
+   keywords; set `lastmod` when the change ships).
+2. Add the HTML shell at `<path>/index.html` with `data-page="<id>"`.
+3. Write the logic in `src/lib/` with tests, and the UI in `src/tools/`,
+   wired into the lazy map in `src/tools/ToolApp.tsx` and the page content
+   (how-to, FAQ) in `src/tools/content/`.
+4. `npm run test:all`, then `npm run build` and check the built page and
+   sitemap in `dist/`.
+
 ## Performance
 
 Measured on an M-series laptop (paste to diff on screen):
@@ -177,7 +228,6 @@ patience diff does) and a search-depth cap bounds pathological cases, so the
 result stays correct (it rebuilds both files) but may occasionally be a little
 longer than the theoretical minimum.
 
-Browser tests use your installed Google Chrome. To use Playwright's bundled
-Chromium instead (e.g. in CI): `npx playwright install chromium` and run with
-`PW_CHANNEL=`.
+## License
 
+[MIT](LICENSE) © 2026 anshx12
