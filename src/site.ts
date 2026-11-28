@@ -86,6 +86,8 @@ export type PageId =
 
 export interface Page {
   id: PageId;
+  /** Date this page's own content last changed (YYYY-MM-DD), recorded from git history and updated when a real change to the page ships; emitted as sitemap <lastmod>. Omit when unknown. */
+  lastmod?: string;
   /** URL path, ending in "/" (served from <dir>/index.html). */
   path: string;
   /** <title>, also used for social cards. */
@@ -114,6 +116,7 @@ export const PAGES: Page[] = [
     name: 'All tools',
     blurb: 'Every toolspace tool on one page.',
     priority: 1.0,
+    lastmod: '2026-11-24',
     aiSummary:
       'The home page of toolspace (toolspace.tech), a free and open source collection of developer tools (diff, JSON, encoding, text, code, image and web utilities) that run entirely in the browser, with no sign-up and no uploads.',
   },
@@ -126,6 +129,7 @@ export const PAGES: Page[] = [
     name: 'Diff checker',
     blurb: 'Compare two texts or files, line by line and word by word.',
     priority: 0.9,
+    lastmod: '2026-10-13',
   },
   {
     id: 'json-diff',
@@ -136,6 +140,7 @@ export const PAGES: Page[] = [
     name: 'JSON diff',
     blurb: 'Compare two JSON files, ignoring key order and formatting.',
     priority: 0.8,
+    lastmod: '2026-10-13',
   },
   {
     id: 'json-formatter',
@@ -146,6 +151,7 @@ export const PAGES: Page[] = [
     name: 'JSON formatter',
     blurb: 'Beautify or minify JSON, with sorted keys if you like.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'json-validator',
@@ -156,6 +162,7 @@ export const PAGES: Page[] = [
     name: 'JSON validator',
     blurb: 'Check JSON syntax and see exactly where it breaks.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'i18n-json-checker',
@@ -166,6 +173,7 @@ export const PAGES: Page[] = [
     name: 'i18n JSON checker',
     blurb: 'Find missing keys across locale files and sync them.',
     priority: 0.8,
+    lastmod: '2026-11-27',
   },
   {
     id: 'json-to-csv',
@@ -176,6 +184,7 @@ export const PAGES: Page[] = [
     name: 'JSON to CSV',
     blurb: 'Turn a JSON array into a spreadsheet-ready CSV file.',
     priority: 0.8,
+    lastmod: '2026-11-26',
   },
   {
     id: 'csv-to-json',
@@ -186,6 +195,7 @@ export const PAGES: Page[] = [
     name: 'CSV to JSON',
     blurb: 'Turn a spreadsheet export into JSON for your app or API.',
     priority: 0.8,
+    lastmod: '2026-11-26',
   },
   {
     id: 'json-to-yaml',
@@ -196,6 +206,7 @@ export const PAGES: Page[] = [
     name: 'JSON to YAML',
     blurb: 'Convert JSON into clean, valid YAML.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'json-viewer',
@@ -206,6 +217,7 @@ export const PAGES: Page[] = [
     name: 'JSON viewer',
     blurb: 'Explore JSON as a collapsible tree and copy paths.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'base64',
@@ -216,6 +228,7 @@ export const PAGES: Page[] = [
     name: 'Base64 encoder',
     blurb: 'Encode and decode Base64 text and files.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'unix-timestamp',
@@ -226,6 +239,7 @@ export const PAGES: Page[] = [
     name: 'Timestamp converter',
     blurb: 'Convert Unix epoch time to dates and back.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'jwt-decoder',
@@ -236,6 +250,7 @@ export const PAGES: Page[] = [
     name: 'JWT decoder',
     blurb: 'Decode JWTs, check expiry and verify signatures.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'regex-tester',
@@ -246,6 +261,7 @@ export const PAGES: Page[] = [
     name: 'Regex tester',
     blurb: 'Test regular expressions with live matches and groups.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'url-encoder',
@@ -256,6 +272,7 @@ export const PAGES: Page[] = [
     name: 'URL encoder',
     blurb: 'Percent-encode and decode URLs and query strings.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'guide-compare-json',
@@ -266,6 +283,7 @@ export const PAGES: Page[] = [
     name: 'Comparing JSON files',
     blurb: 'Why plain diffs mislead, and how to ignore key order.',
     priority: 0.6,
+    lastmod: '2026-10-17',
   },
   {
     id: 'guide-json-to-csv',
@@ -276,6 +294,7 @@ export const PAGES: Page[] = [
     name: 'JSON to CSV for Excel',
     blurb: 'Nested objects, arrays, encoding and Excel quirks.',
     priority: 0.6,
+    lastmod: '2026-10-17',
   },
   {
     id: 'guide-compare-files',
@@ -286,6 +305,7 @@ export const PAGES: Page[] = [
     name: 'Comparing two files',
     blurb: 'Side by side, whitespace and case, reading a unified diff.',
     priority: 0.6,
+    lastmod: '2026-11-24',
   },
   {
     id: 'guide-json-errors',
@@ -296,6 +316,7 @@ export const PAGES: Page[] = [
     name: 'Fixing invalid JSON',
     blurb: 'Why one stray comma breaks the whole file, and the fix for each error.',
     priority: 0.6,
+    lastmod: '2026-11-27',
   },
   {
     id: 'case-converter',
@@ -306,6 +327,7 @@ export const PAGES: Page[] = [
     name: 'Case converter',
     blurb: 'Change text to upper, lower, title, camel or snake case.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'title-case',
@@ -316,6 +338,7 @@ export const PAGES: Page[] = [
     name: 'Title case',
     blurb: 'Capitalize titles in AP, Chicago, APA or MLA style.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'word-counter',
@@ -326,6 +349,7 @@ export const PAGES: Page[] = [
     name: 'Word counter',
     blurb: 'Count words, characters, sentences and reading time.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'password-generator',
@@ -336,6 +360,7 @@ export const PAGES: Page[] = [
     name: 'Password generator',
     blurb: 'Generate strong random passwords, made in your browser.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'lorem-ipsum',
@@ -346,6 +371,7 @@ export const PAGES: Page[] = [
     name: 'Lorem ipsum',
     blurb: 'Generate placeholder text by paragraph, sentence or word.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'qr-code',
@@ -356,6 +382,7 @@ export const PAGES: Page[] = [
     name: 'QR code generator',
     blurb: 'Make QR codes for links, Wi-Fi and text; PNG or SVG.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'color-converter',
@@ -366,6 +393,7 @@ export const PAGES: Page[] = [
     name: 'Color converter',
     blurb: 'Convert HEX, RGB, HSL; contrast, tints and palettes.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'css-gradient',
@@ -376,6 +404,7 @@ export const PAGES: Page[] = [
     name: 'CSS gradient',
     blurb: 'Build linear, radial and conic CSS gradients.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'code-beautifier',
@@ -386,6 +415,7 @@ export const PAGES: Page[] = [
     name: 'Code beautifier',
     blurb: 'Format Python, Java, C++, C#, Go, JS, PHP and more.',
     priority: 0.8,
+    lastmod: '2026-11-04',
   },
   {
     id: 'markdown-preview',
@@ -396,6 +426,7 @@ export const PAGES: Page[] = [
     name: 'Markdown preview',
     blurb: 'Write Markdown and see it rendered live.',
     priority: 0.7,
+    lastmod: '2026-11-14',
   },
   {
     id: 'uuid-generator',
@@ -406,6 +437,7 @@ export const PAGES: Page[] = [
     name: 'UUID generator',
     blurb: 'Generate UUIDs and GUIDs in bulk, v4 or v7.',
     priority: 0.7,
+    lastmod: '2026-11-21',
   },
   {
     id: 'hash-generator',
@@ -416,6 +448,7 @@ export const PAGES: Page[] = [
     name: 'Hash generator',
     blurb: 'MD5 and SHA hashes of text or files.',
     priority: 0.7,
+    lastmod: '2026-11-21',
   },
   {
     id: 'cron-generator',
@@ -426,6 +459,7 @@ export const PAGES: Page[] = [
     name: 'Cron generator',
     blurb: 'Build or explain cron schedules, see next runs.',
     priority: 0.7,
+    lastmod: '2026-11-21',
   },
   {
     id: 'slug-generator',
@@ -436,6 +470,7 @@ export const PAGES: Page[] = [
     name: 'Slug generator',
     blurb: 'Turn titles into clean URL slugs.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'number-base-converter',
@@ -446,6 +481,7 @@ export const PAGES: Page[] = [
     name: 'Number base converter',
     blurb: 'Binary, octal, decimal and hex, both ways.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'html-entities',
@@ -456,6 +492,7 @@ export const PAGES: Page[] = [
     name: 'HTML entity encoder',
     blurb: 'Escape and unescape HTML entities.',
     priority: 0.7,
+    lastmod: '2026-11-21',
   },
   {
     id: 'color-palette',
@@ -466,6 +503,7 @@ export const PAGES: Page[] = [
     name: 'Color palette generator',
     blurb: 'Build palettes from one color, copy as CSS.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'contrast-checker',
@@ -476,6 +514,7 @@ export const PAGES: Page[] = [
     name: 'Contrast checker',
     blurb: 'Text and background contrast against WCAG.',
     priority: 0.7,
+    lastmod: '2026-11-21',
   },
   {
     id: 'aspect-ratio',
@@ -486,6 +525,7 @@ export const PAGES: Page[] = [
     name: 'Aspect ratio calculator',
     blurb: 'Ratios and missing sides, like 16:9.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'image-compressor',
@@ -496,6 +536,7 @@ export const PAGES: Page[] = [
     name: 'Image compressor',
     blurb: 'Shrink images without uploading them.',
     priority: 0.7,
+    lastmod: '2026-11-21',
   },
   {
     id: 'image-resizer',
@@ -506,6 +547,7 @@ export const PAGES: Page[] = [
     name: 'Image resizer',
     blurb: 'Resize images to exact dimensions.',
     priority: 0.7,
+    lastmod: '2026-11-14',
   },
   {
     id: 'favicon-generator',
@@ -516,6 +558,7 @@ export const PAGES: Page[] = [
     name: 'Favicon generator',
     blurb: 'Favicon.ico and app icons from one image.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'svg-optimizer',
@@ -526,6 +569,7 @@ export const PAGES: Page[] = [
     name: 'SVG optimizer',
     blurb: 'Clean up and minify SVG files.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'json-to-typescript',
@@ -536,6 +580,7 @@ export const PAGES: Page[] = [
     name: 'JSON to TypeScript',
     blurb: 'TypeScript interfaces or Zod from JSON.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'yaml-validator',
@@ -546,6 +591,7 @@ export const PAGES: Page[] = [
     name: 'YAML validator',
     blurb: 'Check YAML syntax and see where it breaks.',
     priority: 0.7,
+    lastmod: '2026-11-21',
   },
   {
     id: 'line-cleaner',
@@ -556,6 +602,7 @@ export const PAGES: Page[] = [
     name: 'Line cleaner',
     blurb: 'Dedupe, sort and trim lists of lines.',
     priority: 0.7,
+    lastmod: '2026-11-04',
   },
   {
     id: 'list-to-sql',
@@ -566,6 +613,7 @@ export const PAGES: Page[] = [
     name: 'List to SQL IN',
     blurb: 'Lines to SQL IN lists and comma lists.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'mock-json',
@@ -576,6 +624,7 @@ export const PAGES: Page[] = [
     name: 'Mock data generator',
     blurb: 'Fake JSON test data with chosen fields.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'meta-tag-generator',
@@ -586,6 +635,7 @@ export const PAGES: Page[] = [
     name: 'Meta tag generator',
     blurb: 'Title, description and social meta tags.',
     priority: 0.6,
+    lastmod: '2026-11-21',
   },
   {
     id: 'robots-txt',
@@ -596,6 +646,7 @@ export const PAGES: Page[] = [
     name: 'Robots.txt generator',
     blurb: 'Build and test a robots.txt file.',
     priority: 0.6,
+    lastmod: '2026-11-21',
   },
   {
     id: 'http-status',
@@ -606,6 +657,7 @@ export const PAGES: Page[] = [
     name: 'HTTP status codes',
     blurb: 'What each HTTP status code means.',
     priority: 0.6,
+    lastmod: '2026-11-21',
   },
   {
     id: 'subnet-calculator',
@@ -616,6 +668,7 @@ export const PAGES: Page[] = [
     name: 'Subnet calculator',
     blurb: 'IPv4 CIDR ranges, masks and hosts.',
     priority: 0.6,
+    lastmod: '2026-11-21',
   },
   {
     id: 'chmod-calculator',
@@ -626,6 +679,7 @@ export const PAGES: Page[] = [
     name: 'Chmod calculator',
     blurb: 'Unix permissions as octal and rwx.',
     priority: 0.6,
+    lastmod: '2026-11-21',
   },
   {
     id: 'java-beautifier',
@@ -636,6 +690,7 @@ export const PAGES: Page[] = [
     name: 'Java beautifier',
     blurb: 'Format and indent Java code.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'javascript-beautifier',
@@ -646,6 +701,7 @@ export const PAGES: Page[] = [
     name: 'JavaScript beautifier',
     blurb: 'Format JavaScript with Prettier.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'css-beautifier',
@@ -656,6 +712,7 @@ export const PAGES: Page[] = [
     name: 'CSS beautifier',
     blurb: 'Format or minify CSS.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'html-beautifier',
@@ -666,6 +723,7 @@ export const PAGES: Page[] = [
     name: 'HTML beautifier',
     blurb: 'Format and indent HTML.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'python-formatter',
@@ -676,6 +734,7 @@ export const PAGES: Page[] = [
     name: 'Python formatter',
     blurb: 'Format Python in the Black style.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'sql-formatter',
@@ -686,6 +745,7 @@ export const PAGES: Page[] = [
     name: 'SQL formatter',
     blurb: 'Format and indent SQL queries.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'xml-formatter',
@@ -696,6 +756,7 @@ export const PAGES: Page[] = [
     name: 'XML formatter',
     blurb: 'Format XML and check it is well-formed.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'px-to-rem',
@@ -706,6 +767,7 @@ export const PAGES: Page[] = [
     name: 'PX to REM converter',
     blurb: 'Pixels to rem and back, any base size.',
     priority: 0.6,
+    lastmod: '2026-11-21',
   },
   {
     id: 'email-extractor',
@@ -716,6 +778,7 @@ export const PAGES: Page[] = [
     name: 'Email extractor',
     blurb: 'Pull email addresses out of any text.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'user-agent-parser',
@@ -726,6 +789,7 @@ export const PAGES: Page[] = [
     name: 'User agent parser',
     blurb: 'Read browser, OS and device from a UA string.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'jsonpath-tester',
@@ -736,6 +800,7 @@ export const PAGES: Page[] = [
     name: 'JSONPath tester',
     blurb: 'Query JSON with JSONPath and see matches.',
     priority: 0.6,
+    lastmod: '2026-11-04',
   },
   {
     id: 'about',
@@ -746,6 +811,7 @@ export const PAGES: Page[] = [
     name: 'About',
     blurb: 'What toolspace is, how your input stays on your device, and what Umami and Clarity record.',
     priority: 0.4,
+    lastmod: '2026-11-24',
   },
   {
     id: 'contact',
@@ -756,6 +822,7 @@ export const PAGES: Page[] = [
     name: 'Contact',
     blurb: 'Email, bug reports and tool ideas.',
     priority: 0.3,
+    lastmod: '2026-11-24',
   },
 ];
 
