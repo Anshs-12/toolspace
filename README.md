@@ -1,40 +1,53 @@
 # toolspace
 
-Everything they paywall. Free. Your text stays in your browser.
+Free developer tools that run in your browser.
 
 **[toolspace.tech](https://toolspace.tech)** · [MIT license](LICENSE)
 
-toolspace is a collection of developer tools that run entirely in the
-browser: diff checking, JSON and data conversion, formatters, encoders,
-generators and more. Unlimited use, no account, nothing uploaded. Every tool
-gets its own page, built to real HTML at deploy time so the heading, how-to
-and FAQ are there before any JavaScript runs.
+toolspace is a collection of developer tools: diff checking, JSON and data
+conversion, formatters, encoders, generators and more. The tools run in the
+browser tab and need no account. Every tool gets its own page, built to real
+HTML at deploy time so the heading, how-to and FAQ are there before any
+JavaScript runs.
 
 ## Highlights
 
-- **Client-side by design.** There is no backend. Tool input (text, files,
-  tokens, images) is processed in the browser tab and is not uploaded.
+- **Runs in the browser.** Tool input (text, files, tokens, images) is
+  processed by code running in the page. See [Privacy](#privacy) for exactly
+  what the site does send.
 - **One page per tool.** Each tool is a real route with its own title,
   description, canonical URL, how-to and FAQ, prerendered to static HTML.
-- **Built for large input.** The diff engine is Myers O(ND) (the algorithm
-  behind `git diff`), linear-space, in a Web Worker: 500,000 lines diff in
-  about a second, and the editors only render what is on screen.
-- **Merge, patch, share.** Line-by-line merge with undo, `.patch` export that
-  `git apply` accepts, and share links that keep both texts after the `#`,
-  so no server ever sees them.
+- **Diff engine for large input.** Myers O(ND) line diff (the algorithm
+  behind `git diff`), linear-space, run in a Web Worker. The editors and diff
+  view only render what is on screen. Time budgets are enforced by the tests
+  (see [Testing](#testing)).
+- **Merge, patch, share.** Line-by-line merge with undo, `.patch` export
+  (the tests apply generated patches with the real `git apply`), and share
+  links that keep both texts after the `#`, which browsers do not send to
+  servers.
 - **Readable by agents.** Every page is also served as Markdown
   (`/json-formatter.md`, or `Accept: text/markdown` on the page URL), plus
   `llms.txt`, `llms-full.txt` and `ai.txt` at the root.
-- **Honest sitemaps.** `sitemap.xml` carries a `<lastmod>` per page, recorded
+- **Per-page sitemap dates.** `sitemap.xml` carries a `<lastmod>` per page, recorded
   from when that page's own content last changed, not the build date.
 
 ## Privacy
 
-There is no backend. Tool input is processed in the browser tab and is not
-uploaded. The site sends cookieless usage counts to
-[Umami Cloud](https://umami.is) and uses Microsoft Clarity for heatmaps and
-session recordings, with tool areas masked. Both are described below and on
-the About page.
+What stays in the browser: tool input (text, files, tokens, images) is
+processed by code in the page. The tool code makes no network requests with
+it, and the Content Security Policy (`src/csp.ts`) only allows connections
+to Umami and Clarity, described below.
+
+What the server side is: static files served from Cloudflare behind a small
+Worker (`src/worker.ts`) that redirects http and the old address, and serves
+the Markdown versions of pages. It handles page requests only; no tool
+receives input from it.
+
+What is sent: cookieless usage counts to [Umami Cloud](https://umami.is)
+(page paths and a `tool-run` event with the tool's ID), and Microsoft
+Clarity heatmaps and session recordings with tool areas masked. Like any
+website, the host and these services see request metadata such as IP
+address. Details are below and on the About page.
 
 ## Analytics
 
@@ -146,8 +159,8 @@ React 19, TypeScript, Vite, Tailwind CSS 4, CodeMirror 6, Prettier and
 WebAssembly formatters in the page. Tested with Vitest (unit and property
 tests) and Playwright (browser, privacy and performance tests). Deployed on
 Cloudflare: a static site behind a small Worker (`src/worker.ts`,
-`wrangler.jsonc`) that redirects the old address and serves the Markdown
-versions.
+`wrangler.jsonc`) that redirects the old address and http, and serves the
+Markdown versions.
 
 ## Development
 
@@ -169,17 +182,20 @@ npm run test:perf  # rendering time budgets in the browser
 npm run test:all   # everything
 ```
 
-- **Engine**: Myers is checked against a reference LCS on 20,000 random inputs
-  (every result must rebuild both sides and be minimal); generated patches are
-  applied with the real `git apply`; merges must converge.
+- **Engine**: Myers is checked on 20,000 random inputs (5 seeds x 4,000;
+  every result must rebuild both sides and be a minimal edit script);
+  generated patches are applied with the real `git apply` when git is
+  installed; merges must converge.
 - **Browser**: diffing, split/unified, merge and undo, ignore rules, in-editor
   highlights, `.patch` download, share links, theme, and privacy checks (the
   CSP is present, no requests are made while diffing, outgoing `fetch` is
   blocked).
-- **Performance**: the engine must return the exact minimal diff for 20k, 100k
-  and 500k lines within time limits; in the browser, 5k–500k line diffs must be
-  on screen within limits, keep under 200 rows in the DOM, scroll in one frame,
-  and typing in a 100k-line document must stay under 100 ms per keystroke.
+- **Performance**: the unit tests require the exact edit count for 20,000,
+  100,000 and 500,000 lines within budgets of 500 ms, 1.5 s and 6 s
+  (`src/lib/performance.test.ts`). The browser tests (`e2e/perf.spec.ts`)
+  require 5k to 500k line diffs on screen within 1.5 to 6 s, under 200 rows
+  in the DOM, scrolling under 100 ms, and typing in a 100,000-line document
+  under 100 ms per keystroke.
 
 Browser tests use your installed Google Chrome. To use Playwright's bundled
 Chromium instead (e.g. in CI): `npx playwright install chromium` and run with
@@ -198,8 +214,10 @@ Chromium instead (e.g. in CI): `npx playwright install chromium` and run with
 - Tool logic lives in `src/lib/` as plain functions with unit tests; the UI
   wraps it in `src/tools/`. Long guides live in `guides/`.
 - `src/worker.ts` sits in front of the static files on Cloudflare: it 301s
-  the old `workers.dev` address, serves unknown URLs as a real 404, and
-  answers Markdown requests (`/<page>.md`, content negotiation, `/api/md/`).
+  http requests and the old `workers.dev` address to `https://toolspace.tech`
+  and answers Markdown requests (`/<page>.md`, content negotiation,
+  `/api/md/`). Unknown URLs get `dist/404.html` with a real 404 status
+  (`wrangler.jsonc`).
 
 ## Adding a tool
 
@@ -212,21 +230,13 @@ Chromium instead (e.g. in CI): `npx playwright install chromium` and run with
 4. `npm run test:all`, then `npm run build` and check the built page and
    sitemap in `dist/`.
 
-## Performance
+## Diff accuracy
 
-Measured on an M-series laptop (paste to diff on screen):
-
-| Lines   | Diff engine | On screen |
-| ------- | ----------- | --------- |
-| 20,000  | ~15 ms      | ~0.3 s    |
-| 100,000 | ~45 ms      | ~0.4 s    |
-| 500,000 | ~300 ms     | ~1.1 s    |
-
-Inputs up to 10,000 lines always get the exact shortest edit script. Larger
-inputs are first anchored on lines that occur once on each side (as git's
-patience diff does) and a search-depth cap bounds pathological cases, so the
-result stays correct (it rebuilds both files) but may occasionally be a little
-longer than the theoretical minimum.
+When the two texts together are at most 10,000 lines, the diff is always the
+exact shortest edit script. Larger inputs are first anchored on lines that
+occur once on each side (as git's patience diff does) and a search-depth cap
+bounds pathological cases, so the result stays correct (it rebuilds both
+files) but may occasionally be a little longer than the theoretical minimum.
 
 ## License
 
